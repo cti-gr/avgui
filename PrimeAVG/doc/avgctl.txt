@@ -1,0 +1,82 @@
+avgctl(1)                                                                                      AVG Manual                                                                                     avgctl(1)
+
+
+
+NAME
+       avgctl - AVG command line controller
+
+
+SYNOPSIS
+       avgctl [options]
+
+
+DESCRIPTION
+       avgctl is used to control the creation and termination of AVG processes. It also serves as a license controller and can be used for obtaining additional information such as statistics and ver‐
+       sion.
+
+
+OPTIONS
+       --start[=component]
+              Launch AVG daemon or specified component. See also COMPONENTS section.
+
+
+       --stop[=component]
+              Stop running AVG daemon or specified component. See also COMPONENTS section.
+
+
+       --restart[=component]
+              Restart AVG daemon or specified component. See also COMPONENTS section.
+
+
+       --stat[=component]
+              Show statistics from running AVG daemon or specified component. See also COMPONENTS section.
+              This is currently not supported by NS and Aspam components.
+
+
+       --stat-all
+              Show statistics of all running AVG components.
+
+
+       --licinfo
+              Display registered license info.
+
+
+       -h, --help
+              Display help.
+
+
+       -v, --version
+              Display version of the avgctl.
+
+
+       --avg-version
+              Display AVG version.
+
+
+COMPONENTS
+       Please note that the following is a list of all components regardless the product you are using.
+       WD - Avgd (parent of all AVG processes)
+       Sched - Scheduler
+       Lnsd - LinkScanner
+       NS - NetShield
+       Avid - AviLoader
+       Tcpd - Email server
+       Aspam - Antispam engine
+       Oad - On-access scanner
+
+
+SEE ALSO
+       avgavid(1), avgcfgctl(1), avgd(1), avgdump(1), avgevtlog(1),  avglnsd(1),  avgnsd(1),  avgoad(1),  avgscan(1),  avgscand(1),  avgsched(1),  avgspamd(1),  avgtcpd(1),  avgupd(1),  avgupdate(1),
+       avgurlscan(1), avgvvctl(1)
+
+
+AUTHOR
+       AVG Technologies CZ, s.r.o.
+       Holandska 4
+       639 00 Brno
+       Czech Republic
+       www.avg.com
+
+
+
+AVG 2013                                                                                   September 29, 2010                                                                                 avgctl(1)

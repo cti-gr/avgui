@@ -1,0 +1,195 @@
+avgscand(1)                                                                                    AVG Manual                                                                                   avgscand(1)
+
+
+
+NAME
+       avgscand - AVG scan daemon
+
+
+SYNOPSIS
+       avgscand
+
+
+DESCRIPTION
+       avgscand is a general anti-virus scan daemon.  avgtcpd, avgoad and avgscan use this process as a scanning service.
+
+
+CONFIGURATION
+       avgscand configuration can be changed through the avgcfgctl utility. For further description a <comp> means either Tcpd for avgtcpd, or Oad for avgoad.
+
+
+       <comp>.scand.maxscanproc=DWORD
+              Size of scanning thread pool. If zero is specified the thread pool is initialized with number of cpu units in the system.
+              default: 0
+
+
+       <comp>.scan.Options.ParanoidMode=BOOL
+              Enable paranoid mode. Scan for less dangerous malware and more time consuming algoritms.
+              default: false
+
+
+       Oad.scan.AutomaticActions.Enabled=BOOL
+              Enable automatic actions (healing, move to vault).
+              default: false
+
+
+       Oad.scan.AutomaticActions.PreferedAction=DWORD
+              Define preferred action ( scan.AutomaticActions.Enabled actions must be enabled).
+              1 - Heal
+              2 - Delete (without moving to VV)
+              4 - Move to vault
+              default: 0
+
+
+       Oad.scan.AutomaticActions.BackupInVault=BOOL
+              Enable backup in vault if object is healed by deletion.
+              default: true
+
+
+       Tcpd.scan.DirOptions.Extensions=MULTISTRING
+              Included/Excluded file extensions. Depends on scan.DirOptions.ScanAllFiles flag.
+              default:
+
+
+       Tcpd.scan.DirOptions.ScanAllFiles=BOOL
+              Enable including/excluding of file extensions.
+              default: true
+
+
+       Tcpd.scan.DirOptions.ScanFilesWithoutExtensions=BOOL
+              Scan files without extension.
+              default: true
+
+
+       Tcpd.scan.DirOptions.MaxRecursionDepth=DWORD
+              Define maximal level of recursion for file and directory processing.
+              default: 16384
+
+
+       Tcpd.scan.Options.ArchiveLevel=DWORD
+              Define level of processing archive files (resident, default).
+              values:
+              0 - no archives, macros, cookies, real-time compression will be scanned, including MIME
+              32 - only macros, cookies, real-time compression will be scanned
+              256 - archives, macros, cookies will be scanned
+              default: Tcpd - 256, Oad - 32
+
+
+       Tcpd.scan.Options.MaxRecursionDepth=DWORD
+              Define maximal level of recursion for archive file.
+              default: Tcpd - 3
+
+
+       Tcpd.scan.Options.MaxNumberOfFiles=DWORD
+              Define maximal count of extracted files from archives.
+              default: Tcpd - 50000
+
+
+       Tcpd.scan.Options.MaxFileSize=DWORD
+              Define maximal size of extracted files from archive, bigger files will be processed only to this limit.
+              default: Tcpd - 0x10000000
+
+
+       Tcpd.scan.Options.DetectCookies=BOOL
+              Enable detection of cookies.
+              default: false
+
+
+       Tcpd.scan.Options.DetectPup=BOOL
+              Enable detection of PUP (Potentially Unwanted Programs).
+              default: true
+
+
+       Tcpd.scan.Options.DetectPup2=BOOL
+              Report enhanced set of Potentially Unwanted Programs.
+              default: false
+
+
+       Tcpd.scan.Options.ReportArchiveBombs=BOOL
+              Enable detection of malicious archive files (archive bombs; unpacking such file consumes all available disk space).
+              default: Tcpd - true, Oad - false
+
+
+       Tcpd.scan.Options.ReportHiddenExtensions=BOOL
+              Enable detection of files with hidden (double) extension.
+              default: false
+
+
+       Tcpd.scan.Options.ReportMacros=BOOL
+              Enable detection of document files containing macros.
+              default: false
+
+
+       Tcpd.scan.Options.ReportPwdProtectedArchs=BOOL
+              Enable detection of archive files protected by password.
+              default: false
+
+
+       Tcpd.scan.Options.ReportPwdProtectedDocs=BOOL
+              Enable detection of document files protected by password.
+              default: false
+
+
+       Tcpd.scan.Options.ScanMediaFiles=BOOL
+              Scan media files.
+              default: true
+
+
+       Tcpd.scan.Options.UseHeuristics=BOOL
+              Enable heuristic analysis.
+              default: true
+
+
+       Tcpd.scan.mail.strip.enable=BOOL
+              Enable detection of listed file attachments based on file extension.
+              default: false
+
+
+       Tcpd.scan.mail.strip.alldoc=BOOL
+              Enable detection of listed document files.
+              default: false
+
+
+       Tcpd.scan.mail.strip.alldoclist=MULTISTRING
+              List of file extensions which are treated as documents.
+              default: DO?, XL?, VBX, RTF, PP?, POT, MDA, MDB, XML, DOC?, DOT?, XLS?, XLT?, XLAM, PPT?, POT?, PPS?, SLD?, PPAM, THMX
+
+
+       Tcpd.scan.mail.strip.allexe=BOOL
+              Enable detection of listed executable files.
+              default: false
+
+
+       Tcpd.scan.mail.strip.allexelist=MULTISTRING
+              List of file extensions which are treated as executables.
+              default:  COM, DRV, EXE, OV?, PGM, SYS, BIN, CMD, DEV, 386, SMM, VXD, DLL, OCX, BOO, SCR, ESL, CLA, CLASS, BAT, VBS, VBE, WSH, HTA, CHM, INI, HTT, INF, JS, JSE, HLP, SHS, PRC, PDB, PIF,
+              PHP, ASP, LNK, PL, CPL, WMF
+
+
+       Tcpd.scan.mail.strip.list=MULTISTRING
+              Custom list of file extensions.
+              default:
+
+
+       Default.scan.Options.PupExceptions=MULTISTRING
+              List of files excluded from PUP detection.
+              default:
+
+
+
+SEE ALSO
+       avgavid(1), avgcfgctl(1), avgctl(1),  avgd(1),  avgdump(1),  avgevtlog(1),  avglnsd(1),  avgnsd(1),  avgoad(1),  avgscan(1),  avgsched(1),  avgspamd(1),  avgtcpd(1),  avgupd(1),  avgupdate(1),
+       avgurlscan(1), avgvvctl(1)
+
+
+AUTHOR
+       AVG Technologies CZ, s.r.o.
+       Holandska 4
+       639 00 Brno
+       Czech Republic
+       www.avg.com
+
+
+
+
+AVG 2013                                                                                      May 30, 2011                                                                                  avgscand(1)

@@ -1,0 +1,41 @@
+Μέσω του historylog functionality
+1. θα τηρείται το ιστορικό και
+2. θα είναι δυνατή η ανάκληση, φιλτράρισμα και απεικόνιση πληροφορίας 
+
+σχετικά με:
+
+ i.  σαρώσεις του filesystem  
+ ii. ανανεώσεις του προγράμματος (βάσης ιών, ή εκδόσεων του avg)
+
+---- Τήρηση ιστορικού σαρώσεων filesystem ----
+Kατά την σάρωση ενός φακέλου / αρχείου, παράγεται η ακόλουθη έξοδος από το σχετικό πρόγραμμα
+
+AVG command line Anti-Virus scanner
+Copyright (c) 2013 AVG Technologies CZ
+
+Virus database version: 3184/6376
+Virus database release date: Sun, 02 Jun 2013 06:58:00 +0300
+
+./malware_codered.exe  Virus identified CodeRed
+./malware.exe  Virus found V2PX
+
+Files scanned     :  2(2)
+Infections found  :  2(2)
+PUPs found        :  0
+Files healed      :  0
+Warnings reported :  0
+Errors reported   :  0
+
+Χρήσιμη πληροφορία:
+- virus database version
+- virus database release date
+- λίστα ονομάτων μολυσμένων αρχείων, μαζί με το όνομα του κακόβουλου λογισμικού που εντοπίστηκε
+- συνολικός αριθμός αρχείων που σαρώθηκαν
+- σύνολο μολύνσεων που βρέθηκαν
+- σύνολο potentially unwanted programs που βρέθηκαν
+- σύνολο αρχείων που αποκαταστάθηκαν (healed)
+- σύνολο προειδοποιήσεων (warnings)
+- σύνολο σφαλμάτων (errors)
+
+-> Χρήση sqlite για τη δημιουργία τοπικής βάσης που θα κρατάει το ιστορικό με τα παραπάνω στοιχεία
+
