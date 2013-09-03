@@ -570,6 +570,8 @@ class dbHistoryTableModel(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 #print(headersList[self.__flag])
                 return headers[section]
+            else:
+                return str(section + 1)
             
         if role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignCenter         
