@@ -301,7 +301,7 @@ class manager(QObject):
         flag = 0
         
         if (self._theMainWindow.theHistory.comStartDate.date() > self._theMainWindow.theHistory.comEndDate.date()):
-            QMessageBox.information(None, "Λάθος Ημερομηνίες", "Έχετε χρησιμοποιήσει λάθος ημερομηνίες", 
+            QMessageBox.information(None, "Λάθος Ημερομηνίες", "Έχετε χρησιμοποιήσει λάθος διάταξη στις ημερομηνίες", 
                                  QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
             return
         

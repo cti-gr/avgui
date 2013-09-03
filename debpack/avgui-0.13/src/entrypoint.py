@@ -19,7 +19,7 @@ class theApplication(object):
         self.theWindow = setupGui.mainWindow()
         self.theInitializer =  signalManager.manager(self.theWindow)       
         
-
+    
 app = QApplication(sys.argv)
 if not utilities.isAVGDRunning():
     QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 

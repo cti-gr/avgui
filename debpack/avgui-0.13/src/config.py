@@ -1,4 +1,5 @@
 from os.path import expanduser
+import PySide
 
 global DBFILEPATH
 

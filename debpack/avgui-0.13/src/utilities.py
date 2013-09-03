@@ -523,7 +523,9 @@ class scanResultsTableModel(QtCore.QAbstractTableModel):
             if orientation == QtCore.Qt.Horizontal:
                 #print(headersList[self.__flag])
                 return headersList[self.__flag][section]
-            
+            else:
+                return str(section + 1)
+          
         if role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignCenter
 
@@ -625,36 +627,7 @@ class dbHistoryWorker(QtCore.QThread):
                 continue
                 
         #self.exec_()
-        '''
-        self.dbHistoryProc = QtCore.QProcess()
-        self.dbHistoryProc.readyReadStandardOutput.connect(self.parseOut)
-        self.dbHistoryProc.finished.connect(self.ondbHistoryProcessFinish)
-        
-        if (self.dbHistoryProc.state() != QtCore.QProcess.ProcessState.Running) & (self.dbHistoryProc.state() != QtCore.QProcess.ProcessState.Starting) :
-            try:
-                self.dbHistoryProc.start("gksu", ["--description=Ιστορικό", "--message='H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)'", "avgevtlog"])
-            except Exception as errinit:
-                    print("Σφάλμα κατά την εκκίνηση avgevtlog " + str(errinit))
-                    raise errinit
-        
-                  
-    def parseOut(self):
-        try:
-            theOutput = str(self.dbHistoryProc.readAllStandardOutput())
-            print("theOutput: " + theOutput)
-            if ("Loaded core/iavi version:" in theOutput) & ("Update: Update was successfully completed" in theOutput):
-                #print("theOutput: " + theOutput)
-                for info in theOutput.splitlines():
-                    #print("info:" + info)
-                    if ("Loaded core/iavi version:" in info):
-                        #print("info:" + info)
-                        tmpList = []
-                        tmpList.append(info[0:19])
-                        tmpList.append(info[51:61])
-                        self.__results.append(tmpList)
-        except UnicodeDecodeError:
-            pass
-    '''
+
     def ondbHistoryProcessFinish(self):
         print("Results")
         print(len(self.__results))
