@@ -16,7 +16,7 @@
   <property name="windowTitle">
    <string>Αποτελέσματα Αναζήτησης</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btnExtractTxt">
    <property name="geometry">
     <rect>
      <x>330</x>
@@ -35,7 +35,7 @@
     <string>Εξαγωγή Αποτελεσμάτων σε .txt αρχείο</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="exitButton">
+  <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
      <x>410</x>

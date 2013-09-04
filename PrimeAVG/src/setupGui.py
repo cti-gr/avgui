@@ -11,11 +11,16 @@ class histdbResults(QtGui.QDialog, dbupdateResultsUI.Ui_dialogDBResults):
         
 class scanResults(QtGui.QDialog, scanResultsUI.Ui_dialogScanResults):
     
+    sigCloseEvent= QtCore.Signal()
+    
     def __init__(self, parent=None):
         super(scanResults, self).__init__(parent)
         self.setupUi(self)
-        self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
-
+        self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
+    
+    def closeEvent(self, event):
+       self.sigCloseEvent.emit()
+    
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
     

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'historyDialog.ui'
 #
-# Created: Thu Aug 29 14:09:51 2013
+# Created: Wed Sep  4 13:44:26 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -91,19 +91,12 @@ class Ui_historyDialog(object):
         self.upTab = QtGui.QWidget()
         self.upTab.setObjectName("upTab")
         self.btnHistoryDB = QtGui.QPushButton(self.upTab)
-        self.btnHistoryDB.setGeometry(QtCore.QRect(100, 90, 291, 61))
+        self.btnHistoryDB.setGeometry(QtCore.QRect(100, 150, 291, 61))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
         self.btnHistoryDB.setFont(font)
         self.btnHistoryDB.setObjectName("btnHistoryDB")
-        self.pushButton_2 = QtGui.QPushButton(self.upTab)
-        self.pushButton_2.setGeometry(QtCore.QRect(100, 210, 291, 61))
-        font = QtGui.QFont()
-        font.setWeight(75)
-        font.setBold(True)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setObjectName("pushButton_2")
         self.historyTabWidget.addTab(self.upTab, "")
         self.exitButton = QtGui.QPushButton(historyDialog)
         self.exitButton.setGeometry(QtCore.QRect(200, 420, 111, 41))
@@ -111,7 +104,7 @@ class Ui_historyDialog(object):
         self.exitButton.setObjectName("exitButton")
 
         self.retranslateUi(historyDialog)
-        self.historyTabWidget.setCurrentIndex(1)
+        self.historyTabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(historyDialog)
 
     def retranslateUi(self, historyDialog):
@@ -125,7 +118,6 @@ class Ui_historyDialog(object):
         self.btnExecute.setText(QtGui.QApplication.translate("historyDialog", "Εκτέλεση Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
         self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.searchTab), QtGui.QApplication.translate("historyDialog", "Ιστορικό Αναζητήσεων", None, QtGui.QApplication.UnicodeUTF8))
         self.btnHistoryDB.setText(QtGui.QApplication.translate("historyDialog", "Ιστορικό Ενημερώσεων Βάσης Ιών", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton_2.setText(QtGui.QApplication.translate("historyDialog", "Ιστορικό Ενημερώσεων Προγράμματος", None, QtGui.QApplication.UnicodeUTF8))
         self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.upTab), QtGui.QApplication.translate("historyDialog", "Ιστορικό Ενημερώσεων", None, QtGui.QApplication.UnicodeUTF8))
         self.exitButton.setText(QtGui.QApplication.translate("historyDialog", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
 

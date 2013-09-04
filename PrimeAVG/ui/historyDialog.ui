@@ -195,7 +195,7 @@
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>90</y>
+       <y>150</y>
        <width>291</width>
        <height>61</height>
       </rect>
@@ -208,25 +208,6 @@
      </property>
      <property name="text">
       <string>Ιστορικό Ενημερώσεων Βάσης Ιών</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>100</x>
-       <y>210</y>
-       <width>291</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Ιστορικό Ενημερώσεων Προγράμματος</string>
      </property>
     </widget>
    </widget>

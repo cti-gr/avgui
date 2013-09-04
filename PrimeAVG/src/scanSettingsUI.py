@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanSettings.ui'
 #
-# Created: Thu Aug 29 14:09:51 2013
+# Created: Wed Sep  4 13:44:27 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!

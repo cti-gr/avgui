@@ -3,15 +3,18 @@ from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGri
 from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize
 from datetime import datetime, date, time
 import utilities
-
+from io import open
+from os.path import expanduser
 import utilities
 import subprocess, sys, time
 import setupGui
 import gc
+import getpass
 
 
 global scanPath
 global abnormalTermination
+global homeDir
 
 class manager(QObject):
 
@@ -21,17 +24,20 @@ class manager(QObject):
     _folderStorage = None
     _fileStorage = None
     _storagePath = None
+    _resultsToPrint = []
+   
     
       
     def __init__(self, theMainWindow, parent=None):
         global abnormalTermination
         global scanPath
+        global homeDir
         super(manager, self).__init__(parent)
         self._theMainWindow = theMainWindow
         self.setupConnections(self._theMainWindow)
         abnormalTermination = 0
         scanPath = None
-             
+        homeDir = expanduser("~")    
         
     def setupConnections(self, theMainWindow):
         #Main Window
@@ -61,7 +67,8 @@ class manager(QObject):
         #Scan History Dialog
         self._theMainWindow.theHistory.btnExecute.clicked.connect(self.execSearch)
         self._theMainWindow.theHistory.btnHistoryDB.clicked.connect(self.retrieveDBHistory)
-    
+        self._theMainWindow.theHistory.theResults.btnExtractTxt.clicked.connect(self.extractToText)
+        self._theMainWindow.theHistory.theResults.sigCloseEvent.connect(self.clearResults)
                   
     def emitScan(self):
         self._theMainWindow.sigMainSent.emit("SCAN")
@@ -336,26 +343,57 @@ class manager(QObject):
                 for i in item:
                     tempList.append(str(i))
                 nestedResults.append(tempList)
-                modelResults = utilities.scanResultsTableModel(nestedResults, flag)
-                self._theMainWindow.theHistory.theResults.tblVscanResults.setModel(modelResults)
-                #self._theMainWindow.theHistory.theResults.tblVscanResults.resizeColumnsToContents()
-                if flag == 0:
-                    for i in range(3):
-                        self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(i, 300)
-                if flag == 2:
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(0, 170)
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(1, 180)
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(2, 200)
-                                          
-                if flag == 3:
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(0, 150)
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(1, 170)
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(2, 190)
-                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(3, 170)
-                #print("flag = " + str(flag))
-                #qsize = QSize(2000, 2000)
-                #self._theMainWindow.theHistory.theResults.tblVscanResults.resize(qsize)
-                self._theMainWindow.theHistory.theResults.show()
+            manager._resultsToPrint = nestedResults
+            modelResults = utilities.scanResultsTableModel(nestedResults, flag)
+            # print("Nested Results: " + str(nestedResults))
+            self._theMainWindow.theHistory.theResults.tblVscanResults.setModel(modelResults)
+            #self._theMainWindow.theHistory.theResults.tblVscanResults.resizeColumnsToContents()
+            if flag == 0:
+                for i in range(3):
+                    self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(i, 300)
+            if flag == 2:
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(0, 170)
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(1, 180)
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(2, 200)
+                                      
+            if flag == 3:
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(0, 150)
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(1, 170)
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(2, 190)
+                self._theMainWindow.theHistory.theResults.tblVscanResults.setColumnWidth(3, 170)
+            #print("flag = " + str(flag))
+            #qsize = QSize(2000, 2000)
+            #self._theMainWindow.theHistory.theResults.tblVscanResults.resize(qsize)
+            self._theMainWindow.theHistory.theResults.show()
 
-        
+    def extractToText(self):
+        try:
+            now = datetime.now().isoformat().split('T')
+            filename='scanLog_' + now[0][0:10] + '_' + now[1][0:8] + '.txt'
+            flags = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
+            folder = QFileDialog.getExistingDirectory(self._theMainWindow.theHistory.theResults, "Επιλογή Φακέλου για Αποθήκευση text Αρχείου", homeDir, flags)
+            print(filename)
+            print(manager._resultsToPrint)
+            path = folder + '/' + filename
+            with open(path, 'w') as file:
+                file.write("Χρήστης" + '\t\t\t' + "Αριθμός Ευρημάτων"  + '\t\t' + "Ημερομηνία και ώρα αναζήτησης" + '\n') # linux specific newline - not portable!
+                file.write("----------------------------------------------------------------------------------" + '\n') # linux specific newline - not portable!
+                for inlist in manager._resultsToPrint:
+                    file.write(inlist[0] + '\t\t\t')
+                    file.write(inlist[1] + '\t\t\t\t\t')
+                    file.write(inlist[2] + '\n') # linux specific newline - not portable!
+                file.close()    
+        except IOError as error:
+            print(str(error)[0:13])
+            if "Permission denied" in str(error):
+                QMessageBox.critical(None, "Προσοχή", "Δεν έχετε δικαιώματα αποθήκευσης αρχείων στο συγκεκριμένο φάκελο", 
+                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+        except Exception:
+            QMessageBox.critical(None, "Προσοχή", "Παρουσιάστηκε σφάλμα κατά την αποθήκευση του αρχείου", 
+                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+    def clearResults(self):
+        manager._resultsToPrint = []
+        #print("Test")
+    
+            
        

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanResults.ui'
 #
-# Created: Thu Aug 29 14:09:51 2013
+# Created: Wed Sep  4 13:44:26 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,20 +14,20 @@ class Ui_dialogScanResults(object):
         dialogScanResults.setObjectName("dialogScanResults")
         dialogScanResults.setWindowModality(QtCore.Qt.ApplicationModal)
         dialogScanResults.resize(952, 517)
-        self.pushButton = QtGui.QPushButton(dialogScanResults)
-        self.pushButton.setGeometry(QtCore.QRect(330, 390, 311, 51))
+        self.btnExtractTxt = QtGui.QPushButton(dialogScanResults)
+        self.btnExtractTxt.setGeometry(QtCore.QRect(330, 390, 311, 51))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName("pushButton")
-        self.exitButton = QtGui.QPushButton(dialogScanResults)
-        self.exitButton.setGeometry(QtCore.QRect(410, 450, 141, 51))
+        self.btnExtractTxt.setFont(font)
+        self.btnExtractTxt.setObjectName("btnExtractTxt")
+        self.btnExit = QtGui.QPushButton(dialogScanResults)
+        self.btnExit.setGeometry(QtCore.QRect(410, 450, 141, 51))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
-        self.exitButton.setFont(font)
-        self.exitButton.setObjectName("exitButton")
+        self.btnExit.setFont(font)
+        self.btnExit.setObjectName("btnExit")
         self.horizontalLayoutWidget = QtGui.QWidget(dialogScanResults)
         self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 10, 931, 371))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
@@ -55,6 +55,6 @@ class Ui_dialogScanResults(object):
 
     def retranslateUi(self, dialogScanResults):
         dialogScanResults.setWindowTitle(QtGui.QApplication.translate("dialogScanResults", "Αποτελέσματα Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.pushButton.setText(QtGui.QApplication.translate("dialogScanResults", "Εξαγωγή Αποτελεσμάτων σε .txt αρχείο", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitButton.setText(QtGui.QApplication.translate("dialogScanResults", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExtractTxt.setText(QtGui.QApplication.translate("dialogScanResults", "Εξαγωγή Αποτελεσμάτων σε .txt αρχείο", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("dialogScanResults", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
 
