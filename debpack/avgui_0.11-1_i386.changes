@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Fri, 02 Aug 2013 13:10:34 +0300
+Source: avgui
+Binary: avgui
+Architecture: source i386
+Version: 0.11-1
+Distribution: unstable
+Urgency: low
+Maintainer: Pantelis Karamolegkos <pkaramol@cti.gr>
+Changed-By: Pantelis <pkaramol@cti.gr>
+Description: 
+ avgui      - GUI to support the usage of avg free for linux
+Changes: 
+ avgui (0.11-1) unstable; urgency=low
+ .
+   * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+Checksums-Sha1: 
+ 429d43bc88e4410545ccba55705f9b4a174f8c3e 528 avgui_0.11-1.dsc
+ 7eb095fcd85f91f9e0a840a0873a97583ba6bf82 3487007 avgui_0.11-1.tar.gz
+ 589121a7e0ac75a58bca3fff863b1c0978bd7bcb 2569856 avgui_0.11-1_i386.deb
+Checksums-Sha256: 
+ e0606b2ef23e1d255b5ac1efaa1a3e5381b607a0749ebc328c98a2a021ffe5a7 528 avgui_0.11-1.dsc
+ 5897b7355f3f712b296b5456cc6007fc53ef1a487301d6fd8df29ff8ff3c4cd3 3487007 avgui_0.11-1.tar.gz
+ 5a010b06d45d0c11da3024b981d983a74313fb494b7622400686998228223b81 2569856 avgui_0.11-1_i386.deb
+Files: 
+ d1a17fd6fc832abf9aea46346d2562cb 528 graphics extra avgui_0.11-1.dsc
+ f853b127a4db2f188a8a8128b1574051 3487007 graphics extra avgui_0.11-1.tar.gz
+ 6a86215fad84f26bb8957de994633a74 2569856 graphics extra avgui_0.11-1_i386.deb

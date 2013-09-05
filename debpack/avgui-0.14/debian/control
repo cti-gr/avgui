@@ -1,0 +1,15 @@
+Source: avgui
+Section: graphics
+Priority: extra
+Maintainer: Pantelis Karamolegkos <pkaramol@cti.gr>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.2
+Homepage: www.cti.gr
+#Vcs-Git: git://git.debian.org/collab-maint/avgui.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/avgui.git;a=summary
+
+Package: avgui
+Architecture: any
+Depends: python3.2, python3-pyside, sqlite3
+Description: GUI to support the usage of avg free for linux
+ Support automation of scanning and updates and also logging
