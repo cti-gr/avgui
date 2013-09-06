@@ -5,11 +5,8 @@ RESFILE=avg.qrc
 #checking integrity of resource file
 #every .png file within the media directory should have its own entry in the resource file
 cd ${AVGPR}/media
-sleep 0.5
 echo "Changed to " $PWD
-sleep 0.5
 echo "Assuming resource file name is " $RESFILE
-sleep 0.5
 
 if [ ! -f $RESFILE ]; then
 	echo "Resource file does not exist, will create one..."
@@ -40,7 +37,6 @@ done
 cat $RESFILE
 
 echo "Removing previous .py resource file and creating a new one.."
-sleep 0.5
 RESFILEPY=${RESFILE%.*}_rc.py
 if [ -f $RESFILEPY ]; then
 	rm $RESFILEPY
@@ -48,16 +44,12 @@ fi
 
 pyside-rcc -py3 $RESFILE -o $RESFILEPY
 echo "Moving the .py resource file to src folder"
-sleep 0.5
 mv $RESFILEPY ${AVGPR}/src
 
 echo "preparing the .ui files - compiling them to .py"
-sleep 0.5
 cd ${AVGPR}/ui
 echo "Changed to " $PWD
-sleep 0.5
 echo "Compiling .ui files..."
-sleep 0.5
 for file in $(ls $PWD)
 do
 	if [ "${file##*.}" == "ui"  ]; then

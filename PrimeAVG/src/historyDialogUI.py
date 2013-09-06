@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'historyDialog.ui'
 #
-# Created: Wed Sep  4 13:44:26 2013
+# Created: Fri Sep  6 16:11:40 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -84,6 +84,7 @@ class Ui_historyDialog(object):
         self.btnExecute.setGeometry(QtCore.QRect(160, 310, 191, 41))
         font = QtGui.QFont()
         font.setWeight(75)
+        font.setItalic(True)
         font.setBold(True)
         self.btnExecute.setFont(font)
         self.btnExecute.setObjectName("btnExecute")
@@ -100,6 +101,10 @@ class Ui_historyDialog(object):
         self.historyTabWidget.addTab(self.upTab, "")
         self.exitButton = QtGui.QPushButton(historyDialog)
         self.exitButton.setGeometry(QtCore.QRect(200, 420, 111, 41))
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.exitButton.setFont(font)
         self.exitButton.setAutoDefault(False)
         self.exitButton.setObjectName("exitButton")
 

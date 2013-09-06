@@ -12,13 +12,18 @@ import gc
 import getpass
 
 
+########################################################################################################
+# IMPORTANT NOTICE!!!! TO CHECK CLASS-LEVEL PARAMETERS!!!!
+########################################################################################################
+
+
 global scanPath
+global scanParameters
 global abnormalTermination
 global homeDir
 
 class manager(QObject):
-
-    _scanParams = None
+    _scanParams = []
     _scanRunning = 0
     _storageEnabled = 0
     _folderStorage = None
@@ -48,7 +53,7 @@ class manager(QObject):
         
         #Scan Dialog
         self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
-        self._theMainWindow.theScan.btnBeginScan.clicked.connect(self.initiateScan)
+        self._theMainWindow.theScan.btnBeginScan.clicked.connect(self.beginScan)
         self._theMainWindow.theScan.btnScanSettings.clicked.connect(self.setScanSettings)
         
         #Scan Select Dialog
@@ -57,7 +62,7 @@ class manager(QObject):
         self._theMainWindow.theScan.theSelect.radioFolder.clicked.connect(self.emitFolderSelected)
         
         #Scan Settings Dialog
-        self._theMainWindow.theScan.theScanSettings.btnOK.clicked.connect(self.setupScanSettings)
+        self._theMainWindow.theScan.theScanSettings.btnOK.clicked.connect(self.getScanSettings)
         self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.connect(self.enableStorage)
         self._theMainWindow.theScan.theScanSettings.btnSelectFolder.clicked.connect(self.selectScanReportFolder)
         
@@ -81,8 +86,7 @@ class manager(QObject):
     def emitUpdate(self):
         self._theMainWindow.sigMainSent.emit("UPDATE")
         
-     
-    
+        
     def handleMainWindowEmits(self, param):
         #print(param)
         if param == "SCAN":
@@ -121,7 +125,7 @@ class manager(QObject):
         options = QFileDialog.DontResolveSymlinks 
         scanPath = QFileDialog.getOpenFileName(self._theMainWindow.theScan.theSelect, 'Επιλογή Αρχείου προς Σάρωση', '/home', 'All files (*.*)', "",  options)[0]
         print(scanPath)
-        manager._scanType = 0
+        # manager._scanType = 0
         self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
         self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
         self._theMainWindow.theScan.theSelect.close()
@@ -131,7 +135,7 @@ class manager(QObject):
         options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
         scanPath = QFileDialog.getExistingDirectory(self._theMainWindow.theScan.theSelect, 'Επιλογή Φακέλου προς Σάρωση', '/home', options)
         print(scanPath)
-        manager._scanType = 1
+        # manager._scanType = 1
         self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
         #self._theMainWindow.theScan.theSelect.sigSelectType.emit("FOLDER")
         self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
@@ -143,14 +147,20 @@ class manager(QObject):
         self._theMainWindow.theScan.theScanSettings.show()
         
     
-    def setupScanSettings(self):
+    def getScanSettings(self):
+        global scanParameters
+        print("Setting up scan settings...")
         scanParams = []
         # scan for specific file extensions
         if self._theMainWindow.theScan.theScanSettings.chkbIfType.isChecked():
+            print("Getting file extension")
             filesToScan = self._theMainWindow.theScan.theScanSettings.textIfType.toPlainText()
+            print("files to scan BEFORE: " + str(filesToScan))
             if (utilities.checkIsExtension(filesToScan)):
                 scanParams.append("--ext")
                 scanParams.append(filesToScan)
+                print("files to scan AFTER: " + str(filesToScan))
+                print("Just after setting file extensions: " + str(scanParams))
         if (manager._storageEnabled == 1) & (self.validateFileStorage() != -1):
             scanParams.append("--report")
             scanParams.append(manager._storagePath)
@@ -172,7 +182,13 @@ class manager(QObject):
         elif self._theMainWindow.theScan.theScanSettings.radioVault.isChecked():
             scanParams.append("--vv-move")
         
-        manager._scanParams = scanParams
+        print("Inside function the scanParams are: " + str(scanParams))
+        scanParameters = scanParams
+        #print("Just set manager._scanParams: " + str(manager._scanParams))
+        #scanParameters = scanParams
+        print("Just set scanParameters: " + str(scanParameters))
+        
+        
         self._theMainWindow.theScan.theScanSettings.close()
 
 ##################################################################################################
@@ -198,10 +214,11 @@ class manager(QObject):
 
     
 ########################################## SCAN ##################################################
-    def initiateScan(self):
+    def beginScan(self):
         global scanPath
         global abnormalTermination
-        
+        global scanParameters
+        self.getScanSettings()
         print("global scanpath: " + str(scanPath))
         
         abnormalTermination = 0
@@ -218,7 +235,7 @@ class manager(QObject):
             # preparing to start scan in a new thread
             self._theMainWindow.theScan.theScanProgress.textScanProg.clear()
             self._theMainWindow.theScan.theScanProgress.show()
-            self.theScanWorker = utilities.scanWorker(scanPath, manager._scanParams)
+            self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
             self.theScanWorker.finished.connect(self.onScanFinish)
             self.theScanWorker.sigWriteScan.connect(self.printToWidget)
             
@@ -255,6 +272,7 @@ class manager(QObject):
         self._theMainWindow.theScan.theScanProgress.hide()
         if self.theScanWorker.isRunning():
             self.theScanWorker.exit()
+        manager._scanParams = []
       
              
     def onScanFinish(self):
@@ -266,7 +284,8 @@ class manager(QObject):
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
         if abnormalTermination == 0:
             self.theSQLITEWorker.start()
-      
+        manager._scanParams = []
+        
         gc.collect()
 
     def selectScanReportFolder(self):

@@ -133,3 +133,5 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
         self.theScan = scanDialog(self)
         self.theHistory = historyDialog(self)
         self.theScanProgress = scanProgress()
+        
+        self.connect(self.btnExitMain, QtCore.SIGNAL("clicked()"), self.close)

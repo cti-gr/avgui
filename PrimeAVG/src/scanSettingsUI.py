@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanSettings.ui'
 #
-# Created: Wed Sep  4 13:44:27 2013
+# Created: Fri Sep  6 16:11:40 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -89,7 +89,7 @@ class Ui_scanSettingsDialog(object):
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
         self.frame.setObjectName("frame")
         self.labelLogo = QtGui.QLabel(scanSettingsDialog)
-        self.labelLogo.setGeometry(QtCore.QRect(210, 0, 101, 41))
+        self.labelLogo.setGeometry(QtCore.QRect(230, 0, 71, 31))
         self.labelLogo.setText("")
         self.labelLogo.setPixmap(QtGui.QPixmap(":/avg_logo.png"))
         self.labelLogo.setScaledContents(True)

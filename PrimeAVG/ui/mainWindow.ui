@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>700</width>
-    <height>450</height>
+    <width>766</width>
+    <height>470</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,14 +18,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>700</width>
-    <height>450</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>700</width>
-    <height>450</height>
+    <width>160000</width>
+    <height>160000</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -34,6 +34,13 @@
   <property name="windowIcon">
    <iconset resource="../media/avg.qrc">
     <normaloff>:/avg_logo.png</normaloff>:/avg_logo.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton#btnExitMain { 
+border: 1px solid orange;	
+border-radius: 5px ;
+	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, stop:0 rgba(255, 160, 68, 196), stop:1 rgba(255, 255, 255, 255));
+}</string>
   </property>
   <property name="locale">
    <locale language="Greek" country="Greece"/>
@@ -45,13 +52,16 @@
    </size>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <widget class="QWidget" name="gridLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>70</y>
+      <x>80</x>
+      <y>40</y>
       <width>620</width>
-      <height>311</height>
+      <height>321</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -73,35 +83,6 @@
      <property name="verticalSpacing">
       <number>0</number>
      </property>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="settingsBtn">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Ρυθμίσεις</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../media/avg.qrc">
-         <normaloff>:/settings.png</normaloff>:/settings.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>64</width>
-         <height>64</height>
-        </size>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="0">
       <widget class="QPushButton" name="scanBtn">
        <property name="minimumSize">
@@ -122,35 +103,6 @@
        <property name="icon">
         <iconset resource="../media/avg.qrc">
          <normaloff>:/scan.png</normaloff>:/scan.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>64</width>
-         <height>64</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QPushButton" name="logBtn">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <weight>75</weight>
-         <bold>true</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>Ιστορικό</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../media/avg.qrc">
-         <normaloff>:/log.png</normaloff>:/log.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -225,6 +177,64 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QPushButton" name="settingsBtn">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Ρυθμίσεις</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../media/avg.qrc">
+         <normaloff>:/settings.png</normaloff>:/settings.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QPushButton" name="logBtn">
+       <property name="minimumSize">
+        <size>
+         <width>200</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Ιστορικό</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../media/avg.qrc">
+         <normaloff>:/log.png</normaloff>:/log.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QLabel" name="label">
@@ -249,8 +259,8 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>20</y>
+      <x>330</x>
+      <y>0</y>
       <width>121</width>
       <height>51</height>
      </rect>
@@ -265,13 +275,39 @@
      <bool>true</bool>
     </property>
    </widget>
+   <widget class="QPushButton" name="btnExitMain">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>360</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Έξοδος</string>
+    </property>
+    <property name="icon">
+     <iconset resource="../media/avg.qrc">
+      <normaloff>:/power_off.png</normaloff>:/power_off.png</iconset>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>700</width>
+     <width>766</width>
      <height>25</height>
     </rect>
    </property>

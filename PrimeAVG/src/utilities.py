@@ -7,6 +7,7 @@ import sqlite3
 import getpass
 import config
 
+# To add utility that periodically checks for size of the database !!!
 
 malwareFound = []
 infectedFiles =[]
@@ -76,11 +77,13 @@ class scanWorker(QtCore.QThread):
         dbRelDate = None
         user = None
         numFilesHealed = 0
+        print(str(self.scanParams))
         
         
            
     def run(self): 
         #print("CURRENT THREAD WHEN STARTING: " +  str(self.currentThreadId()))
+        print("Starting scan with scanPath: " + str(self.scanPath) + " and with scanParams: " + str(self.scanParams))
         self.finished.connect(self.onThreadFinish)
         self.avgscanProc = QtCore.QProcess()
         self.avgscanProc.readyReadStandardOutput.connect(self.printOut)
@@ -199,11 +202,11 @@ class sqliteWorker(QtCore.QThread):
             print("Executing tblVirusDBs insertion")    
             getVirusDBs = cur.execute("""select * from tblVirusDBs""")
             virusDBslist = getVirusDBs.fetchall()
-            print("virusDBslist :" + str(virusDBslist))
+            #print("virusDBslist :" + str(virusDBslist))
             if not virusDBslist: # if no virus db entry yet
                 toInsert = (dbVersion, dbRelDate)
-                print("toInsert in VirusDB: " + str(toInsert))
-                print("inserting ONE...!!!!!")
+                #print("toInsert in VirusDB: " + str(toInsert))
+                #print("inserting ONE...!!!!!")
                 cur.execute('insert into tblVirusDBs (DBVersion, DBrDate) values (?, ?)', toInsert)
                 #conn.commit()
             else:
@@ -529,7 +532,7 @@ class scanResultsTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.TextAlignmentRole:
             return QtCore.Qt.AlignCenter
 
-##################################### RETRIEVE DB UPDATES HISTORY ################################   
+##################################### RETRIEVE CORE AND VIRUS DB UPDATES HISTORY ################################   
 
 class dbHistoryTableModel(QtCore.QAbstractTableModel):
     
@@ -564,7 +567,7 @@ class dbHistoryTableModel(QtCore.QAbstractTableModel):
     def headerData(self, section, orientation, role):
         
         
-        headers = ["Ημερομηνία / Ώρα Ανανέωσης", "Βάση Ιών"]
+        headers = ["Ημερομηνία / Ώρα Ανανέωσης", "Έκδοση Core AVG / Βάση Ιών"]
         
         if role == QtCore.Qt.DisplayRole:
             if orientation == QtCore.Qt.Horizontal:

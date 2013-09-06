@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>432</width>
+    <width>550</width>
     <height>432</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>432</width>
+    <width>550</width>
     <height>432</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>432</width>
+    <width>550</width>
     <height>432</height>
    </size>
   </property>
@@ -30,13 +30,25 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>411</width>
+     <width>531</width>
      <height>351</height>
     </rect>
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetNoConstraint</enum>
+    </property>
     <item>
      <widget class="QTableView" name="tblViewHistoryDB">
+      <property name="minimumSize">
+       <size>
+        <width>525</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
       </property>
@@ -62,7 +74,7 @@
   <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>210</x>
      <y>370</y>
      <width>151</width>
      <height>41</height>
