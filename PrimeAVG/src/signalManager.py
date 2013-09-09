@@ -21,14 +21,19 @@ global scanPath
 global scanParameters
 global abnormalTermination
 global homeDir
+global scanReportFolder
+global scanReportFile
+global scanReportPath
+global scanReportStorageEnabled
+
 
 class manager(QObject):
     _scanParams = []
     _scanRunning = 0
-    _storageEnabled = 0
-    _folderStorage = None
-    _fileStorage = None
-    _storagePath = None
+    # _storageEnabled = 0
+    #_folderStorage = None
+    #_fileStorage = None
+    #_storagePath = None
     _resultsToPrint = []
    
     
@@ -37,10 +42,17 @@ class manager(QObject):
         global abnormalTermination
         global scanPath
         global homeDir
+        global scanReportStorageEnabled
+        global scanReportPath
+        global scanReportFolder
+        
         super(manager, self).__init__(parent)
         self._theMainWindow = theMainWindow
         self.setupConnections(self._theMainWindow)
         abnormalTermination = 0
+        scanReportStorageEnabled = 0
+        scanReportPath = None
+        scanReportFolder = None
         scanPath = None
         homeDir = expanduser("~")    
         
@@ -141,7 +153,7 @@ class manager(QObject):
         self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
         self._theMainWindow.theScan.theSelect.close()
 
-################################### Scan Settings ##########################################
+################################### Methods related to setting the Scan Settings ##########################################
 
     def setScanSettings(self):
         self._theMainWindow.theScan.theScanSettings.show()
@@ -149,21 +161,28 @@ class manager(QObject):
     
     def getScanSettings(self):
         global scanParameters
+        global scanReportFolder
+        global scanReportFile
+        global scanReportPath
+        global scanReportStorageEnabled
+        
+        closeWidget = True
+        
         print("Setting up scan settings...")
         scanParams = []
         # scan for specific file extensions
         if self._theMainWindow.theScan.theScanSettings.chkbIfType.isChecked():
-            print("Getting file extension")
+            #print("Getting file extension")
             filesToScan = self._theMainWindow.theScan.theScanSettings.textIfType.toPlainText()
             print("files to scan BEFORE: " + str(filesToScan))
             if (utilities.checkIsExtension(filesToScan)):
                 scanParams.append("--ext")
                 scanParams.append(filesToScan)
-                print("files to scan AFTER: " + str(filesToScan))
-                print("Just after setting file extensions: " + str(scanParams))
-        if (manager._storageEnabled == 1) & (self.validateFileStorage() != -1):
+                #print("files to scan AFTER: " + str(filesToScan))
+                #print("Just after setting file extensions: " + str(scanParams))
+        if (scanReportStorageEnabled == 1) & (self.validateFileStorage()):
             scanParams.append("--report")
-            scanParams.append(manager._storagePath)
+            scanParams.append(scanReportPath)
             #print(scanParams)
         if self._theMainWindow.theScan.theScanSettings.chkbBackUpFiles.isChecked():
             scanParams.append("--vv-backup")
@@ -190,8 +209,61 @@ class manager(QObject):
         #scanParameters = scanParams
         print("Just set scanParameters: " + str(scanParameters))
         
+        if self.validateFileStorage() & (scanReportStorageEnabled == 1):
+            self._theMainWindow.theScan.theScanSettings.close()
         
-        self._theMainWindow.theScan.theScanSettings.close()
+    def selectScanReportFolder(self):
+        global scanReportFolder
+        global scanReportStorageEnabled
+        result = False
+        #if self._theMainWindow.theScan.theScanSettings.chkbFileStore.isChecked():
+        if scanReportStorageEnabled == 1:
+            while not result:
+                self._theMainWindow.theScan.theScanSettings.theStoreFileDialog.ShowDirsOnly
+                self._theMainWindow.theScan.theSelect.selectDialog.setFileMode(QFileDialog.Directory)
+                self.reportDir = self._theMainWindow.theScan.theSelect.selectDialog.getExistingDirectory()
+                result = utilities.checkFolderPermissions(self.reportDir)
+                if not result:
+                    QMessageBox.information(None, "Προσοχή", "Δεν έχετε τα κατάλληλα δικαιώματα για το συγκεκριμένο directory - Παρακαλώ επιλέξτε άλλο directory", 
+                                    QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+                else:                   
+                    scanReportFolder = self.reportDir
+                    self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setText(scanReportFolder)
+            
+    
+    def validateFileStorage(self):
+        global scanReportFolder
+        global scanReportPath
+        storagePathOK = False
+        
+        if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (scanReportStorageEnabled == 1):
+            QMessageBox.information(None, "Προσοχή", "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης", 
+                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+            self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
+        if scanReportStorageEnabled == 1:
+            print("scanReportFolder is: " + str(scanReportFolder))
+            scanReportFile = self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText()
+            if scanReportFolder != None:
+                scanReportPath = scanReportFolder + "/" + scanReportFile
+                
+            else:
+                scanReportPath = scanReportFile
+            storagePathOK = True
+        print("scanReportPath is: " + str(scanReportPath))
+        
+        return storagePathOK
+             
+    def enableStorage(self):
+        global scanReportStorageEnabled
+               
+        if scanReportStorageEnabled == 0:
+            self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setEnabled(True)
+            self._theMainWindow.theScan.theScanSettings.textStoreFile.setEnabled(True)
+            scanReportStorageEnabled = 1
+        else:
+            self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setDisabled(True)
+            self._theMainWindow.theScan.theScanSettings.textStoreFile.setDisabled(True)
+            scanReportStorageEnabled = 0
 
 ##################################################################################################
         
@@ -278,6 +350,10 @@ class manager(QObject):
       
              
     def onScanFinish(self):
+        global scanReportFolder
+        global scanReportFile
+        global scanReportPath
+        
         global abnormalTermination
         #self._theMainWindow.theHistory.theResults.tblVscanResults
         manager._scanRunning = 0
@@ -288,42 +364,12 @@ class manager(QObject):
             self.theSQLITEWorker.start()
         manager._scanParams = []
         
+        #scanReportFolder = None
+        #scanReporPath = None
+        #scanReportFile = None
+        
         gc.collect()
-
-    def selectScanReportFolder(self):
-        if self._theMainWindow.theScan.theScanSettings.chkbFileStore.isChecked():
-            self._theMainWindow.theScan.theScanSettings.theStoreFileDialog.ShowDirsOnly
-            self._theMainWindow.theScan.theSelect.selectDialog.setFileMode(QFileDialog.Directory)
-            self.reportDir = self._theMainWindow.theScan.theSelect.selectDialog.getExistingDirectory()
-            #print(self.reportDir)
-            manager._folderStorage = self.reportDir
-            self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setText(manager._folderStorage)
-            
-    
-    def validateFileStorage(self):
-        if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (manager._storageEnabled == 1):
-            QMessageBox.information(None, "Προσοχή", "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης", 
-                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-            return -1
-        if manager._storageEnabled == 1:
-            manager._fileStorage = self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText()
-            if manager._folderStorage != None:
-                manager._storagePath = manager._folderStorage + "/" + manager._fileStorage
-                
-            else:
-                manager._storagePath = manager._fileStorage
-        
-        
-             
-    def enableStorage(self):
-        if manager._storageEnabled == 0:
-            self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setEnabled(True)
-            self._theMainWindow.theScan.theScanSettings.textStoreFile.setEnabled(True)
-            manager._storageEnabled = 1
-        else:
-            self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setDisabled(True)
-            self._theMainWindow.theScan.theScanSettings.textStoreFile.setDisabled(True)
-            manager._storageEnabled = 0
+   
     
     def execSearch(self):
         flag = 0

@@ -6,6 +6,7 @@ import setupGui
 import sqlite3
 import getpass
 import config
+import os, stat
 
 # To add utility that periodically checks for size of the database !!!
 
@@ -18,8 +19,33 @@ numFilesHealed = 0
 mutexResults = QtCore.QMutex()
 foo = 0
 
-# function to check database existence and integrity
+# TO ADD function to check database existence and integrity
 
+
+def checkFolderPermissions(filepath=""):
+    # function that checks if user executing has write permissions to the directory filepath
+    # either as owner, group or other
+    
+    if filepath == "":
+        QtGui.QMessageBox.critical(None, "Προσοχή", "Δεν ήταν δυνατόν ο έλεγχος δικαιωμάτων του συγκεκριμένου directory", 
+                                 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
+        return False
+    else:
+        try:
+            st = os.stat(filepath)
+            if os.getuid() == st.st_uid:
+                if bool(st.st_mode & stat.S_IWUSR):
+                    return True
+            if os.getgid() == st.st_gid:
+                if bool(st.st_mode & stat.S_IWGPR):
+                    return True
+            else:
+                return bool(st.st_mode & stat.S_IWOTH)  
+        except Exception as error:
+            QtGui.QMessageBox.critical(None, "Προσοχή", "Δεν ήταν δυνατόν ο έλεγχος δικαιωμάτων του συγκεκριμένου directory" + str(error), 
+                                 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
+            raise(error)
+    
 def isAVGDRunning():
 # check if avgd is up and running    
     returnCode = False
