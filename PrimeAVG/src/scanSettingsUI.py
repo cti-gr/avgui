@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanSettings.ui'
 #
-# Created: Fri Sep  6 16:11:40 2013
+# Created: Mon Sep  9 12:17:21 2013
 #      by: pyside-uic 0.2.13 running on PySide 1.1.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -47,6 +47,9 @@ class Ui_scanSettingsDialog(object):
         self.chkbBackUpFiles = QtGui.QCheckBox(self.verticalLayoutWidget)
         self.chkbBackUpFiles.setObjectName("chkbBackUpFiles")
         self.verticalLayout.addWidget(self.chkbBackUpFiles)
+        self.chkbArchive = QtGui.QCheckBox(self.verticalLayoutWidget)
+        self.chkbArchive.setObjectName("chkbArchive")
+        self.verticalLayout.addWidget(self.chkbArchive)
         self.chkbBootSec = QtGui.QCheckBox(self.verticalLayoutWidget)
         self.chkbBootSec.setObjectName("chkbBootSec")
         self.verticalLayout.addWidget(self.chkbBootSec)
@@ -111,6 +114,7 @@ class Ui_scanSettingsDialog(object):
         self.btnSelectFolder.setText(QtGui.QApplication.translate("scanSettingsDialog", "Επιλογή Φακέλου Αποθήκευσης", None, QtGui.QApplication.UnicodeUTF8))
         self.textStoreFile.setToolTip(QtGui.QApplication.translate("scanSettingsDialog", "<html><head/><body><p><span style=\" font-style:italic;\">Εισάγετε εδώ το όνομα του αρχείου στο οποίο θα αποθηκευτεί το αποτέλεσμα αναζήτησης...</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.chkbBackUpFiles.setText(QtGui.QApplication.translate("scanSettingsDialog", "Διατήρηση αντιγράφων αρχείων που πρόκειται να διαγραφούν ", None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbArchive.setText(QtGui.QApplication.translate("scanSettingsDialog", "Σάρωση archive files (.zip, .rar κ.λ.π.)", None, QtGui.QApplication.UnicodeUTF8))
         self.chkbBootSec.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αναζήτηση στον τομέα εκκίνησης (boot sector)", None, QtGui.QApplication.UnicodeUTF8))
         self.chkbCookies.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αναζήτηση στα cookies", None, QtGui.QApplication.UnicodeUTF8))
         self.chkbMultimedia.setText(QtGui.QApplication.translate("scanSettingsDialog", "Να μη γίνει αναζήτηση σε πολυμεσικά αρχεία", None, QtGui.QApplication.UnicodeUTF8))

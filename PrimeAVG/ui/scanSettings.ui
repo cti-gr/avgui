@@ -111,6 +111,13 @@
      </widget>
     </item>
     <item>
+     <widget class="QCheckBox" name="chkbArchive">
+      <property name="text">
+       <string>Σάρωση archive files (.zip, .rar κ.λ.π.)</string>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QCheckBox" name="chkbBootSec">
       <property name="text">
        <string>Αναζήτηση στον τομέα εκκίνησης (boot sector)</string>

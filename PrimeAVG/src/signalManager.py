@@ -167,6 +167,8 @@ class manager(QObject):
             #print(scanParams)
         if self._theMainWindow.theScan.theScanSettings.chkbBackUpFiles.isChecked():
             scanParams.append("--vv-backup")
+        if self._theMainWindow.theScan.theScanSettings.chkbArchive.isChecked():
+            scanParams.append("--arc")
         if self._theMainWindow.theScan.theScanSettings.chkbBootSec.isChecked():
             scanParams.append("--boot-sector")
         if self._theMainWindow.theScan.theScanSettings.chkbCookies.isChecked():
