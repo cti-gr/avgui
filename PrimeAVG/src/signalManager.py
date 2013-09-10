@@ -218,16 +218,19 @@ class manager(QObject):
         result = False
         #if self._theMainWindow.theScan.theScanSettings.chkbFileStore.isChecked():
         if scanReportStorageEnabled == 1:
+            reportDir = ""
             while not result:
                 self._theMainWindow.theScan.theScanSettings.theStoreFileDialog.ShowDirsOnly
                 self._theMainWindow.theScan.theSelect.selectDialog.setFileMode(QFileDialog.Directory)
-                self.reportDir = self._theMainWindow.theScan.theSelect.selectDialog.getExistingDirectory()
-                result = utilities.checkFolderPermissions(self.reportDir)
+                reportDir = self._theMainWindow.theScan.theSelect.selectDialog.getExistingDirectory()
+                if reportDir == "":
+                    return
+                result = utilities.checkFolderPermissions(reportDir)
                 if not result:
                     QMessageBox.information(None, "Προσοχή", "Δεν έχετε τα κατάλληλα δικαιώματα για το συγκεκριμένο directory - Παρακαλώ επιλέξτε άλλο directory", 
                                     QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
                 else:                   
-                    scanReportFolder = self.reportDir
+                    scanReportFolder = reportDir
                     self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setText(scanReportFolder)
             
     
