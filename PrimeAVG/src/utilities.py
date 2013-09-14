@@ -142,10 +142,22 @@ class scanWorker(QtCore.QThread):
         global mutexResults
        
         try:
-           self.theLine = str(self.avgscanProc.readAllStandardOutput())
-        except UnicodeDecodeError:
-            pass                
-        self.sigWriteScan.emit(self.theLine)
+           if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+               #print(str(self.avgscanProc))
+               self.theLine = self.avgscanProc.readAllStandardOutput()
+               #print("--------------")
+               #print(str(self.avgscanProc))
+               self.sigWriteScan.emit(str(self.theLine))
+           else:
+               print("DID NOT MANAGE TO RETRIEVE LINE")
+               return
+        except UnicodeDecodeError as uerr:
+            print ("A Unicode error occurred: " + str(uerr))
+            return
+        except Exception as genericerror:
+            print("A generic error occurred: " + str(genericerror)) 
+            return               
+         
         
         textin = str(self.theLine).splitlines()
         #print("textin, within processScanOutput: " + str(textin))

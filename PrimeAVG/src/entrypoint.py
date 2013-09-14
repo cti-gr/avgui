@@ -1,4 +1,4 @@
-#!/usr/bin/python3.2
+#!/usr/bin/python3.3
 import gc
 from PySide.QtGui import QApplication, QMessageBox
 import sys

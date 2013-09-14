@@ -202,12 +202,13 @@ class manager(QObject):
             scanParams.append("--heal")
         elif self._theMainWindow.theScan.theScanSettings.radioVault.isChecked():
             scanParams.append("--vv-move")
+        scanParams.append("--ignerrors")
         
-        print("Inside function the scanParams are: " + str(scanParams))
+        #print("Inside function the scanParams are: " + str(scanParams))
         scanParameters = scanParams
         #print("Just set manager._scanParams: " + str(manager._scanParams))
         #scanParameters = scanParams
-        print("Just set scanParameters: " + str(scanParameters))
+        #print("Just set scanParameters: " + str(scanParameters))
         
         if self.validateFileStorage() & (scanReportStorageEnabled == 1):
             self._theMainWindow.theScan.theScanSettings.close()
