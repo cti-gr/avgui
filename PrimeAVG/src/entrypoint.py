@@ -1,4 +1,4 @@
-#!/usr/bin/python3.2
+#!/usr/bin/python3.3
 import gc
 from PySide.QtGui import QApplication, QMessageBox
 import sys
@@ -30,6 +30,9 @@ if (len(sys.argv) > 1):
 else:
     config.init_config(False)
 print(config.DBFILEPATH)
+print("Executing with Python: " + config.PYTHON_VERSION)
+print("Using PySide: " + config.PYSIDE_VERSION)
+print("Qt Framework used is: " + config.QT_VERSION)
 theApp = theApplication()
 theApp.theWindow.show()
 
