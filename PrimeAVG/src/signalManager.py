@@ -1,4 +1,4 @@
-#!/usr/lib/python3.2
+#!/usr/lib/python3.3
 from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout
 from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize
 from datetime import datetime, date, time
@@ -342,18 +342,22 @@ class manager(QObject):
     
     def terminateScan(self):
         global abnormalTermination
+        print("Entering terminateScan from signalManager")
         if self.theScanWorker.isRunning():
-            self.theScanWorker.killScan()
-            #self.theScanWorker.exit()
+            print("Seems it was running, calling killScan method")
+            #self.theScanWorker.killScan()
+            self.theScanWorker.exit()
             manager._scanRunning = 0
             abnormalTermination = 1
         self._theMainWindow.theScan.theScanProgress.hide()
         if self.theScanWorker.isRunning():
+            print("EXITING TWICE!!!")
             self.theScanWorker.exit()
         manager._scanParams = []
       
              
     def onScanFinish(self):
+        print("Entering onScanFinish, from signalManager")
         global scanReportFolder
         global scanReportFile
         global scanReportPath
@@ -362,7 +366,7 @@ class manager(QObject):
         #self._theMainWindow.theHistory.theResults.tblVscanResults
         manager._scanRunning = 0
         print("Thread finished normally")
-        
+        gc.collect() 
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
         if abnormalTermination == 0:
             self.theSQLITEWorker.start()

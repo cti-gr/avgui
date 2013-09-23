@@ -30,9 +30,12 @@ if (len(sys.argv) > 1):
 else:
     config.init_config(False)
 print(config.DBFILEPATH)
+theDebugger = utilities.debugger()
+theDebugger.start()
 theApp = theApplication()
 theApp.theWindow.show()
-
+gc.enable()
+#gc.set_debug(gc.DEBUG_STATS | gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_SAVEALL)
 app.exec_()
 # to add finalization operation, e.g. closing the cursor
 

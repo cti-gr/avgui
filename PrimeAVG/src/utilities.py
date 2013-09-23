@@ -6,7 +6,7 @@ import setupGui
 import sqlite3
 import getpass
 import config
-import os, stat
+import os, stat, gc
 
 # To add utility that periodically checks for size of the database !!!
 
@@ -82,6 +82,18 @@ def checkIsExtension(fileTypes):
     else:
         return False
 
+class debugger(QtCore.QThread):
+    def __init__(self, parent=None):
+        super(debugger, self).__init__(parent)
+        
+    def run(self):
+        while True:
+            for o in gc.get_objects():
+                if(("PySide.QtCore.QProces" in str(type(o))) | ("QThread" in str(type(o)))):    
+                    print(str(o) + "ID: " + str(id(o)))
+            self.sleep(3)
+
+
 class scanWorker(QtCore.QThread):
     sigWriteScan = QtCore.Signal(str)
     sigScanTerminated = QtCore.Signal()
@@ -104,15 +116,19 @@ class scanWorker(QtCore.QThread):
         user = None
         numFilesHealed = 0
         #print(str(self.scanParams))
-        
-        
-           
+    
+    def __del__(self):
+        del self.avgscanProc
+        gc.collect()
+
     def run(self): 
         #print("CURRENT THREAD WHEN STARTING: " +  str(self.currentThreadId()))
         #print("Starting scan with scanPath: " + str(self.scanPath) + " and with scanParams: " + str(self.scanParams))
-        self.finished.connect(self.onThreadFinish)
+        #self.finished.connect(self.onThreadFinish)
         self.avgscanProc = QtCore.QProcess()
-        self.avgscanProc.readyReadStandardOutput.connect(self.printOut)
+        self.avgscanProc.open(QtCore.QIODevice.Unbuffered)
+        self.avgscanProc.destroyed.connect(self.procDestroyed)
+        self.avgscanProc.readyRead.connect(self.printOut)
         self.avgscanProc.finished.connect(self.onAVGProcessFinish)
         if (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Running) & (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Starting) :
             
@@ -128,10 +144,14 @@ class scanWorker(QtCore.QThread):
                 except ExceptionInit as errinit:
                     print("Σφάλμα κατά την εκκίνηση της σάρωσης " + str(errinit))
                 
+        print("ID SCAN PROC: " + str(id(self.avgscanProc)))
         self.exec_()
+        self.avgscanProc.deleteLater()      
        
-        
-        
+    def procDestroyed(self):
+        print("!!!!!! PROCESS DESTROYED !!!!!!") 
+    
+    @QtCore.Slot()    
     def printOut(self):
         global malwareFound
         global infectedFiles
@@ -144,12 +164,22 @@ class scanWorker(QtCore.QThread):
         try:
            if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
                #print(str(self.avgscanProc))
-               self.theLine = self.avgscanProc.readAllStandardOutput()
+               #print("Before reading: " + str(id(self.avgscanProc)))
+               self.theLine = self.avgscanProc.read(self.avgscanProc.bytesAvailable())
+               #self.theLine = self.avgscanProc.readAllStandardOutput()
                #print("--------------")
                #print(str(self.avgscanProc))
                self.sigWriteScan.emit(str(self.theLine))
            else:
                print("DID NOT MANAGE TO RETRIEVE LINE")
+               print("In printOut, Thread id: " + str(id(self)))
+               print("In printOut, PROCESS id: " + str(id(self.avgscanProc)))
+               #print(vars(self.avgscanProc))
+               self.avgscanProc.closeWriteChannel()
+               self.avgscanProc.closeReadChannel(QProcess.StandardOutput)
+               print(str(self.avgscanProc.readChannel()))
+               #self.avgscanProc.finished.emit(0)
+               #gc.collect()
                return
         except UnicodeDecodeError as uerr:
             print ("A Unicode error occurred: " + str(uerr))
@@ -184,22 +214,28 @@ class scanWorker(QtCore.QThread):
         except Exception as err:
             print(str(err))
         
-        #self.exec_()
         
     def killScan(self):
         if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-            #print("PROCESS was running, now exiting - KILLED")
-            self.avgscanProc.kill()
+            print("PROCESS was running, now exiting - KILLED")
+            self.avgscanProc.close()
+            #self.avgscanProc.kill()
             #self.exit()
        
         
     def onAVGProcessFinish(self):
-        #print("--------- QProcess Terminated ----------")
-        self.avgscanProc.readyReadStandardOutput.disconnect()
+        print("--------- QProcess Terminated ----------")
+        print("In onAVGProcessFinish, Thread id: " + str(id(self)))
+        print("In onAVGProcessFinish, PROCESS id: " + str(id(self.avgscanProc)))
+        #self.avgscanProc.readyReadStandardOutput.disconnect()
+        self.avgscanProc.blockSignals(True)
+        self.avgscanProc.kill()
         self.avgscanProc.close()
-        self.avgscanProc.finished.disconnect()
+        del self.avgscanProc
+        gc.collect()
+        #self.avgscanProc.finished.disconnect()
         self.exit()
-        self.avgscanProc.terminate()
+        #self.avgscanProc.terminate()
         
     
     def onThreadFinish(self):
