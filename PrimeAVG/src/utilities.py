@@ -103,13 +103,13 @@ class scanWorker(QtCore.QThread):
         dbRelDate = None
         user = None
         numFilesHealed = 0
-        print(str(self.scanParams))
+        #print(str(self.scanParams))
         
         
            
     def run(self): 
         #print("CURRENT THREAD WHEN STARTING: " +  str(self.currentThreadId()))
-        print("Starting scan with scanPath: " + str(self.scanPath) + " and with scanParams: " + str(self.scanParams))
+        #print("Starting scan with scanPath: " + str(self.scanPath) + " and with scanParams: " + str(self.scanParams))
         self.finished.connect(self.onThreadFinish)
         self.avgscanProc = QtCore.QProcess()
         self.avgscanProc.readyReadStandardOutput.connect(self.printOut)
@@ -250,9 +250,9 @@ class sqliteWorker(QtCore.QThread):
             else:
                 cnt = 0
                 while cnt < len(virusDBslist):
-                    print("here")
+                    #print("here")
                     if (dbVersion in virusDBslist[cnt][1]):
-                        print(cnt)
+                        #print(cnt)
                         break
                     cnt = cnt + 1
                 if cnt >= len(virusDBslist):
@@ -304,7 +304,7 @@ class sqliteWorker(QtCore.QThread):
             print("dbVerTuple: " + str(dbVerTuple))
             dbs = cur.execute('select ID from tblVirusDBs where DBVersion = ?', dbVerTuple)
             dblist = dbs.fetchall()
-            print("dblist: " + str(dblist))
+            #print("dblist: " + str(dblist))
             if len(dblist) > 1:
                 print("Σφάλμα κατά την εξαγωγή του dbID")
                 conn.close()
@@ -334,7 +334,7 @@ class sqliteWorker(QtCore.QThread):
             z = 0
             for rowSEID in y:
                 scaneventID = rowSEID[0]
-                print("scan event ID: " + str(scaneventID))
+                #print("scan event ID: " + str(scaneventID))
                 z = z + 1
             if z != 1:
                 print("Σφάλμα κατά την εξαγωγή του Scan Event ID " + str(scaneventID))
@@ -512,10 +512,10 @@ def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =
         else:
             queryString = querySelect + queryFrom
         queryString = queryString + 'ORDER BY tblScanEvent.DateTime'
-        print(queryString)
+        #print(queryString)
         results = cur.execute(queryString)
         resultsList = results.fetchall()
-        print("resultsList: " + str(resultsList))
+        #print("resultsList: " + str(resultsList))
     
     except Exception as errcon:
         QtGui.QMessageBox.critical(None, "Προσοχή", "Σφάλμα κατά την αναζήτηση περιεχομένου στη βάση: " + str(errcon), 
