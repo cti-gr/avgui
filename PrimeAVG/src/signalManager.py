@@ -1,6 +1,6 @@
 #!/usr/lib/python3.3
 from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout
-from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize
+from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker
 from datetime import datetime, date, time
 import utilities
 from io import open
@@ -25,7 +25,7 @@ global scanReportFolder
 global scanReportFile
 global scanReportPath
 global scanReportStorageEnabled
-
+mutexTermination = QMutex()
 
 class manager(QObject):
     _scanParams = []
@@ -253,7 +253,7 @@ class manager(QObject):
             else:
                 scanReportPath = scanReportFile
             storagePathOK = True
-        print("scanReportPath is: " + str(scanReportPath))
+        #print("scanReportPath is: " + str(scanReportPath))
         
         return storagePathOK
              
@@ -297,10 +297,9 @@ class manager(QObject):
         global abnormalTermination
         global scanParameters
         self.getScanSettings()
-        print("global scanpath: " + str(scanPath))
-        
         abnormalTermination = 0
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
+        '''
         # can only have one scan process running
         if manager._scanRunning == 0:
             manager._scanRunning = 1
@@ -310,26 +309,28 @@ class manager(QObject):
                                  QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
                 manager._scanRunning = 0
                 return -1
-            # preparing to start scan in a new thread
-            self._theMainWindow.theScan.theScanProgress.textScanProg.clear()
-            self._theMainWindow.theScan.theScanProgress.show()
-            self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
-            self.theScanWorker.finished.connect(self.onScanFinish)
-            self.theScanWorker.sigWriteScan.connect(self.printToWidget)
+            ''' 
+        # preparing to start scan in a new thread
+        self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
+        #self.theScanWorker.finished.connect(self.onScanFinish)
+        self.theScanWorker.sigWriteScan.connect(self.printToWidget)
+        self.theScanWorker.sigScanTerminated.connect(self.onScanFinish)
+        
+        self._theMainWindow.theScan.theScanProgress.textScanProg.clear()
+        self._theMainWindow.theScan.theScanProgress.show()
+        self.theScanWorker.start()
             
-            #preparing to store scan event in a new thread
-            self.theSQLITEWorker = utilities.sqliteWorker()
-            self.theSQLITEWorker.finished.connect(self.onSQLiteFinish)
+        #preparing to store scan event in a new thread
+        self.theSQLITEWorker = utilities.sqliteWorker()
+        self.theSQLITEWorker.finished.connect(self.onSQLiteFinish)
             
-            self.theScanWorker.sigScanTerminated.connect(self.onScanFinish)
-            self.theScanWorker.start()
-               
-            
+                           
+        '''    
         else:
             QMessageBox.information(None, "Προσοχή", "Εκτελείται ήδη διαδικασία αναζήτησης κακόβουλου λογισμικού", 
                                  QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
             #return -1
-        
+        '''
     def onSQLiteFinish(self):
         pass
         #print("Data Insertion Completed!!!!")
@@ -341,44 +342,50 @@ class manager(QObject):
                 
     
     def terminateScan(self):
-        global abnormalTermination
-        print("Entering terminateScan from signalManager")
-        if self.theScanWorker.isRunning():
-            print("Seems it was running, calling killScan method")
-            #self.theScanWorker.killScan()
-            self.theScanWorker.exit()
-            manager._scanRunning = 0
-            abnormalTermination = 1
-        self._theMainWindow.theScan.theScanProgress.hide()
-        if self.theScanWorker.isRunning():
-            print("EXITING TWICE!!!")
-            self.theScanWorker.exit()
-        manager._scanParams = []
-      
-             
-    def onScanFinish(self):
-        print("Entering onScanFinish, from signalManager")
-        global scanReportFolder
-        global scanReportFile
-        global scanReportPath
-        
-        global abnormalTermination
-        #self._theMainWindow.theHistory.theResults.tblVscanResults
-        manager._scanRunning = 0
-        print("Thread finished normally")
-        gc.collect() 
+         global abnormalTermination
+         print("Entering terminateScan from signalManager")
+         if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
+             print("Seems it was running, calling killScan method")
+             self.theScanWorker.killScan()
+             #self.theScanWorker.exit()
+             #manager._scanRunning = 0
+         self._theMainWindow.theScan.theScanProgress.hide()
+         #if self.theScanWorker.isRunning():
+         #    print("EXITING TWICE!!!")
+         #    self.theScanWorker.exit()
+         manager._scanParams = []
+         
+
+    def onScanFinish(self, normalTermination):
+        print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
+        #global abnormalTermination
+        #manager._scanRunning = 0
+        #self.theScanWorker.sigWriteScan.disconnect()
+        #self.theScanWorker.sigScanTerminated.disconnect()
+        self.theScanWorker.exit()
+        while not self.theScanWorker.wait():
+            print("Waiting for scan worker to finish")
+            #self.theScanWorker.exit()
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
-        if abnormalTermination == 0:
-            self.theSQLITEWorker.start()
+        if self.theScanWorker.isFinished():
+            print("theScanWorker is finished")
+            print(" ")
+        elif self.theScanWorker.isRunning():
+            print("theScanWorker is RUNNING!")
+        else:
+            print("WTF?!")
+        try:
+            lockerFinish = QMutexLocker(mutexTermination)          
+            if normalTermination=="True":
+                print("normalTermination = " + normalTermination + " - Will START SQL")
+                self.theSQLITEWorker.start() 
+        except Exception as errnmut2:
+            print(str(errmut2))   
+       
         manager._scanParams = []
-        
-        #scanReportFolder = None
-        #scanReporPath = None
-        #scanReportFile = None
-        
+        #self.theScanWorker.cleanup()
         gc.collect()
-   
-    
+           
     def execSearch(self):
         flag = 0
         

@@ -91,12 +91,12 @@ class debugger(QtCore.QThread):
             for o in gc.get_objects():
                 if(("PySide.QtCore.QProces" in str(type(o))) | ("QThread" in str(type(o)))):    
                     print(str(o) + "ID: " + str(id(o)))
-            self.sleep(3)
+            self.sleep(5)
 
 
 class scanWorker(QtCore.QThread):
     sigWriteScan = QtCore.Signal(str)
-    sigScanTerminated = QtCore.Signal()
+    sigScanTerminated = QtCore.Signal(str)
     
     def __init__(self, scanPath, scanParams, parent=None):
         super(scanWorker, self).__init__(parent)
@@ -115,10 +115,11 @@ class scanWorker(QtCore.QThread):
         dbRelDate = None
         user = None
         numFilesHealed = 0
-        #print(str(self.scanParams))
-    
+        self.normalTermination = "True"
+	
     def __del__(self):
-        del self.avgscanProc
+        if hasattr(self, 'avgscanProc'):
+            del self.avgscanProc
         gc.collect()
 
     def run(self): 
@@ -132,21 +133,33 @@ class scanWorker(QtCore.QThread):
         self.avgscanProc.finished.connect(self.onAVGProcessFinish)
         if (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Running) & (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Starting) :
             
-            #print("---- STARTING AVG SCAN ----")
+            print("---- STARTING AVG SCAN ----")
             if self.scanParams != None:
                 try:
+                    print("Within try1")
                     self.avgscanProc.start("avgscan", [self.scanPath] + self.scanParams)
-                except ExceptionInit as errinit:
+                    self.exec_()
+                    #while not self.avgscanProc.waitForStarted():
+                    #    print("Waiting avgscanProc to start") 
+                except Exception as errinit1:
                         print("Σφάλμα κατά την εκκίνηση της σάρωσης " + str(errinit))
             else:
                 try:
+                    print("Within try2")
                     self.avgscanProc.start("avgscan", [self.scanPath])
-                except ExceptionInit as errinit:
+                    self.exec_()
+                    #while not self.avgscanProc.waitForStarted():
+                    #    print("Waiting avgscanProc to start") 
+                except Exception as errinit2:
                     print("Σφάλμα κατά την εκκίνηση της σάρωσης " + str(errinit))
-                
-        print("ID SCAN PROC: " + str(id(self.avgscanProc)))
-        self.exec_()
-        self.avgscanProc.deleteLater()      
+
+              
+        #print("ID SCAN PROC: " + str(id(self.avgscanProc)))
+        #print("-------------BEFORE EXEC-------------")
+        #self.exec_()
+        #print("-------------AFTER EXEC--------------")
+        #if hasattr(self, 'avgscanProc'):
+        #    self.avgscanProc.deleteLater()      
        
     def procDestroyed(self):
         print("!!!!!! PROCESS DESTROYED !!!!!!") 
@@ -216,27 +229,63 @@ class scanWorker(QtCore.QThread):
         
         
     def killScan(self):
-        if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+      self.avgscanProc.kill()
+      self.normalTermination="False"     
+      #if hasattr(self, 'avgscanProc'):
+      #    while not self.avgscanProc.waitForFinished():
+      #        print("Waiting....")
+      #self.sigScanTerminated.emit()
+      
+      '''  
+      if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
             print("PROCESS was running, now exiting - KILLED")
-            self.avgscanProc.close()
+            #self.avgscanProc.readyReadStandardOutput.disconnect()
+            print("disconnecting finished signal of avgscanproc")
+            self.avgscanProc.finished.disconnect()
+            #self.avgscanProc.blockSignals(True)
+            print("killing")
+            self.avgscanProc.kill()
+            print("closing")
+            if hasattr(self, 'avgscanProc'):
+                print("it does have the attribute avgscanProc, deleting it")
+                #while not self.avgscanProc.waitForFinished():
+                #    print("Waiting for avgscanProc to finish")
+                #self.avgscanProc.close()
+                del self.avgscanProc
+                print("deleted it")
+            gc.collect()
+            print("gc-collected")
             #self.avgscanProc.kill()
             #self.exit()
-       
-        
+            self.sigScanTerminated.emit()
+      '''
+
+    def getScanState(self):
+        if hasattr(self, 'avgscanProc'):
+            return self.avgscanProc.state()    
+        else:
+            pass
+
     def onAVGProcessFinish(self):
         print("--------- QProcess Terminated ----------")
-        print("In onAVGProcessFinish, Thread id: " + str(id(self)))
-        print("In onAVGProcessFinish, PROCESS id: " + str(id(self.avgscanProc)))
+        #print("In onAVGProcessFinish, Thread id: " + str(id(self)))
+        #print("In onAVGProcessFinish, PROCESS id: " + str(id(self.avgscanProc)))
         #self.avgscanProc.readyReadStandardOutput.disconnect()
-        self.avgscanProc.blockSignals(True)
-        self.avgscanProc.kill()
-        self.avgscanProc.close()
-        del self.avgscanProc
+        #self.avgscanProc.blockSignals(True)
+        if hasattr(self, 'avgscanProc'):
+            if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+               self.avgscanProc.kill()
+            self.avgscanProc.close()
+        if hasattr(self, 'avgscanProc'):
+            del self.avgscanProc
         gc.collect()
         #self.avgscanProc.finished.disconnect()
-        self.exit()
+        #self.exit()
         #self.avgscanProc.terminate()
-        
+        if hasattr(self, 'avgscanProc'):
+            while not self.avgscanProc.waitForFinished():
+               print("Waiting before emitting...")
+        self.sigScanTerminated.emit(self.normalTermination)
     
     def onThreadFinish(self):
        
@@ -273,7 +322,7 @@ class sqliteWorker(QtCore.QThread):
             # if it does not exist
             #   add it in tblVirusDB
             ########################
-            print("Executing tblVirusDBs insertion")    
+            #print("Executing tblVirusDBs insertion")    
             getVirusDBs = cur.execute("""select * from tblVirusDBs""")
             virusDBslist = getVirusDBs.fetchall()
             #print("virusDBslist :" + str(virusDBslist))
@@ -293,8 +342,8 @@ class sqliteWorker(QtCore.QThread):
                     cnt = cnt + 1
                 if cnt >= len(virusDBslist):
                     toInsert = (dbVersion, dbRelDate)
-                    print(str(toInsert))
-                    print("cnt: " + str(cnt))
+                    #print(str(toInsert))
+                    #print("cnt: " + str(cnt))
                     cur.execute('insert into tblVirusDBs (DBVersion, DBrDate) values (?, ?)', toInsert)
                     #conn.commit()
                                      
@@ -335,9 +384,9 @@ class sqliteWorker(QtCore.QThread):
             #scanWorker.numFilesHealed
             
             # getting dbID from the tblVirusDBs
-            print("dbVersion is: " + dbVersion)
+            #print("dbVersion is: " + dbVersion)
             dbVerTuple = (dbVersion, )
-            print("dbVerTuple: " + str(dbVerTuple))
+            #print("dbVerTuple: " + str(dbVerTuple))
             dbs = cur.execute('select ID from tblVirusDBs where DBVersion = ?', dbVerTuple)
             dblist = dbs.fetchall()
             #print("dblist: " + str(dblist))
@@ -347,7 +396,7 @@ class sqliteWorker(QtCore.QThread):
                 raise Exception("Error getting dbID")
                 exit(-1)
             else:
-                print("foufoutos")
+                #print("foufoutos")
                 #exit(1)
                 dbID = dblist[0][0]
            
