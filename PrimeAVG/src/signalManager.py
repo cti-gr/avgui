@@ -67,7 +67,8 @@ class manager(QObject):
         self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
         self._theMainWindow.theScan.btnBeginScan.clicked.connect(self.beginScan)
         self._theMainWindow.theScan.btnScanSettings.clicked.connect(self.setScanSettings)
-        
+        self._theMainWindow.theScan.sigCleanScanDialog.connect(self.cleanScanDialog)      
+ 
         #Scan Select Dialog
         #self._theMainWindow.theScan.theSelect.sigSelectType.connect(self.handleSelectScanTypeEmits)
         self._theMainWindow.theScan.theSelect.radioFile.clicked.connect(self.emitFileSelected)
@@ -299,17 +300,12 @@ class manager(QObject):
         self.getScanSettings()
         abnormalTermination = 0
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
-        '''
-        # can only have one scan process running
-        if manager._scanRunning == 0:
-            manager._scanRunning = 1
-            # checking if scan path is set
-            if scanPath == None:
-                QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
+        print("Scan path is: " + str(scanPath))
+        if scanPath == None:
+            QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
                                  QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-                manager._scanRunning = 0
-                return -1
-            ''' 
+            return -1
+        
         # preparing to start scan in a new thread
         self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
         #self.theScanWorker.finished.connect(self.onScanFinish)
@@ -347,25 +343,15 @@ class manager(QObject):
          if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
              print("Seems it was running, calling killScan method")
              self.theScanWorker.killScan()
-             #self.theScanWorker.exit()
-             #manager._scanRunning = 0
          self._theMainWindow.theScan.theScanProgress.hide()
-         #if self.theScanWorker.isRunning():
-         #    print("EXITING TWICE!!!")
-         #    self.theScanWorker.exit()
          manager._scanParams = []
          
 
     def onScanFinish(self, normalTermination):
         print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
-        #global abnormalTermination
-        #manager._scanRunning = 0
-        #self.theScanWorker.sigWriteScan.disconnect()
-        #self.theScanWorker.sigScanTerminated.disconnect()
         self.theScanWorker.exit()
         while not self.theScanWorker.wait():
             print("Waiting for scan worker to finish")
-            #self.theScanWorker.exit()
         self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
         if self.theScanWorker.isFinished():
             print("theScanWorker is finished")
@@ -383,9 +369,16 @@ class manager(QObject):
             print(str(errmut2))   
        
         manager._scanParams = []
-        #self.theScanWorker.cleanup()
         gc.collect()
-           
+    
+
+    def cleanScanDialog(self):
+        global scanPath
+        print("Running cleanup")
+        scanPath = None
+        manager._scanParams = []
+                       
+        
     def execSearch(self):
         flag = 0
         

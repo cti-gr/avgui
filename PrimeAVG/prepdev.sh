@@ -30,7 +30,9 @@ for file in $DEBDIR/*
 					rm -r $file2
 				fi
 			done
-			DESTINATION=${file%\-*}'-'$VERSION
+			
+            DESTINATION='avgui-'$DESTINATION
+            #DESTINATION=${file%\-*}'-'$VERSION
 			echo "Destination now is " $DESTINATION
 			if [ $file != $DESTINATION ]; then				
 				mv $file $DESTINATION

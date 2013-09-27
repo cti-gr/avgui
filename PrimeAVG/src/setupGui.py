@@ -83,6 +83,7 @@ class scanSelect(QtGui.QDialog, scanSelectUI.Ui_scanSelectDialog):
         
 class scanDialog(QtGui.QDialog, scanDialogUI.Ui_scanDialog):
     
+    sigCleanScanDialog = QtCore.Signal()
     
     def __init__(self, parent=None):
         super(scanDialog, self).__init__(parent)
@@ -101,7 +102,10 @@ class scanDialog(QtGui.QDialog, scanDialogUI.Ui_scanDialog):
         self.fileToScanLabel.setText("Δεν έχουν επιλεγεί αρχεία / φάκελοι")
         self.infoLabel.setText("")        
    
-         
+    def closeEvent(self, event):
+       self.sigCleanScanDialog.emit()
+    
+    
 
 class historyDialog(QtGui.QDialog, historyDialogUI.Ui_historyDialog):
     def __init__(self, parent=None):
