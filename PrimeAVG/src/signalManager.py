@@ -137,21 +137,26 @@ class manager(QObject):
         global scanPath
         options = QFileDialog.DontResolveSymlinks 
         scanPath = QFileDialog.getOpenFileName(self._theMainWindow.theScan.theSelect, 'Επιλογή Αρχείου προς Σάρωση', '/home', 'All files (*.*)', "",  options)[0]
-        print(scanPath)
-        # manager._scanType = 0
-        self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
-        self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
+        print("scan path is: " + scanPath)
+        if scanPath == "":
+            scanPath=None
+            return
+        else:
+            self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
+            self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
         self._theMainWindow.theScan.theSelect.close()
         
     def emitFolderSelected(self):
         global scanPath
         options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
         scanPath = QFileDialog.getExistingDirectory(self._theMainWindow.theScan.theSelect, 'Επιλογή Φακέλου προς Σάρωση', '/home', options)
-        print(scanPath)
-        # manager._scanType = 1
-        self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
-        #self._theMainWindow.theScan.theSelect.sigSelectType.emit("FOLDER")
-        self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
+        print("scan path is: " + scanPath)
+        if scanPath == "":
+            scanPath=None
+            return
+        else:
+            self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
+            self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
         self._theMainWindow.theScan.theSelect.close()
 
 ################################### Methods related to setting the Scan Settings ##########################################
