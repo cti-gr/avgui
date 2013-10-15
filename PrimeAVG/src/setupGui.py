@@ -1,6 +1,17 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI
 from PySide import QtGui, QtCore
 from datetime import date
+
+class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
+	def __init__(self, parent=None):
+		super(checkPanel, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
+
+class countDown(QtGui.QDialog, countDownUI.Ui_formCountDown):
+	def __init__(self, parent=None):
+		super(countDown, self).__init__(parent)
+		self.setupUi(self)
 
 class histdbResults(QtGui.QDialog, dbupdateResultsUI.Ui_dialogDBResults):
     def __init__(self, parent=None):
@@ -23,7 +34,6 @@ class scanResults(QtGui.QDialog, scanResultsUI.Ui_dialogScanResults):
     
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
-    
     def __init__(self, parent=None):
         super(scanProgress, self).__init__(parent)
         self.setupUi(self)
@@ -118,7 +128,9 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
         super(updateDialog, self).__init__(parent)
         self.setupUi(self)
         self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
-        
+         
+        self.theCountDown = countDown(self)
+        self.theCheckPanel = checkPanel(self)
 
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
     
@@ -132,6 +144,6 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
         self.theUpdate = updateDialog(self)
         self.theScan = scanDialog(self)
         self.theHistory = historyDialog(self)
-        self.theScanProgress = scanProgress()
+        #self.theScanProgress = scanProgress()
         
         self.connect(self.btnExitMain, QtCore.SIGNAL("clicked()"), self.close)

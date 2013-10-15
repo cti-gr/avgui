@@ -86,6 +86,9 @@ class manager(QObject):
         self._theMainWindow.theHistory.btnHistoryDB.clicked.connect(self.retrieveDBHistory)
         self._theMainWindow.theHistory.theResults.btnExtractTxt.clicked.connect(self.extractToText)
         self._theMainWindow.theHistory.theResults.sigCloseEvent.connect(self.clearResults)
+
+        #Update Dialog
+        self._theMainWindow.theUpdate.btnUpdateCheck.clicked.connect(self.checkUpdates)
                   
     def emitScan(self):
         self._theMainWindow.sigMainSent.emit("SCAN")
@@ -466,4 +469,33 @@ class manager(QObject):
         #print("Test")
     
             
+################################################## UPDATES ###########################################################
+
+    def displayCheckProgress (self):
+        print("Must Show!!!!!!!!!!!!!")
        
+    def checkUpdates(self):
+        self.theChecker = utilities.chkUpdateWorker()
+        self.theChecker.sigTimerReduce.connect(self.decrementLCD)
+        self.theChecker.sigCheckFinished.connect(self.handleCheckTermination)
+        self.theChecker.sigCheckStarted.connect(self.displayCheckProgress)
+        self._theMainWindow.theUpdate.theCountDown.show()
+        self.theChecker.start()
+        #try:
+        #    self.theChecker.start() 
+        #except Exception as err:
+        #    print("Error!!!")
+        #    raise(err)
+        #while self.theChecker.isRunning():
+        #    print("Waiting for checker to finish...")
+
+    def decrementLCD(self):
+        currentValue = self._theMainWindow.theUpdate.theCountDown.countDownLCD.intValue()
+        print("decrementing: current value is" + str(currentValue))
+        self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(currentValue - 1)
+     
+    def handleCheckTermination(self, updateMsg):
+        print("inside")
+        self._theMainWindow.theUpdate.theCountDown.close()
+        self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(updateMsg)
+        self._theMainWindow.theUpdate.theCheckPanel.show()

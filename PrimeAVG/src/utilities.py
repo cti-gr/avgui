@@ -21,10 +21,70 @@ foo = 0
 
 # TO ADD function to check database existence and integrity
 
+################################ Check Updates ###############################################################
+
+class chkUpdateWorker(QtCore.QThread):
+
+	sigCheckFinished = QtCore.Signal(str)
+	sigCheckStarted = QtCore.Signal()
+	sigTimerReduce = QtCore.Signal()
+
+	def __init__(self, parent=None):
+		super(chkUpdateWorker, self).__init__(parent)
+
+	def run(self):
+		result = None
+		try:
+			self.theTimer = QtCore.QTimer()
+			self.theTimer.timeout.connect(self.reduceLCD)
+			self.sigCheckStarted.emit()
+			self.theTimer.start(1000)
+			self.proc = subprocess.Popen(["gksu", "--message='H συγκεκριμένη ενέργεια απαιτεί εισαγωγή συνθηματικού χρήστη (password)'", "--description='Έλεγχος Διαθέσιμων Ενημερώσεων'", "avgupdate -c"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+			self.finished.connect(self.onThreadTermination)
+			self.theOutput, self.theError = self.proc.communicate(timeout=30)
+			self.parseOutput(str(self.theOutput.decode("utf")))
+			self.exit()
+		except subprocess.TimeoutExpired:
+			self.sigCheckFinished.emit("TO")
+			print("timeout!")		
+			return
+		except subprocess.CalledProcessError as cpe:
+			if (cpe.returncode==1):
+				self.sigCheckFinished.emit("ER")
+				print("error code 1")
+				return
+			elif (cpe.returncode==2):
+				print("error code 2")
+				parseOutput(cpe.output.decode("utf"))
+				return
+		self.exec_()
+
+	def reduceLCD(self):
+		print("reducing lcd...")
+		self.sigTimerReduce.emit()
+		
+	def parseOutput(self, theOutput):
+		if not theOutput:
+			raise Exception("Test")
+			return
+		else:
+			print("POLL: " + str(self.proc.poll()))
+			print("the error: " + str(self.theError))
+			for i,j in config.translationDict.items():
+				theOutput = theOutput.replace(i,j)
+			self.theOutput = theOutput
+		print("---------------- New Output --------------")
+		print(self.theOutput)
+		
+	def onThreadTermination(self):
+		print("Thread finished")
+		self.sigCheckFinished.emit(self.theOutput)
+				
+	
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath
-    # either as owner, group or other
+    # either as owner, group or otheir
     
     if filepath == "":
         QtGui.QMessageBox.critical(None, "Προσοχή", "Δεν ήταν δυνατόν ο έλεγχος δικαιωμάτων του συγκεκριμένου directory", 
@@ -619,7 +679,7 @@ class dbHistoryWorker(QtCore.QThread):
     def run(self): 
         try:
             self.dbupdhist = subprocess.check_output(["gksu","--description=Ιστορικό", "--message='H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)'", "avgevtlog"]).decode("utf")
-        except CalledProcessError as cpe:
+        except subprocess.CalledProcessError as cpe:
             print(str(cpe))                
         print(type(self.dbupdhist))
         flagParse = False

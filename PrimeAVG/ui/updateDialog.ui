@@ -39,7 +39,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="btnUpdate">
       <property name="minimumSize">
        <size>
         <width>300</width>
@@ -77,7 +77,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="btnUpdateSet">
       <property name="minimumSize">
        <size>
         <width>300</width>
@@ -115,7 +115,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="btnUpdateCheck">
       <property name="minimumSize">
        <size>
         <width>300</width>

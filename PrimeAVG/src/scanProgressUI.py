@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'scanProgress.ui'
 #
-# Created: Mon Sep  9 12:17:21 2013
-#      by: pyside-uic 0.2.13 running on PySide 1.1.2
+# Created: Mon Oct 14 19:34:30 2013
+#      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
