@@ -3,15 +3,24 @@ from PySide import QtGui, QtCore
 from datetime import date
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
+		
+	
 	def __init__(self, parent=None):
 		super(checkPanel, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
+	
 class countDown(QtGui.QDialog, countDownUI.Ui_formCountDown):
+	
+	sigCloseEvent = QtCore.Signal(str)
+	
 	def __init__(self, parent=None):
 		super(countDown, self).__init__(parent)
 		self.setupUi(self)
+	
+	def closeEvent(self, event):
+		self.sigCloseEvent.emit("")
 
 class histdbResults(QtGui.QDialog, dbupdateResultsUI.Ui_dialogDBResults):
     def __init__(self, parent=None):

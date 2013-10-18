@@ -18,69 +18,146 @@ user = None
 numFilesHealed = 0
 mutexResults = QtCore.QMutex()
 foo = 0
+procChecker = None
 
 # TO ADD function to check database existence and integrity
 
+class checkDaemonD(QtCore.QThread):
+	
+    
+	sigDstarted = QtCore.Signal(int)
+    
+	def __init__(self, dName="avgupdate", parent=None):
+		super(checkDaemonD, self).__init__(parent)
+		self.hasStarted = False
+		self.dName = dName
+
+	def run(self):
+		print("EFFECTIVE UID in Thread: " + str(os.geteuid()))
+		self.retriesCnt = 0
+		print("within daemon checker")
+		while True:
+			self.out1 = subprocess.Popen(['ps','-C', self.dName], stdout=subprocess.PIPE)
+			self.out2 = subprocess.Popen(["wc", "-l"], stdin=self.out1.stdout, stdout=subprocess.PIPE)
+			self.out1IN, self.out1ERR = self.out1.communicate()
+			#print("out1IN is: " + str(self.out1IN))
+			#print("out1ERR is: " + str(self.out1ERR))
+			self.linecount = self.out2.communicate()[0]
+			#self.out1.stdout.close()
+			if (int(self.linecount) > 1):
+				if not self.hasStarted:
+					print("linecount is: " + str(int(self.linecount)))
+					print("Emitting signal")
+					self.sigDstarted.emit(0)
+					self.hasStarted = True
+					break
+			elif self.hasStarted:
+				print("EXITING!")
+				#out1.kill()
+				#out2.kill()
+				break
+			else:
+				if os.geteuid() == 0:
+					self.retriesCnt += 1
+				if self.retriesCnt > 20:
+					self.sigDstarted.emit(1)
+					self.exit()
+					return					
+				#print("linecount is: " + str(int(linecount)))
+				#print("linecount is: " + str(int(linecount)))
+				#print("hasStarted is: " + str(self.hasStarted))
+				print("passing " + str(self.retriesCnt) + " -- effective user id: " + str(os.geteuid()))
+		print("calling exit for daemon checker")
+		self.exec_()
+		self.exit()
+								
 ################################ Check Updates ###############################################################
 
 class chkUpdateWorker(QtCore.QThread):
-
-	sigCheckFinished = QtCore.Signal(str)
-	sigCheckStarted = QtCore.Signal()
-	sigTimerReduce = QtCore.Signal()
+	
+    #sigWriteCheck = QtCore.Signal(str)	
+	sigCheckFinished = QtCore.Signal(str, str)
+	#sigCheckStarted = QtCore.Signal()
+	#sigTimerReduce = QtCore.Signal()
+	
+	def getProcState(self):
+		if hasattr(self, 'avgchkProc'):
+			print("Proc State from Within: " + str(self.avgchkProc.state()))
+			return str(self.avgchkProc.state())
 
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
+	
 
 	def run(self):
+		self.theOutput = ""
+		self.abnormalTermination = False
 		result = None
+		self.avgchkupProc = QtCore.QProcess()
+		#self.avgchkupProc.setStandardErrorFile("errfile.txt")
+		#self.avgchkupProc.open(QtCore.QIODevice.Unbuffered)
+		self.avgchkupProc.destroyed.connect(self.procDestroyed)
+		self.avgchkupProc.readyRead.connect(self.parseOutput)
+		self.avgchkupProc.finished.connect(self.onAVGprocFinish)
+		self.finished.connect(self.onThreadTermination)
+		#self.avgchkupProc.set
 		try:
-			self.theTimer = QtCore.QTimer()
-			self.theTimer.timeout.connect(self.reduceLCD)
-			self.sigCheckStarted.emit()
-			self.theTimer.start(1000)
-			self.proc = subprocess.Popen(["gksu", "--message='H συγκεκριμένη ενέργεια απαιτεί εισαγωγή συνθηματικού χρήστη (password)'", "--description='Έλεγχος Διαθέσιμων Ενημερώσεων'", "avgupdate -c"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-			self.finished.connect(self.onThreadTermination)
-			self.theOutput, self.theError = self.proc.communicate(timeout=30)
-			self.parseOutput(str(self.theOutput.decode("utf")))
-			self.exit()
-		except subprocess.TimeoutExpired:
-			self.sigCheckFinished.emit("TO")
-			print("timeout!")		
+			subprocess.Popen(['sudo, -k'])
+			print("starting AVGUPDATE process with EUID: " + str(os.geteuid()))
+			self.avgchkupProc.start("gksu", ["avgupdate -c"])
+			#print("started UPDATE PROCESS with env: " + str(self.avgchkupProc.systemEnvironment()))
+			while not self.avgchkupProc.waitForStarted():
+				print("waiting for process to start")
+			self.exec_()
+		except Exception as err:
+			print(str(err))
 			return
-		except subprocess.CalledProcessError as cpe:
-			if (cpe.returncode==1):
-				self.sigCheckFinished.emit("ER")
-				print("error code 1")
-				return
-			elif (cpe.returncode==2):
-				print("error code 2")
-				parseOutput(cpe.output.decode("utf"))
-				return
-		self.exec_()
 
-	def reduceLCD(self):
-		print("reducing lcd...")
-		self.sigTimerReduce.emit()
+	def procDestroyed(self):
+		print("AVG UPDATE CHECK DESTROYED!!!")
 		
-	def parseOutput(self, theOutput):
-		if not theOutput:
-			raise Exception("Test")
-			return
+	def parseOutput(self):
+		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running):
+			getLines = self.avgchkupProc.read(self.avgchkupProc.bytesAvailable())
+			self.theOutput += str(getLines)
+		for i,j in config.translationDict.items():
+			self.theOutput = self.theOutput.replace(i,j)
+		#print(str(self.theOutput))
+		
+	def killCheck(self):
+		#print("YAHOO!" + str(self.avgchkupProc.state()))
+		#self.avgchkupProc.kill()
+		if hasattr(self, 'avgchkupProc'):
+			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+				print("KILLING IN THE NAME OF")
+				self.avgchkupProc.kill()
+				self.abnormalTermination = True
 		else:
-			print("POLL: " + str(self.proc.poll()))
-			print("the error: " + str(self.theError))
-			for i,j in config.translationDict.items():
-				theOutput = theOutput.replace(i,j)
-			self.theOutput = theOutput
-		print("---------------- New Output --------------")
-		print(self.theOutput)
-		
+			print("ELEOS!!!!!!")
+
 	def onThreadTermination(self):
 		print("Thread finished")
-		self.sigCheckFinished.emit(self.theOutput)
 				
+	def __del__(self):
+		if hasattr(self, 'avgchkupProc'):
+			del self.avgchkupProc
+		gc.collect()
 	
+	def onAVGprocFinish(self):
+		print(" --- QProcess Terminated --- ")	
+		if hasattr(self, 'avgchkupProc'):
+			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+				self.avgchkupProc.kill()
+			self.avgchkupProc.close()
+		if hasattr(self, 'avgchkupProc'):
+			del self.avgchkupProc
+		gc.collect()
+		if hasattr(self, 'avgchkupProc'):
+			while not self.avgchkupProc.waitForFinished():
+				print("Waiting before emitting")
+		self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
+		print("will now call self.exit on the Thread")
+		self.exit()
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath
@@ -727,3 +804,4 @@ class dbHistoryWorker(QtCore.QThread):
         self.exit()
         
 ################################################################################################
+

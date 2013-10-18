@@ -1,12 +1,11 @@
 #!/usr/lib/python3.2
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout
-from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication
+from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QTimer
 from datetime import datetime, date, time
 import utilities
 from io import open
 from os.path import expanduser
-import utilities
-import subprocess, sys, time
+import subprocess, sys, time, weakref
 import setupGui
 import gc
 import getpass
@@ -49,6 +48,7 @@ class manager(QObject):
         super(manager, self).__init__(parent)
         self._theMainWindow = theMainWindow
         self.setupConnections(self._theMainWindow)
+        self.theTimer = QTimer()
         abnormalTermination = 0
         scanReportStorageEnabled = 0
         scanReportPath = None
@@ -471,31 +471,77 @@ class manager(QObject):
             
 ################################################## UPDATES ###########################################################
 
-    def displayCheckProgress (self):
-        print("Must Show!!!!!!!!!!!!!")
-       
+################################################## Check Updates #####################################################
+
     def checkUpdates(self):
+        self.abnormalTermination = False
+        self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(30)
         self.theChecker = utilities.chkUpdateWorker()
-        self.theChecker.sigTimerReduce.connect(self.decrementLCD)
         self.theChecker.sigCheckFinished.connect(self.handleCheckTermination)
-        self.theChecker.sigCheckStarted.connect(self.displayCheckProgress)
+        self.theChecker.started.connect(self.beginDaemonChecker)
+        self._theMainWindow.theUpdate.theCountDown.sigCloseEvent.connect(self.suddenDeath)
+        self.theDaemonChecker = utilities.checkDaemonD()
+        self.theDaemonChecker.sigDstarted.connect(self.startTimer)
         self._theMainWindow.theUpdate.theCountDown.show()
         self.theChecker.start()
-        #try:
-        #    self.theChecker.start() 
-        #except Exception as err:
-        #    print("Error!!!")
-        #    raise(err)
-        #while self.theChecker.isRunning():
-        #    print("Waiting for checker to finish...")
+        while not self.theChecker.isRunning():
+            print("Waiting for checker to start")
+   
+    def suddenDeath(self):
+        if hasattr(self, 'theChecker'):
+            #if (self.theChecker.getProcState() == QProcess.ProcessState.Running) | (self.theChecker.getProcState() == QProcess.ProcessState.Starting):
+            #print("process was running, will KILL THE PROCESS")
+            print("Caling Kill Check")
+            self.theChecker.killCheck()
+               #QApplication.processEvents()
+              
+ 
+    def beginDaemonChecker(self):
+        print("beginning daemon checker")
+        self.theDaemonChecker.start()
+        while not self.theDaemonChecker.isRunning():
+            print("Waiting for daemon checker to start")
 
+        
+    def startTimer(self, result):
+        print("in start timer, result is: " + str(result))
+        if result == 1:
+            QMessageBox.critical(None, "Προσοχή", "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων", 
+                QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+            self._theMainWindow.theUpdate.theCountDown.close()
+        else:
+            print("starting timer...")
+            self.theTimer.timeout.connect(self.decrementLCD)
+            self.theTimer.start(1000)
+ 
     def decrementLCD(self):
         currentValue = self._theMainWindow.theUpdate.theCountDown.countDownLCD.intValue()
-        print("decrementing: current value is" + str(currentValue))
+        print("decrementing: current value is: " + str(currentValue))
         self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(currentValue - 1)
      
-    def handleCheckTermination(self, updateMsg):
+    def handleCheckTermination(self, abnormalTermination, theOutput):
+        self.abnormalTermination = abnormalTermination
         print("inside")
+        self.theTimer.stop()
+        self.theTimer.timeout.disconnect()
+        if hasattr(self, 'theChecker'):
+            print("PROCESS STATE: " + str(self.theChecker.getProcState())) 
+        #self.theChecker.killCheck()
+        if hasattr(self, 'theDaemonChecker'):
+            self.theDaemonChecker.exit()
+            while not self.theDaemonChecker.wait():
+                print("Waiting for daemon checker to exit")
+        if hasattr(self, 'theDaemonChecker'):
+            del self.theDaemonChecker
+        gc.collect()
+        if self.theChecker.isRunning():
+            print("STILL RUNNING!!!")
+            self.theChecker.exit()
+        while not self.theChecker.wait():
+           print("Waiting for checker to exit")
+        if hasattr(self, 'theChecker'):
+            del self.theChecker
         self._theMainWindow.theUpdate.theCountDown.close()
-        self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(updateMsg)
-        self._theMainWindow.theUpdate.theCheckPanel.show()
+        if not abnormalTermination:
+           self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(theOutput)
+           self._theMainWindow.theUpdate.theCheckPanel.show()
