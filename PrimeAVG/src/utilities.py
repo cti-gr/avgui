@@ -19,6 +19,7 @@ numFilesHealed = 0
 mutexResults = QtCore.QMutex()
 foo = 0
 procChecker = None
+mutexStartCheck = QtCore.QMutex()
 
 # TO ADD function to check database existence and integrity
 
@@ -27,15 +28,15 @@ class checkDaemonD(QtCore.QThread):
     
 	sigDstarted = QtCore.Signal(int)
     
-	def __init__(self, dName="avgupdate", parent=None):
+	def __init__(self, dName="avgscan", parent=None):
 		super(checkDaemonD, self).__init__(parent)
 		self.hasStarted = False
 		self.dName = dName
 
 	def run(self):
-		print("EFFECTIVE UID in Thread: " + str(os.geteuid()))
+		#print("EFFECTIVE UID in Thread: " + str(os.geteuid()))
 		self.retriesCnt = 0
-		print("within daemon checker")
+		#print("within daemon checker")
 		while True:
 			self.out1 = subprocess.Popen(['ps','-C', self.dName], stdout=subprocess.PIPE)
 			self.out2 = subprocess.Popen(["wc", "-l"], stdin=self.out1.stdout, stdout=subprocess.PIPE)
@@ -66,7 +67,7 @@ class checkDaemonD(QtCore.QThread):
 				#print("linecount is: " + str(int(linecount)))
 				#print("linecount is: " + str(int(linecount)))
 				#print("hasStarted is: " + str(self.hasStarted))
-				print("passing " + str(self.retriesCnt) + " -- effective user id: " + str(os.geteuid()))
+				#print("passing " + str(self.retriesCnt) + " -- effective user id: " + str(os.geteuid()))
 		print("calling exit for daemon checker")
 		self.exec_()
 		self.exit()
@@ -74,12 +75,14 @@ class checkDaemonD(QtCore.QThread):
 ################################ Check Updates ###############################################################
 
 class chkUpdateWorker(QtCore.QThread):
-	
+	global mutexStartCheck
+
     #sigWriteCheck = QtCore.Signal(str)	
-	sigCheckFinished = QtCore.Signal(str, str)
+	sigCheckFinished = QtCore.Signal(bool, str)
 	#sigCheckStarted = QtCore.Signal()
 	#sigTimerReduce = QtCore.Signal()
-	
+	#sqlocker = QtCore.QMutexLocker(mutexResults)
+
 	def getProcState(self):
 		if hasattr(self, 'avgchkProc'):
 			print("Proc State from Within: " + str(self.avgchkProc.state()))
@@ -87,30 +90,44 @@ class chkUpdateWorker(QtCore.QThread):
 
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
+		self.abnormalTermination = False
 	
-
+	def emitProcStarted(self):
+		print("------------- PROCESS STARTED!!! ------------------ " + str(self.avgchkupProc.state()))	
+		
 	def run(self):
 		self.theOutput = ""
-		self.abnormalTermination = False
 		result = None
+		#self.avgchkupProc = QtCore.QProcess()
 		self.avgchkupProc = QtCore.QProcess()
-		#self.avgchkupProc.setStandardErrorFile("errfile.txt")
-		#self.avgchkupProc.open(QtCore.QIODevice.Unbuffered)
+		self.avgchkupProc.started.connect(self.emitProcStarted)
+		self.avgchkupProc.setStandardErrorFile("errfile.txt")
+		self.avgchkupProc.open(QtCore.QIODevice.Unbuffered)
 		self.avgchkupProc.destroyed.connect(self.procDestroyed)
 		self.avgchkupProc.readyRead.connect(self.parseOutput)
 		self.avgchkupProc.finished.connect(self.onAVGprocFinish)
 		self.finished.connect(self.onThreadTermination)
 		#self.avgchkupProc.set
 		try:
-			subprocess.Popen(['sudo, -k'])
-			print("starting AVGUPDATE process with EUID: " + str(os.geteuid()))
-			self.avgchkupProc.start("gksu", ["avgupdate -c"])
-			#print("started UPDATE PROCESS with env: " + str(self.avgchkupProc.systemEnvironment()))
-			while not self.avgchkupProc.waitForStarted():
-				print("waiting for process to start")
+			startLocker = QtCore.QMutexLocker(mutexStartCheck)
+			#print("starting AVGUPDATE process with EUID: " + str(os.geteuid()))
+			#print("Now EUID is: " + str(os.geteuid()))
+			QtGui.QApplication.processEvents()
+			self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
+			#print("started UPDATE PROCESS with state: " + str(self.avgchkupProc.state()))
+			if not self.avgchkupProc.waitForStarted(msecs=1000):
+				print("SOS: " + str(self.avgchkupProc.state()))
+				self.exit()
+				#if self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting:
+				#	self.avgchkupProc.kill()
+				#	while not self.avgchkupProc.waitForFinished():
+				#		print("Waiting to exit abnormal situation")
+				#	self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
+				#self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
 			self.exec_()
+			QtGui.QApplication.processEvents()
 		except Exception as err:
-			print(str(err))
+			print("Failed to initialize QProcess: " + str(err))
 			return
 
 	def procDestroyed(self):
@@ -123,17 +140,22 @@ class chkUpdateWorker(QtCore.QThread):
 		for i,j in config.translationDict.items():
 			self.theOutput = self.theOutput.replace(i,j)
 		#print(str(self.theOutput))
-		
-	def killCheck(self):
-		#print("YAHOO!" + str(self.avgchkupProc.state()))
-		#self.avgchkupProc.kill()
+	
+	def __exit__(self):
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
-				print("KILLING IN THE NAME OF")
 				self.avgchkupProc.kill()
-				self.abnormalTermination = True
-		else:
-			print("ELEOS!!!!!!")
+				
+	#def killCheck(self):
+	#	print("YAHOO!")
+	#	#avgchkupProc.kill()
+	#	if hasattr(self, 'avgchkupProc'):
+	#		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+	#			print("KILLING IN THE NAME OF")
+	#			self.avgchkupProc.kill()
+	#			self.abnormalTermination = True
+	#	else:
+	#		print("ELEOS!!!!!!")
 
 	def onThreadTermination(self):
 		print("Thread finished")
@@ -147,17 +169,18 @@ class chkUpdateWorker(QtCore.QThread):
 		print(" --- QProcess Terminated --- ")	
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+				print("have to kill again!")	
 				self.avgchkupProc.kill()
-			self.avgchkupProc.close()
-		if hasattr(self, 'avgchkupProc'):
-			del self.avgchkupProc
-		gc.collect()
-		if hasattr(self, 'avgchkupProc'):
-			while not self.avgchkupProc.waitForFinished():
-				print("Waiting before emitting")
+		self.avgchkupProc.close()
+		#if hasattr(self, 'avgchkupProc'):
+		#	del self.avgchkupProc
+		#gc.collect()
+		#if hasattr(self, 'avgchkupProc'):
+		#	while self.avgchkupProc.waitForFinished():
+		#		print(str(self.avgchkupProc.state()))
+		#		print("Waiting before emitting")
 		self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
-		print("will now call self.exit on the Thread")
-		self.exit()
+		print("emitted with: " + str(self.abnormalTermination))
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath

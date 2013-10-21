@@ -475,6 +475,7 @@ class manager(QObject):
 
     def checkUpdates(self):
         self.abnormalTermination = False
+        self._theMainWindow.theUpdate.theCheckPanel.txtCheck.clear()
         self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(30)
         self.theChecker = utilities.chkUpdateWorker()
         self.theChecker.sigCheckFinished.connect(self.handleCheckTermination)
@@ -489,41 +490,53 @@ class manager(QObject):
    
     def suddenDeath(self):
         if hasattr(self, 'theChecker'):
-            #if (self.theChecker.getProcState() == QProcess.ProcessState.Running) | (self.theChecker.getProcState() == QProcess.ProcessState.Starting):
-            #print("process was running, will KILL THE PROCESS")
-            print("Caling Kill Check")
-            self.theChecker.killCheck()
-               #QApplication.processEvents()
+            if self.abnormalTermination:
+                #if (self.theChecker.getProcState() == QProcess.ProcessState.Running) | (self.theChecker.getProcState() == QProcess.ProcessState.Starting):
+                #print("process was running, will KILL THE PROCESS")
+                print("CALLING EXIT")
+                self.theChecker.exit()
+        while self.theChecker.isRunning():
+            print("STILL RUNNING!!!")
+            self.theChecker.exit()
+        while not self.theChecker.wait():
+            print("Waiting for checker to exit")
+        QApplication.processEvents()
               
  
     def beginDaemonChecker(self):
-        print("beginning daemon checker")
+        #print("beginning daemon checker")
         self.theDaemonChecker.start()
         while not self.theDaemonChecker.isRunning():
             print("Waiting for daemon checker to start")
 
         
     def startTimer(self, result):
-        print("in start timer, result is: " + str(result))
+        #print("in start timer, result is: " + str(result))
         if result == 1:
             QMessageBox.critical(None, "Προσοχή", "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων", 
                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
             self._theMainWindow.theUpdate.theCountDown.close()
         else:
-            print("starting timer...")
+            #PRINt("starting timer...")
             self.theTimer.timeout.connect(self.decrementLCD)
             self.theTimer.start(1000)
  
     def decrementLCD(self):
         currentValue = self._theMainWindow.theUpdate.theCountDown.countDownLCD.intValue()
-        print("decrementing: current value is: " + str(currentValue))
+        #print("decrementing: current value is: " + str(currentValue))
         self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(currentValue - 1)
      
     def handleCheckTermination(self, abnormalTermination, theOutput):
         self.abnormalTermination = abnormalTermination
-        print("inside")
+        if self._theMainWindow.theUpdate.theCountDown.isVisible():
+            print("was visible")
+            self._theMainWindow.theUpdate.theCountDown.close()
+        print("inside with abnormalTermination: " + str(self.abnormalTermination))
         self.theTimer.stop()
-        self.theTimer.timeout.disconnect()
+        try:
+            self.theTimer.timeout.disconnect()
+        except Exception as err:
+            pass
         if hasattr(self, 'theChecker'):
             print("PROCESS STATE: " + str(self.theChecker.getProcState())) 
         #self.theChecker.killCheck()
@@ -534,14 +547,13 @@ class manager(QObject):
         if hasattr(self, 'theDaemonChecker'):
             del self.theDaemonChecker
         gc.collect()
-        if self.theChecker.isRunning():
-            print("STILL RUNNING!!!")
-            self.theChecker.exit()
-        while not self.theChecker.wait():
-           print("Waiting for checker to exit")
-        if hasattr(self, 'theChecker'):
-            del self.theChecker
-        self._theMainWindow.theUpdate.theCountDown.close()
-        if not abnormalTermination:
+               #if hasattr(self, 'theChecker'):
+        #    print("Trying to delete the checker")
+        #    del self.theChecker
+        #if hasattr(self, 'theChecker'):
+        #    print("Failed to delete the checker")
+        #self._theMainWindow.theUpdate.theCountDown.close()
+        if not self.abnormalTermination:
            self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(theOutput)
            self._theMainWindow.theUpdate.theCheckPanel.show()
+        gc.collect()
