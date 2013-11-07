@@ -481,7 +481,7 @@ class manager(QObject):
         self.theChecker.sigFailed.connect(self.handleCheckTermination)
         self.theChecker.sigCheckFinished.connect(self.handleCheckTermination)
         self.theChecker.started.connect(self.beginDaemonChecker)
-        self._theMainWindow.theUpdate.theCountDown.sigCloseEvent.connect(self.suddenDeath)
+        self._theMainWindow.theUpdate.theCountDown.sigCloseEvent.connect(self.closeCounterWidget)
         self.theDaemonChecker = utilities.checkDaemonD()
         self.theDaemonChecker.sigDstarted.connect(self.startTimer)
         self._theMainWindow.theUpdate.theCountDown.show()
@@ -489,21 +489,12 @@ class manager(QObject):
         while not self.theChecker.isRunning():
             print("Waiting for checker to start")
    
-    def suddenDeath(self):
+    def closeCounterWidget(self):
+        print("In Close Counter Widget")
         if hasattr(self, 'theChecker'):
-            if self.abnormalTermination:
-                #if (self.theChecker.getProcState() == QProcess.ProcessState.Running) | (self.theChecker.getProcState() == QProcess.ProcessState.Starting):
-                #print("process was running, will KILL THE PROCESS")
-                print("CALLING EXIT")
-                self.theChecker.exit()
-        while self.theChecker.isRunning():
-            print("STILL RUNNING!!!")
-            self.theChecker.exit()
-            QApplication.processEvents()
-        while not self.theChecker.wait():
-            print("Waiting for checker to exit")
-        QApplication.processEvents()
-              
+            print("it has!")
+            self.theChecker.cleanUp()
+            #self.theChecker.exit() 
  
     def beginDaemonChecker(self):
         #print("beginning daemon checker")
@@ -541,28 +532,25 @@ class manager(QObject):
             self._theMainWindow.theUpdate.theCountDown.close()
         print("inside with abnormalTermination: " + str(self.abnormalTermination))
         self.theTimer.stop()
-        #try:
-        #    self.theTimer.timeout.disconnect()
-        #except Exception as err:
-        #    print("Error disconnecting timeout signal from timer")
         if hasattr(self, 'theChecker'):
-            print("PROCESS STATE: " + str(self.theChecker.getProcState())) 
-        #self.theChecker.killCheck()
+            if self.theChecker.isRunning():
+                self.theChecker.exit()
         if hasattr(self, 'theDaemonChecker'):
-            self.theDaemonChecker.exit()
+            if self.theDaemonChecker.isRunning():
+                self.theDaemonChecker.exit()
             while not self.theDaemonChecker.wait():
                 print("Waiting for daemon checker to exit")
         if hasattr(self, 'theDaemonChecker'):
             del self.theDaemonChecker
-        gc.collect()
         if hasattr(self, 'theChecker'):
+            #self.theChecker.exit()
             print("Trying to delete the checker")
             del self.theChecker
+        gc.collect()
         #if hasattr(self, 'theChecker'):
         #    print("Failed to delete the checker")
         #self._theMainWindow.theUpdate.theCountDown.close()
         if not self.abnormalTermination:
            self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(theOutput)
-
            self._theMainWindow.theUpdate.theCheckPanel.show()
         gc.collect()

@@ -20,11 +20,13 @@ mutexResults = QtCore.QMutex()
 foo = 0
 procChecker = None
 mutexStartCheck = QtCore.QMutex()
+abnormalTermination = False
 
 # TO ADD function to check database existence and integrity
 
 class checkDaemonD(QtCore.QThread):
 	
+	global abnormalTermination	
     
 	sigDstarted = QtCore.Signal(int)
     
@@ -73,10 +75,12 @@ class checkDaemonD(QtCore.QThread):
 						self.retriesCnt = 0
 					elif self.gksuHasStarted & (int(self.linecount2) == 1):
 						print("User cancelled the operation")
+						abnormalTermination = True
 						self.sigDstarted.emit(2)
 						return
 					else:
 						print("Process failed to start")
+						abnormalTermination = True
 						self.sigDstarted.emit(1)
 						self.exit()
 						return					
@@ -92,6 +96,7 @@ class checkDaemonD(QtCore.QThread):
 
 class chkUpdateWorker(QtCore.QThread):
 	global mutexStartCheck
+	global abnormalTermination 
     
 	sigFailed = QtCore.Signal(bool, str)
 	sigCheckFinished = QtCore.Signal(bool, str)
@@ -103,7 +108,7 @@ class chkUpdateWorker(QtCore.QThread):
 
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
-		self.abnormalTermination = False
+		abnormalTermination = False
 	
 	def emitProcStarted(self):
 		print("------------- PROCESS STARTED!!! ------------------ " + str(self.avgchkupProc.state()))	
@@ -139,6 +144,21 @@ class chkUpdateWorker(QtCore.QThread):
 			print("Failed to initialize QProcess: " + str(err))
 			return
 
+	def cleanUp(self):
+		global abnormalTermination
+		#abnormalTermination = True
+		if hasattr(self, 'avgchkupProc'):
+			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+				print("OK GOT IT")
+				abnormalTermination = True
+				self.avgchkupProc.finished.emit(255)
+			if hasattr(self, 'avgchupProc'):	
+				while not self.avgchkupProc.waitForFinished():
+					print("Waiting for proc to finish")
+			else:
+				pass
+			#print(str(self.avgchkupProc.state()))
+	
 	def procDestroyed(self):
 		print("AVG UPDATE CHECK DESTROYED!!!")
 		
@@ -154,37 +174,43 @@ class chkUpdateWorker(QtCore.QThread):
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
 				self.avgchkupProc.kill()
+				del self.avgchkupProc
 				
 	def onThreadTermination(self):
 		print("Thread finished")
 				
-	def __del__(self):
-		if hasattr(self, 'avgchkupProc'):
-			del self.avgchkupProc
-		gc.collect()
+	#def __del__(self):
+	#	if hasattr(self, 'avgchkupProc'):
+	#		del self.avgchkupProc
+	#	gc.collect()
 	
 	def onAVGprocFinish(self):
+		global abnormalTermination
+
 		print(" --- QProcess Terminated --- ")	
 		if hasattr(self, 'avgchkupProc'):
+			#self.avgchkupProc.close()
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
 				print("have to kill again!")	
 				self.avgchkupProc.kill()
-		self.avgchkupProc.close()
-		if hasattr(self, 'avgchkupProc'):
-			del self.avgchkupProc
+		#if hasattr(self, 'avgchkupProc'):
+		#	del self.avgchkupProc
 		print("checking...")	
 		if hasattr(self, 'avgchkupProc'):
 			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
 			if (self.avgchkupProc.exitCode() == 1):
-				self.abnormalTermination = False
+				abnormalTermination = False
 			else:
-				self.abnormalTermination = True
-				self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
-			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
+				abnormalTermination = True
+			self.sigCheckFinished.emit(abnormalTermination, self.theOutput)
 		else:
-			#self.abnormalTermination = True
-			self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
-				#print("emitted with: " + str(self.abnormalTermination))
+			self.abnormalTermination = True
+			self.sigCheckFinished.emit(abnormalTermination, self.theOutput)
+		print("emitted with: " + str(abnormalTermination))
+		#print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
+		if hasattr(self, 'avgchkupProc'):
+			del self.avgchkupProc		
+		#self.exit()
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath
