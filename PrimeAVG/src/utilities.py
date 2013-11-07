@@ -28,10 +28,12 @@ class checkDaemonD(QtCore.QThread):
     
 	sigDstarted = QtCore.Signal(int)
     
-	def __init__(self, dName="avgscan", parent=None):
+	def __init__(self, dName="avgupdate", parent=None):
 		super(checkDaemonD, self).__init__(parent)
 		self.hasStarted = False
+		self.gksuHasStarted = False
 		self.dName = dName
+		self.retriesCnt = 0
 
 	def run(self):
 		#print("EFFECTIVE UID in Thread: " + str(os.geteuid()))
@@ -41,29 +43,43 @@ class checkDaemonD(QtCore.QThread):
 			self.out1 = subprocess.Popen(['ps','-C', self.dName], stdout=subprocess.PIPE)
 			self.out2 = subprocess.Popen(["wc", "-l"], stdin=self.out1.stdout, stdout=subprocess.PIPE)
 			self.out1IN, self.out1ERR = self.out1.communicate()
-			#print("out1IN is: " + str(self.out1IN))
-			#print("out1ERR is: " + str(self.out1ERR))
-			self.linecount = self.out2.communicate()[0]
+			print("out1IN is: " + str(self.out1IN))
+			print("out1ERR is: " + str(self.out1ERR))
+			self.linecount1 = self.out2.communicate()[0]
+			self.outA = subprocess.Popen(['ps','-C', 'gksu'], stdout=subprocess.PIPE)
+			self.outB = subprocess.Popen(["wc", "-l"], stdin=self.outA.stdout, stdout=subprocess.PIPE)
+			self.linecount2 = self.outB.communicate()[0]
+			if (int(self.linecount2) > 1):
+				self.gksuHasStarted = True
 			#self.out1.stdout.close()
-			if (int(self.linecount) > 1):
+			if (int(self.linecount1) > 1):
 				if not self.hasStarted:
-					print("linecount is: " + str(int(self.linecount)))
+					print("linecount is: " + str(int(self.linecount1)))
 					print("Emitting signal")
 					self.sigDstarted.emit(0)
 					self.hasStarted = True
-					break
+					return					
 			elif self.hasStarted:
 				print("EXITING!")
 				#out1.kill()
 				#out2.kill()
 				break
 			else:
-				if os.geteuid() == 0:
-					self.retriesCnt += 1
+				print("Retries: " + str(self.retriesCnt))
+				self.retriesCnt += 1
 				if self.retriesCnt > 20:
-					self.sigDstarted.emit(1)
-					self.exit()
-					return					
+					if self.gksuHasStarted & (int(self.linecount2) > 1):
+						print("gksu has started, user has not given password yet")
+						self.retriesCnt = 0
+					elif self.gksuHasStarted & (int(self.linecount2) == 1):
+						print("User cancelled the operation")
+						self.sigDstarted.emit(2)
+						return
+					else:
+						print("Process failed to start")
+						self.sigDstarted.emit(1)
+						self.exit()
+						return					
 				#print("linecount is: " + str(int(linecount)))
 				#print("linecount is: " + str(int(linecount)))
 				#print("hasStarted is: " + str(self.hasStarted))
@@ -76,12 +92,9 @@ class checkDaemonD(QtCore.QThread):
 
 class chkUpdateWorker(QtCore.QThread):
 	global mutexStartCheck
-
-    #sigWriteCheck = QtCore.Signal(str)	
+    
+	sigFailed = QtCore.Signal(bool, str)
 	sigCheckFinished = QtCore.Signal(bool, str)
-	#sigCheckStarted = QtCore.Signal()
-	#sigTimerReduce = QtCore.Signal()
-	#sqlocker = QtCore.QMutexLocker(mutexResults)
 
 	def getProcState(self):
 		if hasattr(self, 'avgchkProc'):
@@ -113,17 +126,13 @@ class chkUpdateWorker(QtCore.QThread):
 			#print("starting AVGUPDATE process with EUID: " + str(os.geteuid()))
 			#print("Now EUID is: " + str(os.geteuid()))
 			QtGui.QApplication.processEvents()
-			self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
+			self.avgchkupProc.start("gksu", ["avgupdate -c"])
 			#print("started UPDATE PROCESS with state: " + str(self.avgchkupProc.state()))
-			if not self.avgchkupProc.waitForStarted(msecs=1000):
+			if not self.avgchkupProc.waitForStarted(msecs=3000):
 				print("SOS: " + str(self.avgchkupProc.state()))
+				self.sigFailed.emit(True, "")
 				self.exit()
-				#if self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting:
-				#	self.avgchkupProc.kill()
-				#	while not self.avgchkupProc.waitForFinished():
-				#		print("Waiting to exit abnormal situation")
-				#	self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
-				#self.avgchkupProc.start("avgscan", ["/home/pkaramol/Workspace"], priority=QtCore.QThread.HighestPriority)
+				return
 			self.exec_()
 			QtGui.QApplication.processEvents()
 		except Exception as err:
@@ -146,17 +155,6 @@ class chkUpdateWorker(QtCore.QThread):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
 				self.avgchkupProc.kill()
 				
-	#def killCheck(self):
-	#	print("YAHOO!")
-	#	#avgchkupProc.kill()
-	#	if hasattr(self, 'avgchkupProc'):
-	#		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
-	#			print("KILLING IN THE NAME OF")
-	#			self.avgchkupProc.kill()
-	#			self.abnormalTermination = True
-	#	else:
-	#		print("ELEOS!!!!!!")
-
 	def onThreadTermination(self):
 		print("Thread finished")
 				
@@ -172,15 +170,21 @@ class chkUpdateWorker(QtCore.QThread):
 				print("have to kill again!")	
 				self.avgchkupProc.kill()
 		self.avgchkupProc.close()
-		#if hasattr(self, 'avgchkupProc'):
-		#	del self.avgchkupProc
-		#gc.collect()
-		#if hasattr(self, 'avgchkupProc'):
-		#	while self.avgchkupProc.waitForFinished():
-		#		print(str(self.avgchkupProc.state()))
-		#		print("Waiting before emitting")
-		self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
-		print("emitted with: " + str(self.abnormalTermination))
+		if hasattr(self, 'avgchkupProc'):
+			del self.avgchkupProc
+		print("checking...")	
+		if hasattr(self, 'avgchkupProc'):
+			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
+			if (self.avgchkupProc.exitCode() == 1):
+				self.abnormalTermination = False
+			else:
+				self.abnormalTermination = True
+				self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
+			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
+		else:
+			#self.abnormalTermination = True
+			self.sigCheckFinished.emit(self.abnormalTermination, self.theOutput)
+				#print("emitted with: " + str(self.abnormalTermination))
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath

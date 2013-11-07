@@ -478,6 +478,7 @@ class manager(QObject):
         self._theMainWindow.theUpdate.theCheckPanel.txtCheck.clear()
         self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(30)
         self.theChecker = utilities.chkUpdateWorker()
+        self.theChecker.sigFailed.connect(self.handleCheckTermination)
         self.theChecker.sigCheckFinished.connect(self.handleCheckTermination)
         self.theChecker.started.connect(self.beginDaemonChecker)
         self._theMainWindow.theUpdate.theCountDown.sigCloseEvent.connect(self.suddenDeath)
@@ -498,6 +499,7 @@ class manager(QObject):
         while self.theChecker.isRunning():
             print("STILL RUNNING!!!")
             self.theChecker.exit()
+            QApplication.processEvents()
         while not self.theChecker.wait():
             print("Waiting for checker to exit")
         QApplication.processEvents()
@@ -511,13 +513,19 @@ class manager(QObject):
 
         
     def startTimer(self, result):
-        #print("in start timer, result is: " + str(result))
-        if result == 1:
+        try:
+            self.theTimer.timeout.disconnect()
+        except Exception as err:
+            print("Error disconnecting timeout signal from timer")
+        if result == 1: # process failed to start
             QMessageBox.critical(None, "Προσοχή", "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων", 
                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
             self._theMainWindow.theUpdate.theCountDown.close()
-        else:
-            #PRINt("starting timer...")
+        if result == 2:
+            self._theMainWindow.theUpdate.theCountDown.close()
+            return # user cancelled the operation
+        else: # normal process initiation
+            #print("starting timer...")
             self.theTimer.timeout.connect(self.decrementLCD)
             self.theTimer.start(1000)
  
@@ -533,10 +541,10 @@ class manager(QObject):
             self._theMainWindow.theUpdate.theCountDown.close()
         print("inside with abnormalTermination: " + str(self.abnormalTermination))
         self.theTimer.stop()
-        try:
-            self.theTimer.timeout.disconnect()
-        except Exception as err:
-            pass
+        #try:
+        #    self.theTimer.timeout.disconnect()
+        #except Exception as err:
+        #    print("Error disconnecting timeout signal from timer")
         if hasattr(self, 'theChecker'):
             print("PROCESS STATE: " + str(self.theChecker.getProcState())) 
         #self.theChecker.killCheck()
@@ -547,13 +555,14 @@ class manager(QObject):
         if hasattr(self, 'theDaemonChecker'):
             del self.theDaemonChecker
         gc.collect()
-               #if hasattr(self, 'theChecker'):
-        #    print("Trying to delete the checker")
-        #    del self.theChecker
+        if hasattr(self, 'theChecker'):
+            print("Trying to delete the checker")
+            del self.theChecker
         #if hasattr(self, 'theChecker'):
         #    print("Failed to delete the checker")
         #self._theMainWindow.theUpdate.theCountDown.close()
         if not self.abnormalTermination:
            self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(theOutput)
+
            self._theMainWindow.theUpdate.theCheckPanel.show()
         gc.collect()
