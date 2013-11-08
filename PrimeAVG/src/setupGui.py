@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI
 from PySide import QtGui, QtCore
 from datetime import date
 
@@ -41,6 +41,12 @@ class scanResults(QtGui.QDialog, scanResultsUI.Ui_dialogScanResults):
     def closeEvent(self, event):
        self.sigCloseEvent.emit()
     
+
+class updateProgress(QtGui.QDialog, updateProgressUI.Ui_dialogUpdateProg):
+	def __init__(self, parent=None):
+		super(updateProgress, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
     def __init__(self, parent=None):
@@ -140,6 +146,7 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
          
         self.theCountDown = countDown(self)
         self.theCheckPanel = checkPanel(self)
+        self.theUpdateProgress = updateProgress(self)
 
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
     

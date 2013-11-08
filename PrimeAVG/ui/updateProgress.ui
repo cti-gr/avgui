@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DiaScanProg</class>
- <widget class="QWidget" name="DiaScanProg">
+ <class>dialogUpdateProg</class>
+ <widget class="QWidget" name="dialogUpdateProg">
   <property name="windowModality">
    <enum>Qt::NonModal</enum>
   </property>
@@ -34,7 +34,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Έλεγχος για Κακόβουλο Λογισμικό</string>
+   <string>Διαδικασία Ενημέρωσης Λογισμικού</string>
   </property>
   <widget class="QLabel" name="label">
    <property name="geometry">
@@ -55,7 +55,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPlainTextEdit" name="textScanProg">
+  <widget class="QPlainTextEdit" name="textUpdateProg">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -91,9 +91,9 @@
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -163,18 +163,18 @@
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -228,9 +228,9 @@
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -300,18 +300,18 @@
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -365,9 +365,9 @@
       <colorrole role="Button">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -437,18 +437,18 @@
       <colorrole role="Base">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
       <colorrole role="Window">
        <brush brushstyle="SolidPattern">
         <color alpha="255">
-         <red>206</red>
-         <green>106</green>
-         <blue>104</blue>
+         <red>0</red>
+         <green>121</green>
+         <blue>165</blue>
         </color>
        </brush>
       </colorrole>
@@ -500,13 +500,13 @@
     </font>
    </property>
    <property name="styleSheet">
-    <string notr="true">QPlainTextEdit#textScanProg {
-	font: black 75 italic 11pt &quot;Ubuntu&quot;;
-	background-color : #CE6A68;	
+    <string notr="true">QPlainTextEdit#textUpdateProg {
+	font: white 75 italic 11pt &quot;Ubuntu&quot;;
+	background-color : #0079A5;	
 }</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnExitScan">
+  <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -523,7 +523,7 @@
     </font>
    </property>
    <property name="text">
-    <string>Τερματισμός Ελέγχου</string>
+    <string>Έξοδος</string>
    </property>
   </widget>
  </widget>

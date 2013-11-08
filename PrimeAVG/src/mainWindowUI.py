@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created: Mon Oct 14 19:34:30 2013
+# Created: Fri Nov  8 13:57:41 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -18,8 +18,8 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(0, 0))
-        MainWindow.setMaximumSize(QtCore.QSize(160000, 160000))
+        MainWindow.setMinimumSize(QtCore.QSize(766, 470))
+        MainWindow.setMaximumSize(QtCore.QSize(766, 470))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/avg_logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)

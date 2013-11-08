@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanSelect.ui'
 #
-# Created: Mon Oct 14 19:34:30 2013
+# Created: Fri Nov  8 13:57:41 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!

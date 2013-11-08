@@ -101,10 +101,10 @@ class chkUpdateWorker(QtCore.QThread):
 	sigFailed = QtCore.Signal(bool, str)
 	sigCheckFinished = QtCore.Signal(bool, str)
 
-	def getProcState(self):
-		if hasattr(self, 'avgchkProc'):
-			print("Proc State from Within: " + str(self.avgchkProc.state()))
-			return str(self.avgchkProc.state())
+	#def getProcState(self):
+	#	if hasattr(self, 'avgchkProc'):
+	#		print("Proc State from Within: " + str(self.avgchkProc.state()))
+	#		return str(self.avgchkProc.state())
 
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
@@ -211,6 +211,58 @@ class chkUpdateWorker(QtCore.QThread):
 		if hasattr(self, 'avgchkupProc'):
 			del self.avgchkupProc		
 		#self.exit()
+
+
+class updateWorker(QtCore.QThread):
+	
+	sigWriteUpdate = QtCore.Signal(str)
+	sigUpdateTerminated = QtCore.Signal()
+
+	def __init__(self, parent=None):
+		super(updateWorker, self).__init__(parent)
+
+	def onThreadTermination(self):
+		print("- - - Update Thread Terminated - - -")
+
+	def run(self):
+		self.finished.connect(self.onThreadTermination)
+		self.avgUpdateProc = QtCore.QProcess()
+		self.avgUpdateProc.open(QtCore.QIODevice.Unbuffered)
+		self.avgUpdateProc.destroyed.connect(self.avgProcDestroyed)
+		self.avgUpdateProc.readyRead.connect(self.printOut)
+		self.avgUpdateProc.finished.connect(self.onAVGProcFinish)
+		self.avgUpdateProc.start("gksu", ["avgupdate"])
+		if not self.avgUpdateProc.waitForStarted(msecs=3000):
+			print(" - avgupdate failed to start - ")
+
+		self.exec_()
+
+	def avgProcDestroyed(self):
+		print(" - Update Process Destroyed - ")
+	
+	def printOut(self):
+		try:
+			self.theLine = str(self.avgUpdateProc.read(self.avgUpdateProc.bytesAvailable()))			
+			self.sigWriteUpdate.emit(self.theLine)
+		except UnicodeDecodeError as uderr:
+			print("A Unicode Decode Error occurred: " + str(uderr))
+		except Exception as genericError:
+			print("A generic error occurred: " + str(genericError))
+
+
+	def onAVGProcFinish(self):
+		print(" - | - | - Update Process Terminated - | - | - ")
+		if hasattr(self, 'avgUpdateProc'):
+			if (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Starting):
+				self.avgUpdateProc.kill()
+			self.avgUpdateProc.close()
+		if hasattr(self, 'avgUpdateProc'):
+			print(" -- trying to delete avgUpdateProc -- ")
+			del self.avgUpdateProc
+		gc.collect()
+		self.sigUpdateTerminated.emit()			
+
+##########################################################################################################################
 
 def checkFolderPermissions(filepath=""):
     # function that checks if user executing has write permissions to the directory filepath

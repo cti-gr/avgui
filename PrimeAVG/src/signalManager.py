@@ -89,6 +89,7 @@ class manager(QObject):
 
         #Update Dialog
         self._theMainWindow.theUpdate.btnUpdateCheck.clicked.connect(self.checkUpdates)
+        self._theMainWindow.theUpdate.btnUpdate.clicked.connect(self.performUpdate)        
                   
     def emitScan(self):
         self._theMainWindow.sigMainSent.emit("SCAN")
@@ -557,4 +558,52 @@ class manager(QObject):
         if not self.abnormalTermination:
            self._theMainWindow.theUpdate.theCheckPanel.txtCheck.appendPlainText(theOutput)
            self._theMainWindow.theUpdate.theCheckPanel.show()
+        gc.collect()
+
+############################################### Run Update #######################################################
+
+    def performUpdate(self):
+        self.theUpdater = utilities.updateWorker()
+        self.theUpdater.sigWriteUpdate.connect(self.printToUpdateWidget)
+        self.theUpdater.sigUpdateTerminated.connect(self.onUpdateFinish)
+        self.theUpdater.started.connect(self.startChecker)
+        self.theUpdateChecker = utilities.checkDaemonD()
+        self.theUpdateChecker.sigDstarted.connect(self.showProgress)
+        self.theUpdater.start()
+       
+    def startChecker(self):
+        self.theUpdateChecker.start()
+        while not self.theUpdateChecker.isRunning():
+            print("Waiting for checker to start")        
+
+    def showProgress(self, result):
+        self._theMainWindow.theUpdate.theUpdateProgress.textUpdateProg.clear()
+        if result == 0:
+            self._theMainWindow.theUpdate.theUpdateProgress.show()
+            self._theMainWindow.theUpdate.theUpdateProgress.btnExit.setEnabled(False)
+        else:
+           if hasattr(self, 'theUpdater'):
+               if self.theUpdater.isRunning():
+                   self.theUpdater.exit()
+           if hasattr(self, 'theUpdater'):
+               del self.theUpdater
+           if hasattr(self, 'theUpdateChecker'):
+               del self.theUpdateChecker
+
+    def printToUpdateWidget(self, theInput):
+         self._theMainWindow.theUpdate.theUpdateProgress.textUpdateProg.appendPlainText(theInput)
+
+    def onUpdateFinish(self):
+        #if self._theMainWindow.theUpdate.theUpdateProgress.isVisible():
+        self._theMainWindow.theUpdate.theUpdateProgress.btnExit.setEnabled(True)
+        if hasattr(self, 'theUpdateChecker'):
+            if self.theUpdateChecker.isRunning():
+                self.theUpdateChecker.exit()
+        if hasattr(self, 'theUpdateChecker'):
+            del self.theUpdateChecker
+        if hasattr(self, 'theUpdater'):
+            if self.theUpdater.isRunning():
+                self.theUpdater.exit()
+        if hasattr(self, 'theUpdater'):
+            del self.theUpdater
         gc.collect()

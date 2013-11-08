@@ -1,40 +1,40 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'scanProgress.ui'
+# Form implementation generated from reading ui file 'updateProgress.ui'
 #
-# Created: Fri Nov  8 13:57:41 2013
+# Created: Fri Nov  8 13:57:42 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
 
-class Ui_DiaScanProg(object):
-    def setupUi(self, DiaScanProg):
-        DiaScanProg.setObjectName("DiaScanProg")
-        DiaScanProg.setWindowModality(QtCore.Qt.NonModal)
-        DiaScanProg.setEnabled(True)
-        DiaScanProg.resize(830, 360)
-        DiaScanProg.setMinimumSize(QtCore.QSize(830, 360))
-        DiaScanProg.setMaximumSize(QtCore.QSize(830, 360))
+class Ui_dialogUpdateProg(object):
+    def setupUi(self, dialogUpdateProg):
+        dialogUpdateProg.setObjectName("dialogUpdateProg")
+        dialogUpdateProg.setWindowModality(QtCore.Qt.NonModal)
+        dialogUpdateProg.setEnabled(True)
+        dialogUpdateProg.resize(830, 360)
+        dialogUpdateProg.setMinimumSize(QtCore.QSize(830, 360))
+        dialogUpdateProg.setMaximumSize(QtCore.QSize(830, 360))
         font = QtGui.QFont()
         font.setFamily("Courier New")
-        DiaScanProg.setFont(font)
-        self.label = QtGui.QLabel(DiaScanProg)
+        dialogUpdateProg.setFont(font)
+        self.label = QtGui.QLabel(dialogUpdateProg)
         self.label.setGeometry(QtCore.QRect(380, 0, 101, 41))
         self.label.setText("")
         self.label.setPixmap(QtGui.QPixmap(":/avg_logo.png"))
         self.label.setScaledContents(True)
         self.label.setObjectName("label")
-        self.textScanProg = QtGui.QPlainTextEdit(DiaScanProg)
-        self.textScanProg.setGeometry(QtCore.QRect(10, 50, 811, 251))
-        self.textScanProg.setMinimumSize(QtCore.QSize(811, 251))
-        self.textScanProg.setMaximumSize(QtCore.QSize(811, 251))
+        self.textUpdateProg = QtGui.QPlainTextEdit(dialogUpdateProg)
+        self.textUpdateProg.setGeometry(QtCore.QRect(10, 50, 811, 251))
+        self.textUpdateProg.setMinimumSize(QtCore.QSize(811, 251))
+        self.textUpdateProg.setMaximumSize(QtCore.QSize(811, 251))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -58,10 +58,10 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Active, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -79,7 +79,7 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -103,10 +103,10 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(255, 255, 255))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Inactive, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -124,7 +124,7 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Button, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -148,10 +148,10 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Base, brush)
-        brush = QtGui.QBrush(QtGui.QColor(206, 106, 104))
+        brush = QtGui.QBrush(QtGui.QColor(0, 121, 165))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.Window, brush)
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -166,32 +166,32 @@ class Ui_DiaScanProg(object):
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
         brush.setStyle(QtCore.Qt.SolidPattern)
         palette.setBrush(QtGui.QPalette.Disabled, QtGui.QPalette.ToolTipText, brush)
-        self.textScanProg.setPalette(palette)
+        self.textUpdateProg.setPalette(palette)
         font = QtGui.QFont()
         font.setFamily("75 10 11pt Ubuntu")
         font.setWeight(50)
         font.setItalic(False)
         font.setBold(False)
-        self.textScanProg.setFont(font)
-        self.textScanProg.setStyleSheet("QPlainTextEdit#textScanProg {\n"
-"    font: black 75 italic 11pt \"Ubuntu\";\n"
-"    background-color : #CE6A68;    \n"
+        self.textUpdateProg.setFont(font)
+        self.textUpdateProg.setStyleSheet("QPlainTextEdit#textUpdateProg {\n"
+"    font: white 75 italic 11pt \"Ubuntu\";\n"
+"    background-color : #0079A5;    \n"
 "}")
-        self.textScanProg.setObjectName("textScanProg")
-        self.btnExitScan = QtGui.QPushButton(DiaScanProg)
-        self.btnExitScan.setGeometry(QtCore.QRect(340, 310, 191, 41))
+        self.textUpdateProg.setObjectName("textUpdateProg")
+        self.btnExit = QtGui.QPushButton(dialogUpdateProg)
+        self.btnExit.setGeometry(QtCore.QRect(340, 310, 191, 41))
         font = QtGui.QFont()
         font.setFamily("Ubuntu")
         font.setWeight(75)
         font.setBold(True)
-        self.btnExitScan.setFont(font)
-        self.btnExitScan.setObjectName("btnExitScan")
+        self.btnExit.setFont(font)
+        self.btnExit.setObjectName("btnExit")
 
-        self.retranslateUi(DiaScanProg)
-        QtCore.QMetaObject.connectSlotsByName(DiaScanProg)
+        self.retranslateUi(dialogUpdateProg)
+        QtCore.QMetaObject.connectSlotsByName(dialogUpdateProg)
 
-    def retranslateUi(self, DiaScanProg):
-        DiaScanProg.setWindowTitle(QtGui.QApplication.translate("DiaScanProg", "Έλεγχος για Κακόβουλο Λογισμικό", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExitScan.setText(QtGui.QApplication.translate("DiaScanProg", "Τερματισμός Ελέγχου", None, QtGui.QApplication.UnicodeUTF8))
+    def retranslateUi(self, dialogUpdateProg):
+        dialogUpdateProg.setWindowTitle(QtGui.QApplication.translate("dialogUpdateProg", "Διαδικασία Ενημέρωσης Λογισμικού", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("dialogUpdateProg", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc
