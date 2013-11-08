@@ -475,6 +475,7 @@ class manager(QObject):
 
     def checkUpdates(self):
         self.abnormalTermination = False
+        self.isClean = False
         self._theMainWindow.theUpdate.theCheckPanel.txtCheck.clear()
         self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(30)
         self.theChecker = utilities.chkUpdateWorker()
@@ -490,11 +491,14 @@ class manager(QObject):
             print("Waiting for checker to start")
    
     def closeCounterWidget(self):
-        print("In Close Counter Widget")
-        if hasattr(self, 'theChecker'):
-            print("it has!")
-            self.theChecker.cleanUp()
-            #self.theChecker.exit() 
+        if not self.isClean:
+            print("In Close Counter Widget")
+            if hasattr(self, 'theChecker'):
+                print("it has!")
+                self.theChecker.cleanUp()
+            self.isClean = True 
+        else:
+            pass
  
     def beginDaemonChecker(self):
         #print("beginning daemon checker")
