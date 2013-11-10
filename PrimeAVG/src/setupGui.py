@@ -43,10 +43,16 @@ class scanResults(QtGui.QDialog, scanResultsUI.Ui_dialogScanResults):
     
 
 class updateProgress(QtGui.QDialog, updateProgressUI.Ui_dialogUpdateProg):
+	
+	sigCloseEvent = QtCore.Signal()
+
 	def __init__(self, parent=None):
 		super(updateProgress, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
+
+	def closeEvent(self, event):
+		self.sigCloseEvent.emit()
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
     def __init__(self, parent=None):

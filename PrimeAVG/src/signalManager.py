@@ -563,6 +563,8 @@ class manager(QObject):
 ############################################### Run Update #######################################################
 
     def performUpdate(self):
+        self.isClean = False
+        self._theMainWindow.theUpdate.theUpdateProgress.sigCloseEvent.connect(self.closeUpdateProgress)
         self.theUpdater = utilities.updateWorker()
         self.theUpdater.sigWriteUpdate.connect(self.printToUpdateWidget)
         self.theUpdater.sigUpdateTerminated.connect(self.onUpdateFinish)
@@ -571,12 +573,20 @@ class manager(QObject):
         self.theUpdateChecker.sigDstarted.connect(self.showProgress)
         self.theUpdater.start()
        
+    def closeUpdateProgress(self):
+        if self.isClean:
+            pass
+        else:
+            if hasattr(self, "theUpdater"):
+                self.theUpdater.cleanUp()
+
     def startChecker(self):
         self.theUpdateChecker.start()
         while not self.theUpdateChecker.isRunning():
             print("Waiting for checker to start")        
 
     def showProgress(self, result):
+        print("result is: " + str(result))
         self._theMainWindow.theUpdate.theUpdateProgress.textUpdateProg.clear()
         if result == 0:
             self._theMainWindow.theUpdate.theUpdateProgress.show()
@@ -593,17 +603,40 @@ class manager(QObject):
     def printToUpdateWidget(self, theInput):
          self._theMainWindow.theUpdate.theUpdateProgress.textUpdateProg.appendPlainText(theInput)
 
-    def onUpdateFinish(self):
-        #if self._theMainWindow.theUpdate.theUpdateProgress.isVisible():
-        self._theMainWindow.theUpdate.theUpdateProgress.btnExit.setEnabled(True)
-        if hasattr(self, 'theUpdateChecker'):
-            if self.theUpdateChecker.isRunning():
+    def onUpdateFinish(self, result):
+        if result == 1:
+            QMessageBox.critical(None, "Προσοχή", "Αποτυχία εκκίνησης διαδικασίας ενημέρωσης", 
+                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+            if hasattr(self, 'theUpdateChecker'):
                 self.theUpdateChecker.exit()
+            if hasattr(self, 'theUpdater'):
+                self.theUpdater.exit()
+        else:
+            print(str(self.theUpdater.isRunning()))
+            self._theMainWindow.theUpdate.theUpdateProgress.btnExit.setEnabled(True)
+            self.theUpdater.started.disconnect()
+            self.theUpdater.sigUpdateTerminated.disconnect()
+            self.theUpdater.sigWriteUpdate.disconnect()
+            self.theUpdateChecker.sigDstarted.disconnect()
+            #self.theUpdateChecker.exit()
+            #while not self.theUpdateChecker.wait():
+            #    print("waiting update checker to finish")
+        while self.theUpdater.isRunning():
+            print("now waiting updater...")
+            self.theUpdater.exit()
+            QApplication.processEvents()
+        if hasattr(self, 'theUpdater'):
+           print("trying to delete the updater")
+           del self.theUpdater
+		    #if self._theMainWindow.theUpdate.theUpdateProgress.isVisible():
+            #print("set it")
+        if hasattr(self, 'theUpdateChecker'):
+            print("here 1")
+            self.theUpdateChecker.exit()
+            while self.theUpdateChecker.isRunning():
+                print("here 2")
+                self.theUpdateChecker.exit()
+                QApplication.processEvents()
         if hasattr(self, 'theUpdateChecker'):
             del self.theUpdateChecker
-        if hasattr(self, 'theUpdater'):
-            if self.theUpdater.isRunning():
-                self.theUpdater.exit()
-        if hasattr(self, 'theUpdater'):
-            del self.theUpdater
         gc.collect()

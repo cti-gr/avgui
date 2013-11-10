@@ -20,13 +20,16 @@ mutexResults = QtCore.QMutex()
 foo = 0
 procChecker = None
 mutexStartCheck = QtCore.QMutex()
+mutexStartUpdate = QtCore.QMutex()
 abnormalTermination = False
+abnormalCheckUpdatesTermination = False
+abnormalUpdateTermination = False
 
 # TO ADD function to check database existence and integrity
 
 class checkDaemonD(QtCore.QThread):
 	
-	global abnormalTermination	
+	global abnormalCheckUpdatesTermination	
     
 	sigDstarted = QtCore.Signal(int)
     
@@ -75,12 +78,12 @@ class checkDaemonD(QtCore.QThread):
 						self.retriesCnt = 0
 					elif self.gksuHasStarted & (int(self.linecount2) == 1):
 						print("User cancelled the operation")
-						abnormalTermination = True
+						abnormalCheckUpdatesTermination = True
 						self.sigDstarted.emit(2)
 						return
 					else:
 						print("Process failed to start")
-						abnormalTermination = True
+						abnormalCheckUpdatesTermination = True
 						self.sigDstarted.emit(1)
 						self.exit()
 						return					
@@ -96,7 +99,7 @@ class checkDaemonD(QtCore.QThread):
 
 class chkUpdateWorker(QtCore.QThread):
 	global mutexStartCheck
-	global abnormalTermination 
+	global abnormalChekUpdatesTermination 
     
 	sigFailed = QtCore.Signal(bool, str)
 	sigCheckFinished = QtCore.Signal(bool, str)
@@ -108,7 +111,7 @@ class chkUpdateWorker(QtCore.QThread):
 
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
-		abnormalTermination = False
+		abnormalCheckUpdatesTermination = False
 	
 	def emitProcStarted(self):
 		print("------------- PROCESS STARTED!!! ------------------ " + str(self.avgchkupProc.state()))	
@@ -145,12 +148,12 @@ class chkUpdateWorker(QtCore.QThread):
 			return
 
 	def cleanUp(self):
-		global abnormalTermination
+		global abnormalCheckUpdatesTermination
 		#abnormalTermination = True
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
 				print("OK GOT IT")
-				abnormalTermination = True
+				abnormalCheckUpdatesTermination = True
 				self.avgchkupProc.finished.emit(255)
 			if hasattr(self, 'avgchupProc'):	
 				while not self.avgchkupProc.waitForFinished():
@@ -185,7 +188,7 @@ class chkUpdateWorker(QtCore.QThread):
 	#	gc.collect()
 	
 	def onAVGprocFinish(self):
-		global abnormalTermination
+		global abnormalCheckUpdatesTermination
 
 		print(" --- QProcess Terminated --- ")	
 		if hasattr(self, 'avgchkupProc'):
@@ -198,25 +201,27 @@ class chkUpdateWorker(QtCore.QThread):
 		print("checking...")	
 		if hasattr(self, 'avgchkupProc'):
 			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
-			if (self.avgchkupProc.exitCode() == 1):
-				abnormalTermination = False
+			if (self.avgchkupProc.exitCode() == 1) | (self.avgchkupProc.exitCode() == 2) :
+				abnormalCheckUpdatesTermination = False
 			else:
-				abnormalTermination = True
-			self.sigCheckFinished.emit(abnormalTermination, self.theOutput)
+				abnormalCheckUpdatesTermination = True
+			self.sigCheckFinished.emit(abnormalCheckUpdatesTermination, self.theOutput)
 		else:
-			self.abnormalTermination = True
-			self.sigCheckFinished.emit(abnormalTermination, self.theOutput)
-		print("emitted with: " + str(abnormalTermination))
+			self.abnormalCheckUpdatesTermination = True
+			self.sigCheckFinished.emit(abnormalCheckUpdatesTermination, self.theOutput)
+		print("emitted with: " + str(abnormalCheckUpdatesTermination))
 		#print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
 		if hasattr(self, 'avgchkupProc'):
 			del self.avgchkupProc		
+		gc.collect()
 		#self.exit()
 
 
 class updateWorker(QtCore.QThread):
-	
+	global abnormalUpdateTermination 
+
 	sigWriteUpdate = QtCore.Signal(str)
-	sigUpdateTerminated = QtCore.Signal()
+	sigUpdateTerminated = QtCore.Signal(int)
 
 	def __init__(self, parent=None):
 		super(updateWorker, self).__init__(parent)
@@ -232,9 +237,20 @@ class updateWorker(QtCore.QThread):
 		self.avgUpdateProc.readyRead.connect(self.printOut)
 		self.avgUpdateProc.finished.connect(self.onAVGProcFinish)
 		self.avgUpdateProc.start("gksu", ["avgupdate"])
-		if not self.avgUpdateProc.waitForStarted(msecs=3000):
-			print(" - avgupdate failed to start - ")
-
+		try:
+			startLocker = QtCore.QMutexLocker(mutexStartCheck)
+			while not self.avgUpdateProc.waitForStarted(msecs=1000):
+				print(" - avgupdate failed to start - ")
+				#self.avgUpdateProc.readyRead.disconnect()
+				self.avgUpdateProc.kill()
+				self.avgUpdateProc.close()
+				self.avgUpdateProc.finished.emit(1)
+				#self.avgUpdateProc.start("gksu", ["avgupdate"])
+				self.exit()
+				return
+		except Exception as err:
+			print("Failed to initialize Update Process" + str(err))
+			return
 		self.exec_()
 
 	def avgProcDestroyed(self):
@@ -253,14 +269,26 @@ class updateWorker(QtCore.QThread):
 	def onAVGProcFinish(self):
 		print(" - | - | - Update Process Terminated - | - | - ")
 		if hasattr(self, 'avgUpdateProc'):
+			self.avgUpdateProc.readyRead.disconnect()
+			print("status is: " + str(self.avgUpdateProc.state()))
 			if (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Starting):
 				self.avgUpdateProc.kill()
 			self.avgUpdateProc.close()
 		if hasattr(self, 'avgUpdateProc'):
+			print("trying to delete avgUpdateProc")
+			del self.avgUpdateProc
+		#while self.isRunning():
+		#	self.exit()
+		#	print("thread still running")
+		#gc.collect()
+
+		self.sigUpdateTerminated.emit(0)			
+		
+	def __exit__(self):
+		print("in custom exit")
+		if hasattr(self, 'avgUpdateProc'):
 			print(" -- trying to delete avgUpdateProc -- ")
 			del self.avgUpdateProc
-		gc.collect()
-		self.sigUpdateTerminated.emit()			
 
 ##########################################################################################################################
 
