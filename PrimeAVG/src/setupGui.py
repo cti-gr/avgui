@@ -1,6 +1,12 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, updateSettingsUI
 from PySide import QtGui, QtCore
 from datetime import date
+
+class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
+
+	def __init__(self, parent=None):
+		super(updateSettings, self).__init__(parent)
+		self.setupUi(self)
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
 		
@@ -153,6 +159,7 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
         self.theCountDown = countDown(self)
         self.theCheckPanel = checkPanel(self)
         self.theUpdateProgress = updateProgress(self)
+        self.theUpdateSettings = updateSettings(self)
 
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
     

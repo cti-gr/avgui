@@ -1,4 +1,5 @@
 #!/usr/lib/python3.2
+from PySide import QtCore
 from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication
 from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QTimer
 from datetime import datetime, date, time
@@ -90,7 +91,10 @@ class manager(QObject):
 		#Update Dialog
 		self._theMainWindow.theUpdate.btnUpdateCheck.clicked.connect(self.checkUpdates)
 		self._theMainWindow.theUpdate.btnUpdate.clicked.connect(self.performUpdate)		   
-				  
+		self._theMainWindow.theUpdate.btnUpdateSet.clicked.connect(self.setUpdateSettings)
+		self._theMainWindow.theUpdate.theUpdateSettings.btnOK.clicked.connect(self.setUpdateSettings)
+		self._theMainWindow.theUpdate.theUpdateSettings.btnCancel.clicked.connect(self.setUpdateSettings)
+
 	def emitScan(self):
 		self._theMainWindow.sigMainSent.emit("SCAN")
 		
@@ -658,3 +662,20 @@ class manager(QObject):
 			#if self._theMainWindow.theUpdate.theUpdateProgress.isVisible():
 			#print("set it")
 		gc.collect()
+
+###################################################### Update Settings ##############################################
+	
+	#@QtCore.Slot()
+	def setUpdateSettings(self):
+		if self.sender().objectName() == "btnUpdateSet":
+			#self.getSettings()
+			self._theMainWindow.theUpdate.theUpdateSettings.show()
+		elif self.sender().objectName() == "btnOK":
+			try:
+				print("test")
+				#self.setSettings()
+				self._theMainWindow.theUpdate.theUpdateSettings.close()
+			except Exception as err:
+				raise err
+		elif self.sender().objectName() == "btnCancel":
+			self._theMainWindow.theUpdate.theUpdateSettings.close()
