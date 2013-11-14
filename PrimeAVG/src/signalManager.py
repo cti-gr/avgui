@@ -667,8 +667,18 @@ class manager(QObject):
 	
 	#@QtCore.Slot()
 	def setUpdateSettings(self):
+		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndexChanged.connect(self.updateProxyModeSettings)			
+		self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.stateChanged.connect(self.updateProxyModeSettings)			
+		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.currentIndexChanged.connect(self.updateProxyModeSettings)
 		if self.sender().objectName() == "btnUpdateSet":
-			#self.getSettings()
+			self.getSettings()
+			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
 			self._theMainWindow.theUpdate.theUpdateSettings.show()
 		elif self.sender().objectName() == "btnOK":
 			try:
@@ -679,3 +689,77 @@ class manager(QObject):
 				raise err
 		elif self.sender().objectName() == "btnCancel":
 			self._theMainWindow.theUpdate.theUpdateSettings.close()
+
+	def updateProxyModeSettings(self):
+		if (str(self.sender().objectName())) == "cmbBoxProxyMode":
+			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
+			else:
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(True)
+				if  self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.isChecked():
+					self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(True)
+					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
+					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
+		elif (str(self.sender().objectName())) == "chkUseLogIn":
+			if self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.isChecked():
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
+			else:
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
+		'''
+		elif (str(self.sender().objectName())) == "cmbBoxAuthType":
+			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.currentIndex() == 0:
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
+			else:
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
+		'''
+
+
+
+	def getSettings(self):
+		# Minimum Speed 
+		self.minSpeedOut = subprocess.check_output(["avgcfgctl", "Default.update.Inet.disconnect_speed_limit"])
+		self.minSpeed = int(str(self.minSpeedOut.decode("utf")).split("=",1)[-1])
+		self._theMainWindow.theUpdate.theUpdateSettings.leditMinSpeed.setText(str(self.minSpeed))
+	 	# Maximum Time
+		self.maxTimeOut = subprocess.check_output(["avgcfgctl", "Default.update.Inet.disconnect_time_limit"])
+		self.maxTime = int(str(self.maxTimeOut.decode("utf")).split("=",1)[-1])
+		self._theMainWindow.theUpdate.theUpdateSettings.leditMaxTime.setText(str(self.maxTime))
+		# Proxy Name
+		self.proxyNameOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Server"])
+		self.proxyName = str(self.proxyNameOut.decode("utf")).split("=",1)[-1]
+		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setText(str(self.proxyName))
+ 		# Proxy Username
+		self.proxyUsernameOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Login"])
+		self.proxyUsername = str(self.proxyUsernameOut.decode("utf")).split("=",1)[-1]
+		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setText(str(self.proxyUsername))
+		# Proxy Password
+		self.proxyPassOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Password"])
+		self.proxyPass = str(self.proxyPassOut.decode("utf")).split("=",1)[-1]
+		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setText(str(self.proxyPass))
+		# Proxy Port
+		self.proxyPortOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Port"])
+		self.proxyPort = int(str(self.proxyPortOut.decode("utf")).split("=",1)[-1])
+		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setText(str(self.proxyPort))
+		# Proxy Set up
+		self.proxyModeOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Mode"])
+		self.proxyMode = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
+		print(str(self.proxyMode))
+		# Proxy Use LogIn
+		self.proxyLoginRequiredOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Mode"])
+		self.proxyMode = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
+		print(str(self.proxyMode))
+
+

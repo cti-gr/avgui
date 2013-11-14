@@ -26,7 +26,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Ρυθμίσεις Ενημέρωσης Λογισμικού και Βάσης Ιών</string>
   </property>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
@@ -132,70 +132,6 @@
     <property name="verticalSpacing">
      <number>20</number>
     </property>
-    <item row="6" column="0">
-     <widget class="QLabel" name="lblProxyPass">
-      <property name="text">
-       <string>Κωδικός Χρήστη (password)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QLabel" name="lblUseProxy">
-      <property name="text">
-       <string>Χρήση Διακομιστή Proxy</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QLabel" name="lblProxyName">
-      <property name="text">
-       <string>Όνομα Διακομιστή Proxy</string>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0">
-     <widget class="QLabel" name="lblProxyUsername">
-      <property name="text">
-       <string>Όνομα Χρήστη (username)</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <widget class="QLabel" name="lblLogInToProxy">
-      <property name="text">
-       <string>Απαιτείται Log In στον Proxy</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QLabel" name="lblAuthType">
-      <property name="text">
-       <string>Τύπος Authentication</string>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="2">
-     <widget class="QLineEdit" name="leditProxyName"/>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QLineEdit" name="leditUsername"/>
-    </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QComboBox" name="cmbBoxUseProxy"/>
-    </item>
-    <item row="3" column="1" colspan="2">
-     <widget class="QCheckBox" name="chkLogInToProxy">
-      <property name="layoutDirection">
-       <enum>Qt::LeftToRight</enum>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="2">
-     <widget class="QComboBox" name="cmbBoxAuthType"/>
-    </item>
     <item row="0" column="0" colspan="3">
      <widget class="QLabel" name="lblProxy">
       <property name="minimumSize">
@@ -227,8 +163,82 @@
       </property>
      </widget>
     </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="lblProxyPass">
+      <property name="text">
+       <string>Κωδικός Χρήστη (password)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="lblProxyMode">
+      <property name="text">
+       <string>Χρήση Διακομιστή Proxy</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QLabel" name="lblProxyName">
+      <property name="text">
+       <string>Όνομα Διακομιστή Proxy</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0">
+     <widget class="QLabel" name="lblProxyUsername">
+      <property name="text">
+       <string>Όνομα Χρήστη (username)</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QLabel" name="lblUseLogIn">
+      <property name="text">
+       <string>Απαιτείται Log In στον Proxy</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLabel" name="lblAuthType">
+      <property name="text">
+       <string>Τύπος Authentication</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="1" colspan="2">
+     <widget class="QLineEdit" name="leditProxyPass"/>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QCheckBox" name="chkUseLogIn">
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" colspan="2">
+     <widget class="QComboBox" name="cmbBoxAuthType"/>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLineEdit" name="leditProxyName"/>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QComboBox" name="cmbBoxProxyMode"/>
+    </item>
     <item row="6" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="leditProxyUsername"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLineEdit" name="leditProxyPort"/>
+    </item>
+    <item row="3" column="0">
+     <widget class="QLabel" name="lblProxyPort">
+      <property name="text">
+       <string>Θύρα Διακομιστή Proxy</string>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>

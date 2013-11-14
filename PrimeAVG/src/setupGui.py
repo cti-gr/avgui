@@ -7,6 +7,19 @@ class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 	def __init__(self, parent=None):
 		super(updateSettings, self).__init__(parent)
 		self.setupUi(self)
+		# setting input validators
+		self.proxyValidator = QtGui.QIntValidator()
+		self.proxyValidator.setRange(1, 10000)
+		self.leditProxyPort.setValidator(self.proxyValidator)
+		self.leditMinSpeed.setValidator(QtGui.QIntValidator())
+		self.leditMaxTime.setValidator(QtGui.QIntValidator())
+		self.cmbBoxProxyMode.insertItem(0, "Χωρίς Proxy")	
+		self.cmbBoxProxyMode.insertItem(1, "Χρήση Proxy για λήψη ενημερώσεων")	
+		self.cmbBoxProxyMode.insertItem(2, "Χρήση Proxy μόνο αν είναι διαθέσιμος")	
+		self.cmbBoxAuthType.insertItem(0, "Αυτόματη Επιλογή Πιστοποίησης Χρήστη")	
+		self.cmbBoxAuthType.insertItem(1, "Βασική Πιστοποίηση Χρήστη")	
+		self.cmbBoxAuthType.insertItem(2, "NTLM Πιστοποίηση Χρήστη")	
+
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
 		

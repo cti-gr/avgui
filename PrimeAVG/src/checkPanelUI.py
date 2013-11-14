@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'checkPanel.ui'
 #
-# Created: Wed Nov 13 20:52:58 2013
+# Created: Thu Nov 14 20:13:34 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
