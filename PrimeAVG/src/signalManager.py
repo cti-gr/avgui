@@ -8,7 +8,7 @@ from io import open
 from os.path import expanduser
 import subprocess, sys, time, weakref
 import setupGui
-import gc
+import gc, re
 import getpass
 
 
@@ -599,26 +599,10 @@ class manager(QObject):
 			self._theMainWindow.theUpdate.theUpdateProgress.btnExit.setEnabled(False)
 		else:
 			pass
-			'''
-			if hasattr(self, 'theUpdateChecker'):
-				while self.theUpdateChecker.isRunning():
-					print("update checker still running after cancel/wrong pass")
-					self.theUpdateChecker.exit()
-			if hasattr(self, 'theUpdateChecker'):
-				del self.theUpdateChecker
-			if hasattr(self, 'theUpdater'):
-				while self.theUpdater.isRunning():
-					print("updater stil running after cancel/wrong pass")
-					self.theUpdater.exit()
-			if hasattr(self, 'theUpdater'):
-				del self.theUpdater
-			'''
-	
 	
 	def printToUpdateWidget(self, theInput):
 		 self._theMainWindow.theUpdate.theUpdateProgress.textUpdateProg.appendPlainText(theInput)
 
-	
 	def onUpdateFinish(self, exitCode):
 		print("EXIT CODE IS: " + str(exitCode))
 		if exitCode == 1: # process did not start
@@ -668,22 +652,23 @@ class manager(QObject):
 	#@QtCore.Slot()
 	def setUpdateSettings(self):
 		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndexChanged.connect(self.updateProxyModeSettings)			
-		self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.stateChanged.connect(self.updateProxyModeSettings)			
-		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.currentIndexChanged.connect(self.updateProxyModeSettings)
+		self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.stateChanged.connect(self.updateProxyModeSettings)			
+		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.currentIndexChanged.connect(self.updateProxyModeSettings)
 		if self.sender().objectName() == "btnUpdateSet":
 			self.getSettings()
+			print("getting settings")
 			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
 			self._theMainWindow.theUpdate.theUpdateSettings.show()
 		elif self.sender().objectName() == "btnOK":
 			try:
 				print("test")
-				#self.setSettings()
+				self.setSettings()
 				self._theMainWindow.theUpdate.theUpdateSettings.close()
 			except Exception as err:
 				raise err
@@ -695,36 +680,27 @@ class manager(QObject):
 			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
 			else:
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(True)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(True)
-				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.setEnabled(True)
-				if  self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.isChecked():
-					self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(True)
+				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(True)
+				if  self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked():
+					self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(True)
 					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
 					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
-		elif (str(self.sender().objectName())) == "chkUseLogIn":
-			if self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogIn.isChecked():
-				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(True)
+		elif (str(self.sender().objectName())) == "chkUseLogin":
+			if self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked():
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(True)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
 			else:
-				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.setEnabled(False)
+				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
-		'''
-		elif (str(self.sender().objectName())) == "cmbBoxAuthType":
-			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxAuthType.currentIndex() == 0:
-				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
-			else:
-				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
-				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
-		'''
 
 
 
@@ -756,10 +732,59 @@ class manager(QObject):
 		# Proxy Set up
 		self.proxyModeOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Mode"])
 		self.proxyMode = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
-		print(str(self.proxyMode))
-		# Proxy Use LogIn
-		self.proxyLoginRequiredOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Mode"])
-		self.proxyMode = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
-		print(str(self.proxyMode))
+		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.setCurrentIndex(self.proxyMode)
+		# Proxy Auth Type
+		self.proxyAuthTypeOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.AuthenticationType"])
+		self.proxyAuthType = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
+		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setCurrentIndex(self.proxyAuthType)
+		# Proxy Log In Required
+		self.proxyLoginRequiredOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.UseLogin"])
+		self.proxyLoginRequired = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
+		self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setChecked(self.proxyLoginRequired)
 
-
+	def setSettings(self):
+		self.command = ""
+		# Minimum Speed
+		self.newMinSpeed = int(self._theMainWindow.theUpdate.theUpdateSettings.leditMinSpeed.text())
+		if (self.newMinSpeed != self.minSpeed):
+			self.command = self.command + "Default.update.Inet.disconnect_speed_limit=" + str(self.newMinSpeed)
+		# Maximum Time
+		self.newMaxTime = int(self._theMainWindow.theUpdate.theUpdateSettings.leditMaxTime.text())
+		if (self.newMaxTime != self.maxTime):
+			self.command = self.command + " Default.update.Inet.disconnect_time_limit=" + str(self.newMaxTime)
+		# Proxy Name
+		self.newProxyName = self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.text()
+		if (self.newProxyName != self.proxyName):
+			self.command = self.command + " Default.update.Options.Proxy.Server="+self.newProxyName.replace(" ", "")
+		# Proxy Username
+		self.newProxyUsername = self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.text()
+		if (self.newProxyUsername != self.proxyUsername):
+			self.command = self.command + " Default.update.Options.Proxy.Login=" + self.newProxyUsername
+		# Proxy Password
+		self.newProxyPass = self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.text()
+		if (self.newProxyPass != self.proxyPass):
+			self.command = self.command + " Default.update.Options.Proxy.Password=" + self.newProxyPass
+		# Proxy Port
+		self.newProxyPort = int(self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.text())
+		if (self.newProxyPort != self.proxyPort):
+			self.command = self.command + " Default.update.Options.Proxy.Port=" + str(self.newProxyPort)
+		# Proxy Set up
+		self.newProxyMode = int(self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex())
+		if (self.newProxyMode != self.proxyMode):
+			self.command = self.command + " Default.update.Options.Proxy.Mode=" + str(self.newProxyMode)
+		# Proxy Auth Type
+		self.newProxyAuthType = int(self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.currentIndex())
+		if (self.newProxyAuthType != self.proxyAuthType):
+			self.command = self.command + " Default.update.Options.Proxy.AuthenticationType=" + str(self.newProxyAuthType)
+		# Proxy Log in Required
+		self.newProxyLoginRequired = self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked()
+		if (self.newProxyLoginRequired != self.proxyLoginRequired):
+			self.command = self.command + " Default.update.Options.Proxy.UseLogin=" + str(self.newProxyLoginRequired)
+		print("command is: " + self.command)
+		self.command = " ".join(self.command.split()) 
+		print("new command is: " + self.command)
+		try:
+			subprocess.call(["gksu", "avgcfgctl -w " + self.command])
+		except Exception as err:
+			print("Error setting new update settings")
+			raise err

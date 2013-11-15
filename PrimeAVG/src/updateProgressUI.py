@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateProgress.ui'
 #
-# Created: Thu Nov 14 20:13:35 2013
+# Created: Fri Nov 15 18:55:38 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!

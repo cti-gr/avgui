@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateSettings.ui'
 #
-# Created: Thu Nov 14 20:13:35 2013
+# Created: Fri Nov 15 18:55:38 2013
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -86,20 +86,20 @@ class Ui_dialogUpdateSettings(object):
         self.lblUseLogIn = QtGui.QLabel(self.layoutWidget1)
         self.lblUseLogIn.setObjectName("lblUseLogIn")
         self.gridLayout.addWidget(self.lblUseLogIn, 4, 0, 1, 1)
-        self.lblAuthType = QtGui.QLabel(self.layoutWidget1)
-        self.lblAuthType.setObjectName("lblAuthType")
-        self.gridLayout.addWidget(self.lblAuthType, 5, 0, 1, 1)
+        self.lblProxyAuthType = QtGui.QLabel(self.layoutWidget1)
+        self.lblProxyAuthType.setObjectName("lblProxyAuthType")
+        self.gridLayout.addWidget(self.lblProxyAuthType, 5, 0, 1, 1)
         self.leditProxyPass = QtGui.QLineEdit(self.layoutWidget1)
         self.leditProxyPass.setObjectName("leditProxyPass")
         self.gridLayout.addWidget(self.leditProxyPass, 7, 1, 1, 2)
-        self.chkUseLogIn = QtGui.QCheckBox(self.layoutWidget1)
-        self.chkUseLogIn.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.chkUseLogIn.setText("")
-        self.chkUseLogIn.setObjectName("chkUseLogIn")
-        self.gridLayout.addWidget(self.chkUseLogIn, 4, 1, 1, 2)
-        self.cmbBoxAuthType = QtGui.QComboBox(self.layoutWidget1)
-        self.cmbBoxAuthType.setObjectName("cmbBoxAuthType")
-        self.gridLayout.addWidget(self.cmbBoxAuthType, 5, 1, 1, 2)
+        self.chkUseLogin = QtGui.QCheckBox(self.layoutWidget1)
+        self.chkUseLogin.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.chkUseLogin.setText("")
+        self.chkUseLogin.setObjectName("chkUseLogin")
+        self.gridLayout.addWidget(self.chkUseLogin, 4, 1, 1, 2)
+        self.cmbBoxProxyAuthType = QtGui.QComboBox(self.layoutWidget1)
+        self.cmbBoxProxyAuthType.setObjectName("cmbBoxProxyAuthType")
+        self.gridLayout.addWidget(self.cmbBoxProxyAuthType, 5, 1, 1, 2)
         self.leditProxyName = QtGui.QLineEdit(self.layoutWidget1)
         self.leditProxyName.setObjectName("leditProxyName")
         self.gridLayout.addWidget(self.leditProxyName, 2, 1, 1, 2)
@@ -144,7 +144,7 @@ class Ui_dialogUpdateSettings(object):
         self.lblProxyName.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Όνομα Διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
         self.lblProxyUsername.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Όνομα Χρήστη (username)", None, QtGui.QApplication.UnicodeUTF8))
         self.lblUseLogIn.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Απαιτείται Log In στον Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAuthType.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Τύπος Authentication", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyAuthType.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Τύπος Authentication", None, QtGui.QApplication.UnicodeUTF8))
         self.lblProxyPort.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Θύρα Διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
         self.btnOK.setText(QtGui.QApplication.translate("dialogUpdateSettings", "OK", None, QtGui.QApplication.UnicodeUTF8))
         self.btnCancel.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ακύρωση", None, QtGui.QApplication.UnicodeUTF8))

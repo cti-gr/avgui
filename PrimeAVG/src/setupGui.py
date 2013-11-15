@@ -16,9 +16,9 @@ class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 		self.cmbBoxProxyMode.insertItem(0, "Χωρίς Proxy")	
 		self.cmbBoxProxyMode.insertItem(1, "Χρήση Proxy για λήψη ενημερώσεων")	
 		self.cmbBoxProxyMode.insertItem(2, "Χρήση Proxy μόνο αν είναι διαθέσιμος")	
-		self.cmbBoxAuthType.insertItem(0, "Αυτόματη Επιλογή Πιστοποίησης Χρήστη")	
-		self.cmbBoxAuthType.insertItem(1, "Βασική Πιστοποίηση Χρήστη")	
-		self.cmbBoxAuthType.insertItem(2, "NTLM Πιστοποίηση Χρήστη")	
+		self.cmbBoxProxyAuthType.insertItem(0, "Αυτόματη Επιλογή Πιστοποίησης Χρήστη")	
+		self.cmbBoxProxyAuthType.insertItem(1, "Βασική Πιστοποίηση Χρήστη")	
+		self.cmbBoxProxyAuthType.insertItem(2, "NTLM Πιστοποίηση Χρήστη")	
 
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
