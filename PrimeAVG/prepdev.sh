@@ -1,4 +1,4 @@
-#!/bin/bash
+#/bin/bash
 
 DEBDIR="${PWD%/*}/debpack"
 BASEDIR=$PWD
@@ -18,8 +18,11 @@ echo "Enter new avgui version"
 read VERSION
 
 echo "The new avgui version will be " $VERSION
-
-for file in $DEBDIR/*
+DESTINATION=$DEBDIR'/avgui-'$VERSION
+echo "Destination will be: " $DESTINATION
+if [ "$(ls -A $DEBDIR)" ]; then
+    echo "DEBDIR was NOT EMPTY"
+    for file in $DEBDIR/*
 	do
 		if [ -f $file ]; then
 			rm -i $file
@@ -30,14 +33,20 @@ for file in $DEBDIR/*
 					rm -r $file2
 				fi
 			done
-			DESTINATION=${file%\-*}'-'$VERSION
+			
+            DESTINATION=${file%%\-*}'-'$VERSION
 			echo "Destination now is " $DESTINATION
 			if [ $file != $DESTINATION ]; then				
 				mv $file $DESTINATION
 			fi
 		fi
+    done
 
-done 
+else
+    echo "DEBDIR was empty, creating the folder into destination: " $DESTINATION 
+    
+    mkdir -p "${DESTINATION}"
+fi
 
 MEDIADEST="${DESTINATION}/media"
 DOCDEST="${DESTINATION}/doc"

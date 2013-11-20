@@ -1,5 +1,10 @@
 /PrimeAVG/src/__pycache__/
 /PrimeAVG/media/__pycache__/
+<<<<<<< HEAD
 /debpack/
 .project
 .pydevproject
+=======
+/debpack/*
+/PrimeAVG/.metadata/
+>>>>>>> segfsol

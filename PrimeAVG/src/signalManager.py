@@ -1,7 +1,6 @@
-#!/usr/lib/python3.2
-from PySide import QtCore
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication
-from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QTimer
+#!/usr/lib/python3.3
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout
+from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker
 from datetime import datetime, date, time
 import utilities
 from io import open
@@ -25,9 +24,10 @@ global scanReportFolder
 global scanReportFile
 global scanReportPath
 global scanReportStorageEnabled
-
+mutexTermination = QMutex()
 
 class manager(QObject):
+
 	_scanParams = []
 	_scanRunning = 0
 	# _storageEnabled = 0

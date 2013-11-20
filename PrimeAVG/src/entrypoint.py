@@ -25,17 +25,27 @@ if not utilities.isAVGDRunning():
     QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
                                  QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
     exit(1)
-if (len(sys.argv) > 1):
-    config.init_config(True)
+if (len(sys.argv) > 2):
+    print("Error in numner of arguments - exiting")
+    exit(1)
+elif (len(sys.argv) == 2): 
+    if sys.argv[1]=="True":
+        config.init_config(True)
+    else:
+        print("Unknown parameter - exiting")
+        exit(1)
 else:
     config.init_config(False)
 print(config.DBFILEPATH)
+
 print("Executing with Python: " + config.PYTHON_VERSION)
 print("Using PySide: " + config.PYSIDE_VERSION)
 print("Qt Framework used is: " + config.QT_VERSION)
+
 theApp = theApplication()
 theApp.theWindow.show()
-
+gc.enable()
+#gc.set_debug(gc.DEBUG_STATS | gc.DEBUG_COLLECTABLE | gc.DEBUG_UNCOLLECTABLE | gc.DEBUG_SAVEALL)
 app.exec_()
 # to add finalization operation, e.g. closing the cursor
 

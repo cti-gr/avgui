@@ -1,4 +1,5 @@
 from os.path import expanduser
+
 import PySide
 from PySide import QtCore
 import sys
@@ -23,6 +24,8 @@ global QT_VERSION
 global PYTHON_VERSION
 
 def init_config(devmode):
+
+
     global DBFILEPATH
     global PYSIDE_VERSION
     global QT_VERSION
@@ -35,6 +38,9 @@ def init_config(devmode):
     homedir = expanduser("~")
     if devmode:
         DBFILEPATH = DBFILENAME
+        print("Python version: " + PYTHON_VERSION)
+        print("PySide version: " + PYSIDE_VERSION)
+        print("Qt Version: " + QT_VERSION)
     else:
         DBFILEPATH = homedir + "/.avgui/" + DBFILENAME
-    
+
