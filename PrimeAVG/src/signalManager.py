@@ -613,7 +613,7 @@ class manager(QObject):
 			if hasattr(self, 'theUpdater'):
 				self.theUpdater.exit()
 		elif exitCode == 0 | exitCode == 255: # nornal process termination
-			#print(str(self.theUpdater.isRunning()))
+			# print(str(self.theUpdater.isRunning()))
 			# signals need to be disconnected in both cases
 			self.theUpdater.started.disconnect()
 			self.theUpdater.sigUpdateTerminated.disconnect()
@@ -660,7 +660,8 @@ class manager(QObject):
 			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
+				if (self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isEnabled()):
+					self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
@@ -677,10 +678,12 @@ class manager(QObject):
 
 	def updateProxyModeSettings(self):
 		if (str(self.sender().objectName())) == "cmbBoxProxyMode":
+			print("sender was cmbBoxProxyMode")
 			if self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyMode.currentIndex() == 0:
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(False)
-				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
+				if (self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isEnabled()):
+					self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
@@ -703,8 +706,23 @@ class manager(QObject):
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
 
 
-
 	def getSettings(self):
+		# Automatic Program Update
+		self.autoProgUpdateOut = subprocess.check_output(["avgcfgctl", "UpdateProgram.sched.Task.Disabled"])
+		self.tmp_autoProgUpdate = self.autoProgUpdateOut.decode("utf").rstrip().split("=",1)[-1].capitalize()
+		if self.tmp_autoProgUpdate == "False":
+			self.autoProgUpdate = True
+		else:
+			self.autoProgUpdate = False
+		self._theMainWindow.theUpdate.theUpdateSettings.chkAutoUpdateProg.setChecked(self.autoProgUpdate)
+		# Automatic Virus Database Update
+		self.autoVirUpdateOut = subprocess.check_output(["avgcfgctl", "UpdateVir.sched.Task.Disabled"])
+		self.tmp_autoVirUpdate = self.autoVirUpdateOut.decode("utf").rstrip().split("=",1)[-1].capitalize()
+		if self.tmp_autoVirUpdate == "False":
+			self.autoVirUpdate = True
+		else:
+			self.autoVirUpdate = False
+		self._theMainWindow.theUpdate.theUpdateSettings.chkAutoUpdateVir.setChecked(self.autoVirUpdate)
 		# Minimum Speed 
 		self.minSpeedOut = subprocess.check_output(["avgcfgctl", "Default.update.Inet.disconnect_speed_limit"])
 		self.minSpeed = int(str(self.minSpeedOut.decode("utf")).split("=",1)[-1])
@@ -739,11 +757,23 @@ class manager(QObject):
 		self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setCurrentIndex(self.proxyAuthType)
 		# Proxy Log In Required
 		self.proxyLoginRequiredOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.UseLogin"])
-		self.proxyLoginRequired = int(str(self.proxyModeOut.decode("utf")).split("=",1)[-1])
+		self.tmp_proxyLoginRequired = self.proxyLoginRequiredOut.decode("utf").rstrip().split("=",1)[-1].capitalize()
+		if self.tmp_proxyLoginRequired == 'False':
+			self.proxyLoginRequired = False
+		else:
+			self.proxyLoginRequired = True
 		self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setChecked(self.proxyLoginRequired)
 
 	def setSettings(self):
 		self.command = ""
+		# Automatic Program Update
+		self.newAutoProgUpdate = self._theMainWindow.theUpdate.theUpdateSettings.chkAutoUpdateProg.isChecked()
+		if (self.newAutoProgUpdate != self.autoProgUpdate):
+			self.command = self.command + " UpdateProgram.sched.Task.Disabled=" + str(not self.newAutoProgUpdate)
+		# Automatic Virus Database Update
+		self.newAutoVirUpdate = self._theMainWindow.theUpdate.theUpdateSettings.chkAutoUpdateVir.isChecked()
+		if (self.newAutoVirUpdate != self.autoVirUpdate):
+			self.command = self.command + " UpdateVir.sched.Task.Disabled=" + str(not self.newAutoVirUpdate)		
 		# Minimum Speed
 		self.newMinSpeed = int(self._theMainWindow.theUpdate.theUpdateSettings.leditMinSpeed.text())
 		if (self.newMinSpeed != self.minSpeed):
@@ -778,13 +808,17 @@ class manager(QObject):
 			self.command = self.command + " Default.update.Options.Proxy.AuthenticationType=" + str(self.newProxyAuthType)
 		# Proxy Log in Required
 		self.newProxyLoginRequired = self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked()
+		print(self.newProxyLoginRequired)
+		print(self.proxyLoginRequired)
 		if (self.newProxyLoginRequired != self.proxyLoginRequired):
 			self.command = self.command + " Default.update.Options.Proxy.UseLogin=" + str(self.newProxyLoginRequired)
+		
 		print("command is: " + self.command)
 		self.command = " ".join(self.command.split()) 
 		print("new command is: " + self.command)
-		try:
-			subprocess.call(["gksu", "avgcfgctl -w " + self.command])
-		except Exception as err:
-			print("Error setting new update settings")
-			raise err
+		if self.command != "":
+			try:
+				subprocess.call(["gksu", "avgcfgctl -w " + self.command])
+			except Exception as err:
+				print("Error setting new update settings")
+				raise err
