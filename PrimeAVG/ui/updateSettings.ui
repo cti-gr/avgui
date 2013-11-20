@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>660</height>
+    <height>772</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -22,7 +22,7 @@
   <property name="maximumSize">
    <size>
     <width>623</width>
-    <height>660</height>
+    <height>900</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -245,8 +245,8 @@
   <widget class="QPushButton" name="btnOK">
    <property name="geometry">
     <rect>
-     <x>320</x>
-     <y>580</y>
+     <x>330</x>
+     <y>700</y>
      <width>141</width>
      <height>51</height>
     </rect>
@@ -264,8 +264,8 @@
   <widget class="QPushButton" name="btnCancel">
    <property name="geometry">
     <rect>
-     <x>170</x>
-     <y>580</y>
+     <x>180</x>
+     <y>700</y>
      <width>141</width>
      <height>51</height>
     </rect>
@@ -280,14 +280,111 @@
     <string>Ακύρωση</string>
    </property>
   </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>580</y>
+     <width>406</width>
+     <height>47</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="1">
+     <widget class="QCheckBox" name="chkAutoUpdateProg">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblAutoUpdateProg">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Ενεργοποίηση Αυτόματων Ενημερώσεων Λογισμικού  </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>110</x>
+     <y>630</y>
+     <width>406</width>
+     <height>47</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_4">
+    <item row="0" column="1">
+     <widget class="QCheckBox" name="chkAutoUpdateVir">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="lblAutoUpdateVir">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Ενεργοποίηση Αυτόματων Ενημερώσεων Βάσης Ιών    </string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
   <zorder>layoutWidget</zorder>
   <zorder>layoutWidget</zorder>
   <zorder>label</zorder>
   <zorder>btnOK</zorder>
   <zorder>btnCancel</zorder>
+  <zorder>gridLayoutWidget</zorder>
+  <zorder>gridLayoutWidget_2</zorder>
  </widget>
  <resources>
   <include location="../media/avg.qrc"/>
+  <include location="../../../../.designer/media/avg.qrc"/>
  </resources>
  <connections/>
 </ui>
