@@ -518,40 +518,19 @@ class scanWorker(QtCore.QThread):
         
         
     def killScan(self):
-      self.avgscanProc.kill()
-      self.normalTermination="False"     
+        if hasattr(self, 'avgscanProc'):
+            if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+                self.avgscanProc.kill()
+                self.normalTermination="False"
       #if hasattr(self, 'avgscanProc'):
       #    while not self.avgscanProc.waitForFinished():
       #        print("Waiting....")
       #self.sigScanTerminated.emit()
       
-      '''  
-      if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-            print("PROCESS was running, now exiting - KILLED")
-            #self.avgscanProc.readyReadStandardOutput.disconnect()
-            print("disconnecting finished signal of avgscanproc")
-            self.avgscanProc.finished.disconnect()
-            #self.avgscanProc.blockSignals(True)
-            print("killing")
-            self.avgscanProc.kill()
-            print("closing")
-            if hasattr(self, 'avgscanProc'):
-                print("it does have the attribute avgscanProc, deleting it")
-                #while not self.avgscanProc.waitForFinished():
-                #    print("Waiting for avgscanProc to finish")
-                #self.avgscanProc.close()
-                del self.avgscanProc
-                print("deleted it")
-            gc.collect()
-            print("gc-collected")
-            #self.avgscanProc.kill()
-            #self.exit()
-            self.sigScanTerminated.emit()
-      '''
 
     def getScanState(self):
         if hasattr(self, 'avgscanProc'):
-            return self.avgscanProc.state()    
+            return self.avgscanProc.state()
         else:
             pass
 

@@ -38,9 +38,9 @@ def init_config(devmode):
     homedir = expanduser("~")
     if devmode:
         DBFILEPATH = DBFILENAME
-        print("Python version: " + PYTHON_VERSION)
-        print("PySide version: " + PYSIDE_VERSION)
-        print("Qt Version: " + QT_VERSION)
+        #print("Python version: " + PYTHON_VERSION)
+        #print("PySide version: " + PYSIDE_VERSION)
+        #print("Qt Version: " + QT_VERSION)
     else:
         DBFILEPATH = homedir + "/.avgui/" + DBFILENAME
 

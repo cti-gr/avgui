@@ -1,6 +1,6 @@
 #!/usr/lib/python3.3
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout
-from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication
+from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker, QTimer
 from datetime import datetime, date, time
 import utilities
 from io import open
