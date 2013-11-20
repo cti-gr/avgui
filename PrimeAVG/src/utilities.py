@@ -515,8 +515,21 @@ class scanWorker(QtCore.QThread):
                     numFilesHealed = i.split()[3]
         except Exception as err:
             print(str(err))
-        
-        
+    '''  
+    def cleanUp(self):
+		global abnormalCheckUpdatesTermination
+		#abnormalTermination = True
+		if hasattr(self, 'avgchkupProc'):
+			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
+				print("OK GOT IT")
+				abnormalCheckUpdatesTermination = True
+				self.avgchkupProc.finished.emit(255)
+			if hasattr(self, 'avgchupProc'):	
+				while not self.avgchkupProc.waitForFinished():
+					print("Waiting for proc to finish")
+			else:
+				pass
+    ''' 
     def killScan(self):
         if hasattr(self, 'avgscanProc'):
             if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):

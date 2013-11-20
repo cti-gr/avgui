@@ -74,10 +74,15 @@ class updateProgress(QtGui.QDialog, updateProgressUI.Ui_dialogUpdateProg):
 		self.sigCloseEvent.emit()
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
-    def __init__(self, parent=None):
+   
+   sigCloseEvent= QtCore.Signal()
+   
+   def __init__(self, parent=None):
         super(scanProgress, self).__init__(parent)
         self.setupUi(self)
    
+   def closeEvent(self, event):
+       self.sigCloseEvent.emit()
        
 class scanSettings(QtGui.QDialog, scanSettingsUI.Ui_scanSettingsDialog):
        

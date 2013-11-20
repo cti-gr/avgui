@@ -308,6 +308,7 @@ class manager(QObject):
 		
 		abnormalTermination = 0
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
+		self._theMainWindow.theScan.theScanProgress.sigCloseEvent.connect(self.terminateScan)
 		# can only have one scan process running
 		if manager._scanRunning == 0:
 			manager._scanRunning = 1
