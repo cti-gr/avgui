@@ -48,8 +48,8 @@ class checkDaemonD(QtCore.QThread):
 			self.out1 = subprocess.Popen(['ps','-C', self.dName], stdout=subprocess.PIPE)
 			self.out2 = subprocess.Popen(["wc", "-l"], stdin=self.out1.stdout, stdout=subprocess.PIPE)
 			self.out1IN, self.out1ERR = self.out1.communicate()
-			print("out1IN is: " + str(self.out1IN))
-			print("out1ERR is: " + str(self.out1ERR))
+			#print("out1IN is: " + str(self.out1IN))
+			#print("out1ERR is: " + str(self.out1ERR))
 			self.linecount1 = self.out2.communicate()[0]
 			self.outA = subprocess.Popen(['ps','-C', 'gksu'], stdout=subprocess.PIPE)
 			self.outB = subprocess.Popen(["wc", "-l"], stdin=self.outA.stdout, stdout=subprocess.PIPE)
@@ -59,13 +59,13 @@ class checkDaemonD(QtCore.QThread):
 			#self.out1.stdout.close()
 			if (int(self.linecount1) > 1):
 				if not self.hasStarted:
-					print("linecount is: " + str(int(self.linecount1)))
-					print("Emitting signal")
+					#print("linecount is: " + str(int(self.linecount1)))
+					#print("Emitting signal")
 					self.sigDstarted.emit(0)
 					self.hasStarted = True
 					return					
 			elif self.hasStarted:
-				print("EXITING!")
+				#print("EXITING!")
 				#out1.kill()
 				#out2.kill()
 				break
@@ -74,10 +74,10 @@ class checkDaemonD(QtCore.QThread):
 				self.retriesCnt += 1
 				if self.retriesCnt > 20:
 					if self.gksuHasStarted & (int(self.linecount2) > 1):
-						print("gksu has started, user has not given password yet")
+						#print("gksu has started, user has not given password yet")
 						self.retriesCnt = 0
 					elif self.gksuHasStarted & (int(self.linecount2) == 1):
-						print("User cancelled the operation")
+						#print("User cancelled the operation")
 						abnormalCheckUpdatesTermination = True
 						self.sigDstarted.emit(2)
 						return
@@ -91,7 +91,7 @@ class checkDaemonD(QtCore.QThread):
 				#print("linecount is: " + str(int(linecount)))
 				#print("hasStarted is: " + str(self.hasStarted))
 				#print("passing " + str(self.retriesCnt) + " -- effective user id: " + str(os.geteuid()))
-		print("calling exit for daemon checker")
+		#print("calling exit for daemon checker")
 		self.exec_()
 		self.exit()
 								
@@ -152,12 +152,14 @@ class chkUpdateWorker(QtCore.QThread):
 		#abnormalTermination = True
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
-				print("OK GOT IT")
-				abnormalCheckUpdatesTermination = True
-				self.avgchkupProc.finished.emit(255)
+				print("now killing")
+				self.avgchkupProc.terminate()
+				#self.avgchkupProc.close()
+			abnormalCheckUpdatesTermination = True
 			if hasattr(self, 'avgchupProc'):	
 				while not self.avgchkupProc.waitForFinished():
 					print("Waiting for proc to finish")
+					self.avgchkupProc.finished.emit(255)
 			else:
 				pass
 			#print(str(self.avgchkupProc.state()))
@@ -424,15 +426,15 @@ class scanWorker(QtCore.QThread):
 		if (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Running) & (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Starting) :
 			
 			print("---- STARTING AVG SCAN ----")
-			if self.scanParams != None:
+			if self.scanParams:
 				try:
-					print("Within try1")
+					print("Within try1 " + str(self.scanParams))
 					self.avgscanProc.start("avgscan", [self.scanPath] + self.scanParams)
 					self.exec_()
 					#while not self.avgscanProc.waitForStarted():
-					#	 print("Waiting avgscanProc to start") 
+					#print("Waiting avgscanProc to start") 
 				except Exception as errinit1:
-						print("Σφάλμα κατά την εκκίνηση της σάρωσης " + str(errinit))
+						print("Σφάλμα κατά την εκκίνηση της σάρωσης: " + str(errinit2))
 			else:
 				try:
 					print("Within try2")
@@ -441,16 +443,8 @@ class scanWorker(QtCore.QThread):
 					#while not self.avgscanProc.waitForStarted():
 					#	 print("Waiting avgscanProc to start") 
 				except Exception as errinit2:
-					print("Σφάλμα κατά την εκκίνηση της σάρωσης " + str(errinit))
+					print("Σφάλμα κατά την εκκίνηση της σάρωσης: " + str(errinit2))
 
-			  
-		#print("ID SCAN PROC: " + str(id(self.avgscanProc)))
-		#print("-------------BEFORE EXEC-------------")
-		#self.exec_()
-		#print("-------------AFTER EXEC--------------")
-		#if hasattr(self, 'avgscanProc'):
-		#	 self.avgscanProc.deleteLater()		 
-	   
 	def procDestroyed(self):
 		print("!!!!!! PROCESS DESTROYED !!!!!!") 
 	
@@ -463,34 +457,34 @@ class scanWorker(QtCore.QThread):
 		global user
 		global numFilesHealed
 		global mutexResults
-	   
+	
 		try:
-		   if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-			   #print(str(self.avgscanProc))
-			   #print("Before reading: " + str(id(self.avgscanProc)))
-			   self.theLine = self.avgscanProc.read(self.avgscanProc.bytesAvailable())
-			   #self.theLine = self.avgscanProc.readAllStandardOutput()
-			   #print("--------------")
-			   #print(str(self.avgscanProc))
-			   self.sigWriteScan.emit(str(self.theLine))
-		   else:
-			   print("DID NOT MANAGE TO RETRIEVE LINE")
-			   print("In printOut, Thread id: " + str(id(self)))
-			   print("In printOut, PROCESS id: " + str(id(self.avgscanProc)))
-			   #print(vars(self.avgscanProc))
-			   self.avgscanProc.closeWriteChannel()
-			   self.avgscanProc.closeReadChannel(QProcess.StandardOutput)
-			   print(str(self.avgscanProc.readChannel()))
-			   #self.avgscanProc.finished.emit(0)
-			   #gc.collect()
-			   return
+			if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+				#print(str(self.avgscanProc))
+				#print("Before reading: " + str(id(self.avgscanProc)))
+				self.theLine = self.avgscanProc.read(self.avgscanProc.bytesAvailable())
+				#self.theLine = self.avgscanProc.readAllStandardOutput()
+				#print("--------------")
+				#print(str(self.avgscanProc))
+				self.sigWriteScan.emit(str(self.theLine))
+			else:
+				print("DID NOT MANAGE TO RETRIEVE LINE")
+				print("In printOut, Thread id: " + str(id(self)))
+				print("In printOut, PROCESS id: " + str(id(self.avgscanProc)))
+				#print(vars(self.avgscanProc))
+				self.avgscanProc.closeWriteChannel()
+				self.avgscanProc.closeReadChannel(QProcess.StandardOutput)
+				print(str(self.avgscanProc.readChannel()))
+				#self.avgscanProc.finished.emit(0)
+				#gc.collect()
+				return
 		except UnicodeDecodeError as uerr:
 			print ("A Unicode error occurred: " + str(uerr))
 			return
 		except Exception as genericerror:
 			print("A generic error occurred: " + str(genericerror)) 
-			return				 
-		 
+			return
+		
 		
 		textin = str(self.theLine).splitlines()
 		#print("textin, within processScanOutput: " + str(textin))
@@ -519,72 +513,55 @@ class scanWorker(QtCore.QThread):
 		
 		
 	def killScan(self):
-	  self.avgscanProc.kill()
-	  self.normalTermination="False"	 
-	  #if hasattr(self, 'avgscanProc'):
-	  #	   while not self.avgscanProc.waitForFinished():
-	  #		   print("Waiting....")
-	  #self.sigScanTerminated.emit()
-	  
-	  '''  
-	  if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-			print("PROCESS was running, now exiting - KILLED")
-			#self.avgscanProc.readyReadStandardOutput.disconnect()
-			print("disconnecting finished signal of avgscanproc")
-			self.avgscanProc.finished.disconnect()
-			#self.avgscanProc.blockSignals(True)
-			print("killing")
-			self.avgscanProc.kill()
-			print("closing")
-			if hasattr(self, 'avgscanProc'):
-				print("it does have the attribute avgscanProc, deleting it")
-				#while not self.avgscanProc.waitForFinished():
-				#	 print("Waiting for avgscanProc to finish")
-				#self.avgscanProc.close()
-				del self.avgscanProc
-				print("deleted it")
-			gc.collect()
-			print("gc-collected")
-			#self.avgscanProc.kill()
-			#self.exit()
-			self.sigScanTerminated.emit()
-	  '''
-
+		if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+			print("killing scan - in scanWorker class")
+			self.normalTermination="False"
+			self.avgscanProc.finished.emit(0)
+		else:
+			pass
+		#self.avgscanProc.finished.emit()
+		
+		
+		#if hasattr(self, 'avgscanProc'):
+		#while not self.avgscanProc.waitForFinished():
+		#print("Waiting....")
+		#self.sigScanTerminated.emit()
+	
 	def getScanState(self):
 		if hasattr(self, 'avgscanProc'):
-			return self.avgscanProc.state()	   
+			return self.avgscanProc.state()
 		else:
 			pass
 
 	def onAVGProcessFinish(self):
 		print("--------- QProcess Terminated ----------")
-		#print("In onAVGProcessFinish, Thread id: " + str(id(self)))
-		#print("In onAVGProcessFinish, PROCESS id: " + str(id(self.avgscanProc)))
-		#self.avgscanProc.readyReadStandardOutput.disconnect()
-		#self.avgscanProc.blockSignals(True)
+		if hasattr(self, 'avgscanProc'):
+			print("Exit Code: " + str(self.avgscanProc.exitCode()))
+		#try:
+		#	self.avgscanProc.readyRead.disconnect
+		#except Exception as disconect_error:
+		#	print("Error Disconnectint readyRead signal")
 		if hasattr(self, 'avgscanProc'):
 			if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-			   self.avgscanProc.kill()
-			self.avgscanProc.close()
+				print("It was still running - trying to kill it again")
+				self.avgscanProc.kill()
+			#self.avgscanProc.close()
 		if hasattr(self, 'avgscanProc'):
 			del self.avgscanProc
 		gc.collect()
-		#self.avgscanProc.finished.disconnect()
-		#self.exit()
-		#self.avgscanProc.terminate()
 		if hasattr(self, 'avgscanProc'):
 			while not self.avgscanProc.waitForFinished():
-			   print("Waiting before emitting...")
+				print("Waiting before emitting...")
 		self.sigScanTerminated.emit(self.normalTermination)
-	
+		self.exit()
+		
 	def onThreadFinish(self):
-	   
 		self.exit()
 
 ##################################### END OF CLASS SCAN WORKER #############################
 
 class sqliteWorker(QtCore.QThread):
-	   
+	
 	def __init__(self, parent=None):
 		super(sqliteWorker, self).__init__(parent)
 			

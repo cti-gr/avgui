@@ -58,7 +58,7 @@ class scanResults(QtGui.QDialog, scanResultsUI.Ui_dialogScanResults):
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 	
 	def closeEvent(self, event):
-	   self.sigCloseEvent.emit()
+		self.sigCloseEvent.emit()
 	
 
 class updateProgress(QtGui.QDialog, updateProgressUI.Ui_dialogUpdateProg):
@@ -74,16 +74,16 @@ class updateProgress(QtGui.QDialog, updateProgressUI.Ui_dialogUpdateProg):
 		self.sigCloseEvent.emit()
 
 class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
-   
-   sigCloseEvent= QtCore.Signal()
-   
-   def __init__(self, parent=None):
+
+	sigCloseEvent= QtCore.Signal()
+
+	def __init__(self, parent=None):
 		super(scanProgress, self).__init__(parent)
 		self.setupUi(self)
-   
-   def closeEvent(self, event):
-	   self.sigCloseEvent.emit()
-	   
+
+	def closeEvent(self, event):
+		self.sigCloseEvent.emit()
+
 class scanSettings(QtGui.QDialog, scanSettingsUI.Ui_scanSettingsDialog):
 	   
 	def __init__(self, parent=None):
@@ -126,7 +126,7 @@ class scanSelect(QtGui.QDialog, scanSelectUI.Ui_scanSelectDialog):
 		self.setupUi(self)
 		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
 		self.selectDialog = QtGui.QFileDialog(self)
-   
+
 	def clear(self):
 		
 		self.radioFolder.setAutoExclusive(False)
@@ -152,13 +152,13 @@ class scanDialog(QtGui.QDialog, scanDialogUI.Ui_scanDialog):
 					   
 		self.selectDialog = QtGui.QFileDialog(self)
 		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
-   
+
 	def clear(self):
 		self.fileToScanLabel.setText("Δεν έχουν επιλεγεί αρχεία / φάκελοι")
-		self.infoLabel.setText("")		  
-   
+		self.infoLabel.setText("")
+
 	def closeEvent(self, event):
-	   self.sigCleanScanDialog.emit()
+		self.sigCleanScanDialog.emit()
 	
 	
 

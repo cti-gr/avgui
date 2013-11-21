@@ -68,7 +68,7 @@ class manager(QObject):
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
 		self._theMainWindow.theScan.btnBeginScan.clicked.connect(self.beginScan)
 		self._theMainWindow.theScan.btnScanSettings.clicked.connect(self.setScanSettings)
-		
+		self._theMainWindow.theScan.sigCleanScanDialog.connect(self.cleanUpScanSettings)
 		#Scan Select Dialog
 		#self._theMainWindow.theScan.theSelect.sigSelectType.connect(self.handleSelectScanTypeEmits)
 		self._theMainWindow.theScan.theSelect.radioFile.clicked.connect(self.emitFileSelected)
@@ -81,6 +81,7 @@ class manager(QObject):
 		
 		#Scan Progress Dialog
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.clicked.connect(self.terminateScan)
+		self._theMainWindow.theScan.theScanProgress.sigCloseEvent.connect(self.terminateScan)
 		
 		#Scan History Dialog
 		self._theMainWindow.theHistory.btnExecute.clicked.connect(self.execSearch)
@@ -144,21 +145,26 @@ class manager(QObject):
 		global scanPath
 		options = QFileDialog.DontResolveSymlinks 
 		scanPath = QFileDialog.getOpenFileName(self._theMainWindow.theScan.theSelect, 'Επιλογή Αρχείου προς Σάρωση', '/home', 'All files (*.*)', "",  options)[0]
-		print(scanPath)
-		# manager._scanType = 0
-		self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
-		self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
+		print("scan path is: " + scanPath)
+		if scanPath == "":
+			scanPath=None
+			return
+		else:
+			self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
+			self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
 		self._theMainWindow.theScan.theSelect.close()
 		
 	def emitFolderSelected(self):
 		global scanPath
 		options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
 		scanPath = QFileDialog.getExistingDirectory(self._theMainWindow.theScan.theSelect, 'Επιλογή Φακέλου προς Σάρωση', '/home', options)
-		print(scanPath)
-		# manager._scanType = 1
-		self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
-		#self._theMainWindow.theScan.theSelect.sigSelectType.emit("FOLDER")
-		self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
+		print("scan path is: " + scanPath)
+		if scanPath == "":
+			scanPath=None
+			return
+		else:
+			self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
+			self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
 		self._theMainWindow.theScan.theSelect.close()
 
 ################################### Methods related to setting the Scan Settings ##########################################
@@ -176,7 +182,7 @@ class manager(QObject):
 		
 		closeWidget = True
 		
-		print("Setting up scan settings...")
+		#print("Setting up scan settings...")
 		scanParams = []
 		# scan for specific file extensions
 		if self._theMainWindow.theScan.theScanSettings.chkbIfType.isChecked():
@@ -211,11 +217,11 @@ class manager(QObject):
 		elif self._theMainWindow.theScan.theScanSettings.radioVault.isChecked():
 			scanParams.append("--vv-move")
 		
-		print("Inside function the scanParams are: " + str(scanParams))
+		#print("Inside function the scanParams are: " + str(scanParams))
 		scanParameters = scanParams
 		#print("Just set manager._scanParams: " + str(manager._scanParams))
 		#scanParameters = scanParams
-		print("Just set scanParameters: " + str(scanParameters))
+		#print("Just set scanParameters: " + str(scanParameters))
 		
 		if self.validateFileStorage() & (scanReportStorageEnabled == 1):
 			self._theMainWindow.theScan.theScanSettings.close()
@@ -260,7 +266,7 @@ class manager(QObject):
 			else:
 				scanReportPath = scanReportFile
 			storagePathOK = True
-		print("scanReportPath is: " + str(scanReportPath))
+		#print("scanReportPath is: " + str(scanReportPath))
 		
 		return storagePathOK
 			 
@@ -277,7 +283,6 @@ class manager(QObject):
 			scanReportStorageEnabled = 0
 
 ##################################################################################################
-		
 		
 ################################### DB Updates History ##########################################  
 
@@ -296,17 +301,17 @@ class manager(QObject):
 		self.thedbHistoryWorker.exit()
 		
 ##################################################################################################
-
 	
 ########################################## SCAN ##################################################
 	def beginScan(self):
+		self.isCleanScan = False
 		global scanPath
 		global abnormalTermination
 		global scanParameters
 		self.getScanSettings()
 		abnormalTermination = 0
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
-		print("Scan path is: " + str(scanPath))
+		#print("Scan path is: " + str(scanPath))
 		if scanPath == None:
 			QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
@@ -344,28 +349,36 @@ class manager(QObject):
 				
 	
 	def terminateScan(self):
-		 global abnormalTermination
-		 print("Entering terminateScan from signalManager")
-		 if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
-			 print("Seems it was running, calling killScan method")
-			 self.theScanWorker.killScan()
-		 self._theMainWindow.theScan.theScanProgress.hide()
-		 manager._scanParams = []
-		 
+		if not self.isCleanScan:
+			global abnormalTermination
+			print("Entering terminateScan from signalManager")
+			if hasattr(self, 'theScanWorker'):
+				if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
+					print("Seems it was running, calling killScan method")
+					self.theScanWorker.killScan()
+			self.isCleanScan = True
+			self._theMainWindow.theScan.theScanProgress.hide()
+			manager._scanParams = []
+		
 
 	def onScanFinish(self, normalTermination):
 		print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
-		self.theScanWorker.exit()
-		while not self.theScanWorker.wait():
-			print("Waiting for scan worker to finish")
+		if hasattr(self, 'theScanWorker'):
+			self.theScanWorker.exit()
+			while not self.theScanWorker.wait():
+				print("Waiting for scan worker to finish")
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
-		if self.theScanWorker.isFinished():
-			print("theScanWorker is finished")
-			print(" ")
-		elif self.theScanWorker.isRunning():
-			print("theScanWorker is RUNNING!")
+		'''
+			if self.theScanWorker.isFinished():
+				print("The Scan Worker is FINISHED")
+			elif self.theScanWorker.isRunning():
+				print("theScanWorker is RUNNING!")
+		'''
+		if hasattr(self, 'theScanWorker'):
+			del self.theScanWorker
+			print("The Scan Worker is being Deleted")
 		else:
-			print("WTF?!")
+			print("The Scan Worker Was Already Deleted")
 		try:
 			lockerFinish = QMutexLocker(mutexTermination)		   
 			if normalTermination=="True":
@@ -374,11 +387,11 @@ class manager(QObject):
 		except Exception as errnmut2:
 			print(str(errmut2))	  
 	   
-		manager._scanParams = []
+		#manager._scanParams = []
 		gc.collect()
 	
 
-	def cleanScanDialog(self):
+	def cleanUpScanSettings(self):
 		global scanPath
 		print("Running cleanup")
 		scanPath = None
@@ -484,7 +497,7 @@ class manager(QObject):
 
 	def checkUpdates(self):
 		self.abnormalTermination = False
-		self.isClean = False
+		self.isCleanCheck = False
 		self._theMainWindow.theUpdate.theCheckPanel.txtCheck.clear()
 		self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(30)
 		self.theChecker = utilities.chkUpdateWorker()
@@ -499,16 +512,7 @@ class manager(QObject):
 		while not self.theChecker.isRunning():
 			print("Waiting for checker to start")
 
-	def closeCounterWidget(self):
-		if not self.isClean:
-			print("In Close Counter Widget")
-			if hasattr(self, 'theChecker'):
-				print("it has!")
-				self.theChecker.cleanUp()
-			self.isClean = True
-		else:
-			pass
- 
+
 	def beginDaemonChecker(self):
 		#print("beginning daemon checker")
 		self.theDaemonChecker.start()
@@ -537,6 +541,16 @@ class manager(QObject):
 		currentValue = self._theMainWindow.theUpdate.theCountDown.countDownLCD.intValue()
 		#print("decrementing: current value is: " + str(currentValue))
 		self._theMainWindow.theUpdate.theCountDown.countDownLCD.display(currentValue - 1)
+		
+	def closeCounterWidget(self):
+		if not self.isCleanCheck:
+			print("In Close Counter Widget")
+			if hasattr(self, 'theChecker'):
+				print("it has!")
+				self.theChecker.cleanUp()
+			self.isCleanCheck = True
+		else:
+			pass
 	
 	def handleCheckTermination(self, abnormalTermination, theOutput):
 		self.abnormalTermination = abnormalTermination

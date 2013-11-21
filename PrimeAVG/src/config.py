@@ -17,7 +17,11 @@ translationDict = {
 'Available version':'Έκδοση διαθέσιμη για μεταφόρτωση',
 'Recommended update':'Συνιστώμενη Ενημέρωση',
 'Program update':'Ενημέρωση Προγράμματος',
-'iAVI database':'Βάση iAVI'
+'iAVI database':'Βάση iAVI',
+'Running update.':'Έλεγχος Διαθεσιμότητας Ενημερώσεων',
+'Operation failed. The exit code could not be got because the thread or process is still alive.':'Η Διεργασία Δεν Μπόρεσε να Ολοκληρωθεί. Παρακαλούμε Επαναλάβατε την Εκτέλεσή της.',
+'Initializing':'Αρχικοποίηση',
+'Analyzing':'Ανάλυση Διαθέσιμων Ενημερώσεων'
 }
 global PYSIDE_VERSION
 global QT_VERSION
