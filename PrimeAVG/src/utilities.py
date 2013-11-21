@@ -381,7 +381,8 @@ class debugger(QtCore.QThread):
                 if(("PySide.QtCore.QProces" in str(type(o))) | ("QThread" in str(type(o)))):    
                     print(str(o) + "ID: " + str(id(o)))
             self.sleep(5)
-
+            
+################################ SCAN WORKER ######################################################
 
 class scanWorker(QtCore.QThread):
     sigWriteScan = QtCore.Signal(str)
@@ -515,35 +516,43 @@ class scanWorker(QtCore.QThread):
                     numFilesHealed = i.split()[3]
         except Exception as err:
             print(str(err))
-    '''  
-    def cleanUp(self):
-		global abnormalCheckUpdatesTermination
-		#abnormalTermination = True
-		if hasattr(self, 'avgchkupProc'):
-			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
-				print("OK GOT IT")
-				abnormalCheckUpdatesTermination = True
-				self.avgchkupProc.finished.emit(255)
-			if hasattr(self, 'avgchupProc'):	
-				while not self.avgchkupProc.waitForFinished():
-					print("Waiting for proc to finish")
-			else:
-				pass
-    ''' 
+        
+        
     def killScan(self):
-        if hasattr(self, 'avgscanProc'):
-            if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
-                self.avgscanProc.kill()
-                self.normalTermination="False"
+      self.avgscanProc.kill()
+      self.normalTermination="False"     
       #if hasattr(self, 'avgscanProc'):
       #    while not self.avgscanProc.waitForFinished():
       #        print("Waiting....")
       #self.sigScanTerminated.emit()
       
+      '''  
+      if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
+            print("PROCESS was running, now exiting - KILLED")
+            #self.avgscanProc.readyReadStandardOutput.disconnect()
+            print("disconnecting finished signal of avgscanproc")
+            self.avgscanProc.finished.disconnect()
+            #self.avgscanProc.blockSignals(True)
+            print("killing")
+            self.avgscanProc.kill()
+            print("closing")
+            if hasattr(self, 'avgscanProc'):
+                print("it does have the attribute avgscanProc, deleting it")
+                #while not self.avgscanProc.waitForFinished():
+                #    print("Waiting for avgscanProc to finish")
+                #self.avgscanProc.close()
+                del self.avgscanProc
+                print("deleted it")
+            gc.collect()
+            print("gc-collected")
+            #self.avgscanProc.kill()
+            #self.exit()
+            self.sigScanTerminated.emit()
+      '''
 
     def getScanState(self):
         if hasattr(self, 'avgscanProc'):
-            return self.avgscanProc.state()
+            return self.avgscanProc.state()    
         else:
             pass
 
@@ -572,6 +581,7 @@ class scanWorker(QtCore.QThread):
        
         self.exit()
 
+##################################### END OF CLASS SCAN WORKER #############################
 
 class sqliteWorker(QtCore.QThread):
        

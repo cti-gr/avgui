@@ -299,91 +299,91 @@ class manager(QObject):
 
 	
 ########################################## SCAN ##################################################
-    def beginScan(self):
-        global scanPath
-        global abnormalTermination
-        global scanParameters
-        self.getScanSettings()
-        abnormalTermination = 0
-        self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
-        print("Scan path is: " + str(scanPath))
-        if scanPath == None:
-            QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
-                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-            return -1
-        
-        # preparing to start scan in a new thread
-        self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
-        #self.theScanWorker.finished.connect(self.onScanFinish)
-        self.theScanWorker.sigWriteScan.connect(self.printToWidget)
-        self.theScanWorker.sigScanTerminated.connect(self.onScanFinish)
-        
-        self._theMainWindow.theScan.theScanProgress.textScanProg.clear()
-        self._theMainWindow.theScan.theScanProgress.show()
-        self.theScanWorker.start()
-            
-        #preparing to store scan event in a new thread
-        self.theSQLITEWorker = utilities.sqliteWorker()
-        self.theSQLITEWorker.finished.connect(self.onSQLiteFinish)
-            
-                           
-        '''    
-        else:
-            QMessageBox.information(None, "Προσοχή", "Εκτελείται ήδη διαδικασία αναζήτησης κακόβουλου λογισμικού", 
-                                 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-            #return -1
-        '''
-    def onSQLiteFinish(self):
-        pass
-        #print("Data Insertion Completed!!!!")
+	def beginScan(self):
+		global scanPath
+		global abnormalTermination
+		global scanParameters
+		self.getScanSettings()
+		abnormalTermination = 0
+		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
+		print("Scan path is: " + str(scanPath))
+		if scanPath == None:
+			QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
+								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return -1
+		
+		# preparing to start scan in a new thread
+		self.theScanWorker = utilities.scanWorker(scanPath, scanParameters)
+		#self.theScanWorker.finished.connect(self.onScanFinish)
+		self.theScanWorker.sigWriteScan.connect(self.printToWidget)
+		self.theScanWorker.sigScanTerminated.connect(self.onScanFinish)
+		
+		self._theMainWindow.theScan.theScanProgress.textScanProg.clear()
+		self._theMainWindow.theScan.theScanProgress.show()
+		self.theScanWorker.start()
+			
+		#preparing to store scan event in a new thread
+		self.theSQLITEWorker = utilities.sqliteWorker()
+		self.theSQLITEWorker.finished.connect(self.onSQLiteFinish)
+			
+						   
+		'''	   
+		else:
+			QMessageBox.information(None, "Προσοχή", "Εκτελείται ήδη διαδικασία αναζήτησης κακόβουλου λογισμικού", 
+								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			#return -1
+		'''
+	def onSQLiteFinish(self):
+		pass
+		#print("Data Insertion Completed!!!!")
   
-    def printToWidget(self, linetoappend):
-        #print("Signal Received!!!!!")
-        curDateTime = datetime.now().isoformat(' ')[:19]
-        self._theMainWindow.theScan.theScanProgress.textScanProg.appendPlainText(linetoappend)
-                
-    
-    def terminateScan(self):
-         global abnormalTermination
-         print("Entering terminateScan from signalManager")
-         if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
-             print("Seems it was running, calling killScan method")
-             self.theScanWorker.killScan()
-         self._theMainWindow.theScan.theScanProgress.hide()
-         manager._scanParams = []
-         
+	def printToWidget(self, linetoappend):
+		#print("Signal Received!!!!!")
+		curDateTime = datetime.now().isoformat(' ')[:19]
+		self._theMainWindow.theScan.theScanProgress.textScanProg.appendPlainText(linetoappend)
+				
+	
+	def terminateScan(self):
+		 global abnormalTermination
+		 print("Entering terminateScan from signalManager")
+		 if (self.theScanWorker.getScanState() == QProcess.ProcessState.Running) | (self.theScanWorker.getScanState() == QProcess.ProcessState.Starting):
+			 print("Seems it was running, calling killScan method")
+			 self.theScanWorker.killScan()
+		 self._theMainWindow.theScan.theScanProgress.hide()
+		 manager._scanParams = []
+		 
 
-    def onScanFinish(self, normalTermination):
-        print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
-        self.theScanWorker.exit()
-        while not self.theScanWorker.wait():
-            print("Waiting for scan worker to finish")
-        self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
-        if self.theScanWorker.isFinished():
-            print("theScanWorker is finished")
-            print(" ")
-        elif self.theScanWorker.isRunning():
-            print("theScanWorker is RUNNING!")
-        else:
-            print("WTF?!")
-        try:
-            lockerFinish = QMutexLocker(mutexTermination)          
-            if normalTermination=="True":
-                print("normalTermination = " + normalTermination + " - Will START SQL")
-                self.theSQLITEWorker.start() 
-        except Exception as errnmut2:
-            print(str(errmut2))   
-       
-        manager._scanParams = []
-        gc.collect()
-    
+	def onScanFinish(self, normalTermination):
+		print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
+		self.theScanWorker.exit()
+		while not self.theScanWorker.wait():
+			print("Waiting for scan worker to finish")
+		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
+		if self.theScanWorker.isFinished():
+			print("theScanWorker is finished")
+			print(" ")
+		elif self.theScanWorker.isRunning():
+			print("theScanWorker is RUNNING!")
+		else:
+			print("WTF?!")
+		try:
+			lockerFinish = QMutexLocker(mutexTermination)		   
+			if normalTermination=="True":
+				print("normalTermination = " + normalTermination + " - Will START SQL")
+				self.theSQLITEWorker.start() 
+		except Exception as errnmut2:
+			print(str(errmut2))	  
+	   
+		manager._scanParams = []
+		gc.collect()
+	
 
-    def cleanScanDialog(self):
-        global scanPath
-        print("Running cleanup")
-        scanPath = None
-        manager._scanParams = []
-        
+	def cleanScanDialog(self):
+		global scanPath
+		print("Running cleanup")
+		scanPath = None
+		manager._scanParams = []
+		
 ######################################################## END OF SCAN ###############################################
 	
 	def execSearch(self):
@@ -629,7 +629,7 @@ class manager(QObject):
 			if self._theMainWindow.theUpdate.theUpdateProgress.isVisible():
 				self._theMainWindow.theUpdate.theUpdateProgress.hide
 
-		###  cleanup code, always runs	###
+		###	 cleanup code, always runs	###
 		if hasattr(self, 'theUpdateChecker'):
 			print("here 1")
 			self.theUpdateChecker.exit()
@@ -695,7 +695,7 @@ class manager(QObject):
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setEnabled(True)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPort.setEnabled(True)
 				self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.setEnabled(True)
-				if  self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked():
+				if	self._theMainWindow.theUpdate.theUpdateSettings.chkUseLogin.isChecked():
 					self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(True)
 					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(True)
 					self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(True)
@@ -731,7 +731,7 @@ class manager(QObject):
 		self.minSpeedOut = subprocess.check_output(["avgcfgctl", "Default.update.Inet.disconnect_speed_limit"])
 		self.minSpeed = int(str(self.minSpeedOut.decode("utf")).split("=",1)[-1])
 		self._theMainWindow.theUpdate.theUpdateSettings.leditMinSpeed.setText(str(self.minSpeed))
-	 	# Maximum Time
+		# Maximum Time
 		self.maxTimeOut = subprocess.check_output(["avgcfgctl", "Default.update.Inet.disconnect_time_limit"])
 		self.maxTime = int(str(self.maxTimeOut.decode("utf")).split("=",1)[-1])
 		self._theMainWindow.theUpdate.theUpdateSettings.leditMaxTime.setText(str(self.maxTime))
@@ -739,7 +739,7 @@ class manager(QObject):
 		self.proxyNameOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Server"])
 		self.proxyName = str(self.proxyNameOut.decode("utf")).split("=",1)[-1]
 		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyName.setText(str(self.proxyName))
- 		# Proxy Username
+		# Proxy Username
 		self.proxyUsernameOut = subprocess.check_output(["avgcfgctl", "Default.update.Options.Proxy.Login"])
 		self.proxyUsername = str(self.proxyUsernameOut.decode("utf")).split("=",1)[-1]
 		self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setText(str(self.proxyUsername))
