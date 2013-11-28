@@ -9,6 +9,7 @@ import subprocess, sys, time, weakref
 import setupGui
 import gc, re
 import getpass
+import translation
 
 
 ########################################################################################################
@@ -344,6 +345,8 @@ class manager(QObject):
   
 	def printToWidget(self, linetoappend):
 		#print("Signal Received!!!!!")
+		for i,j in translation.translationDict.items(): 
+			linetoappend = linetoappend.replace(i,j)
 		curDateTime = datetime.now().isoformat(' ')[:19]
 		self._theMainWindow.theScan.theScanProgress.textScanProg.appendPlainText(linetoappend)
 				

@@ -1,0 +1,23 @@
+translationDict = {
+'You are currently up-to-date':'Δεν υπάρχουν πρόσφατες ενημερώσεις',
+'Update was successfully completed':'Η διαδικασία ελέγχου ενημερώσεων ολοκληρώθηκε επιτυχώς',
+'Virus update':'Βάση Ιών',
+'Download':'Μέγεθος Αρχείου',
+'Component':'Μέρος Προγράμματος',
+'priority':'Προτεραιότητα Ενημέρωσης',
+'Installed version':'Έγκατεστημένη έκδοση',
+'Available version':'Έκδοση διαθέσιμη για μεταφόρτωση',
+'Recommended update':'Συνιστώμενη Ενημέρωση',
+'Program update':'Ενημέρωση Προγράμματος',
+'iAVI database':'Βάση iAVI',
+'Running update.':'Έλεγχος Διαθεσιμότητας Ενημερώσεων',
+'Operation failed. The exit code could not be got because the thread or process is still alive.':'Η Διεργασία Δεν Μπόρεσε να Ολοκληρωθεί. Παρακαλούμε Επαναλάβατε την Εκτέλεσή της.',
+'Initializing':'Αρχικοποίηση',
+'Analyzing':'Ανάλυση Διαθέσιμων Ενημερώσεων',
+'Files scanned':'Αρχεία που εξετάστηκαν για κακόβουλο λογισμικό',
+'Infections found':'Αρχεία που έχουν προσβληθεί',
+'PUPs found':'Πιθανώς Ανεπιθύμητα Προγράμματα',
+'Files healed':'Αρχεία που αποκαταστάθηκαν',
+'Warnings reported':'Προειδοποιήσεις για πιθανά προβλήματα',
+'Errors reported':'Λάθη κατά τη διαδικασία σάρωσης'
+}

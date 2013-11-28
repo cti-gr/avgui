@@ -7,6 +7,7 @@ import sqlite3
 import getpass
 import config
 import os, stat, gc
+import translation
 
 # To add utility that periodically checks for size of the database !!!
 
@@ -171,7 +172,7 @@ class chkUpdateWorker(QtCore.QThread):
 		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running):
 			getLines = self.avgchkupProc.read(self.avgchkupProc.bytesAvailable())
 			self.theOutput += str(getLines)
-		for i,j in config.translationDict.items():
+		for i,j in translation.translationDict.items(): 
 			self.theOutput = self.theOutput.replace(i,j)
 		#print(str(self.theOutput))
 	
@@ -276,7 +277,9 @@ class updateWorker(QtCore.QThread):
 	
 	def printOut(self):
 		try:
-			self.theLine = str(self.avgUpdateProc.read(self.avgUpdateProc.bytesAvailable()))			
+			self.theLine = str(self.avgUpdateProc.read(self.avgUpdateProc.bytesAvailable()))
+			for i,j in translation.translationDict.items(): 
+				self.theLine = self.theLine.replace(i,j)
 			self.sigWriteUpdate.emit(self.theLine)
 		except UnicodeDecodeError as uderr:
 			print("A Unicode Decode Error occurred: " + str(uderr))
@@ -462,11 +465,13 @@ class scanWorker(QtCore.QThread):
 			if (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgscanProc.state() == QtCore.QProcess.ProcessState.Starting):
 				#print(str(self.avgscanProc))
 				#print("Before reading: " + str(id(self.avgscanProc)))
-				self.theLine = self.avgscanProc.read(self.avgscanProc.bytesAvailable())
-				#self.theLine = self.avgscanProc.readAllStandardOutput()
-				#print("--------------")
-				#print(str(self.avgscanProc))
-				self.sigWriteScan.emit(str(self.theLine))
+				self.theLineParse = self.avgscanProc.read(self.avgscanProc.bytesAvailable())
+				#self.theLineParse = self.theLineScan
+				#for i,j in translation.translationDict.items(): 
+				#	self.theLineScan = self.theLineScan.replace(i,j)
+				self.sigWriteScan.emit(str(self.theLineParse))
+				#print("theLineScan: " + self.theLineScan)
+				#print("theLineParse: " + self.theLineParse)
 			else:
 				print("DID NOT MANAGE TO RETRIEVE LINE")
 				print("In printOut, Thread id: " + str(id(self)))
@@ -486,7 +491,7 @@ class scanWorker(QtCore.QThread):
 			return
 		
 		
-		textin = str(self.theLine).splitlines()
+		textin = str(self.theLineParse).splitlines()
 		#print("textin, within processScanOutput: " + str(textin))
 		
 		try:
