@@ -4,6 +4,7 @@ import PySide
 from PySide import QtCore
 import sys
 
+global avgmonitor
 global DBFILEPATH
 
 translationDict = {
@@ -29,22 +30,20 @@ global PYTHON_VERSION
 
 def init_config(devmode):
 
+	global avgmonitor
+	global DBFILEPATH
+	global PYSIDE_VERSION
+	global QT_VERSION
+	global PYTHON_VERSION
 
-    global DBFILEPATH
-    global PYSIDE_VERSION
-    global QT_VERSION
-    global PYTHON_VERSION
-
-    PYTHON_VERSION=sys.version
-    PYSIDE_VERSION=PySide.__version__
-    QT_VERSION=PySide.QtCore.__version__
-    DBFILENAME = "avghistory.sqlite"
-    homedir = expanduser("~")
-    if devmode:
-        DBFILEPATH = DBFILENAME
-        #print("Python version: " + PYTHON_VERSION)
-        #print("PySide version: " + PYSIDE_VERSION)
-        #print("Qt Version: " + QT_VERSION)
-    else:
-        DBFILEPATH = homedir + "/.avgui/" + DBFILENAME
+	avgmonitor = "avgmonitor.py"
+	PYTHON_VERSION=sys.version
+	PYSIDE_VERSION=PySide.__version__
+	QT_VERSION=PySide.QtCore.__version__
+	DBFILENAME = "avghistory.sqlite"
+	homedir = expanduser("~")
+	if devmode:
+		DBFILEPATH = DBFILENAME
+	else:
+		DBFILEPATH = homedir + "/.avgui/" + DBFILENAME
 
