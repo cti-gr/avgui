@@ -222,8 +222,9 @@ class manager(QObject):
 		scanParameters = scanParams
 		#print("Just set manager._scanParams: " + str(manager._scanParams))
 		#scanParameters = scanParams
-		#print("Just set scanParameters: " + str(scanParameters))
+		print("Just set scanParameters: " + str(scanParameters))
 		
+		print("Clicked OK")
 		if self.validateFileStorage() & (scanReportStorageEnabled == 1):
 			self._theMainWindow.theScan.theScanSettings.close()
 		
@@ -252,18 +253,18 @@ class manager(QObject):
 	def validateFileStorage(self):
 		global scanReportFolder
 		global scanReportPath
-		storagePathOK = False
+		storagePathOK = True
 		
 		if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (scanReportStorageEnabled == 1):
 			QMessageBox.information(None, "Προσοχή", "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης", 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
+			storagePathOK = False
 		if scanReportStorageEnabled == 1:
 			print("scanReportFolder is: " + str(scanReportFolder))
 			scanReportFile = self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText()
 			if scanReportFolder != None:
 				scanReportPath = scanReportFolder + "/" + scanReportFile
-				
 			else:
 				scanReportPath = scanReportFile
 			storagePathOK = True
