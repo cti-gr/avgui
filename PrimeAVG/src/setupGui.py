@@ -1,4 +1,5 @@
 import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, updateSettingsUI
+import utilities
 from PySide import QtGui, QtCore
 from datetime import date
 
@@ -198,3 +199,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		#self.theScanProgress = scanProgress()
 		
 		self.connect(self.btnExitMain, QtCore.SIGNAL("clicked()"), self.close)
+		
+	def closeEvent(self, event):
+		utilities.finalizeApp()
+		

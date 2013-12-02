@@ -1035,3 +1035,13 @@ class dbHistoryWorker(QtCore.QThread):
 		self.sigHistoryRetrieved.emit(self.__results)
 		#self.dbHistoryProc.terminate()
 		self.exit()
+
+############# Program Finalization ######################################
+
+# Stop avgmonitor daemon
+def finalizeApp():
+	try:
+		subprocess.call([config.daemonMonitor, "--stop"])
+	except Exception as err:
+		print("Error Shutting down avgmonitor daemon: " + str(err))
+		raise err

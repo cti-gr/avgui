@@ -57,8 +57,8 @@ theApp = theApplication()
 theApp.theWindow.show()
 gc.enable()
 
-daemon = (subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + config.avgmonitor)
-subprocess.call([daemon, "--start", str(mainpid)])
+#config.daemonPath = (subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + config.avgmonitor)
+subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
 
 app.exec_()
 # to add finalization operation, e.g. closing the cursor
