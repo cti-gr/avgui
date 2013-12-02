@@ -2,7 +2,7 @@ translationDict = {
 'You are currently up-to-date':'Δεν υπάρχουν πρόσφατες ενημερώσεις',
 'Update was successfully completed':'Η διαδικασία ελέγχου ενημερώσεων ολοκληρώθηκε επιτυχώς',
 'Virus update':'Βάση Ιών',
-'Download':'Μέγεθος Αρχείου',
+'Download':'Μέγεθος Αρχείου:',
 'Component':'Μέρος Προγράμματος',
 'priority':'Προτεραιότητα Ενημέρωσης',
 'Installed version':'Έγκατεστημένη έκδοση',

@@ -24,7 +24,7 @@ global homeDir
 global scanReportFolder
 global scanReportFile
 global scanReportPath
-global scanReportStorageEnabled
+#global scanReportStorageEnabled
 mutexTermination = QMutex()
 
 class manager(QObject):
@@ -43,7 +43,7 @@ class manager(QObject):
 		global abnormalTermination
 		global scanPath
 		global homeDir
-		global scanReportStorageEnabled
+		#global scanReportStorageEnabled
 		global scanReportPath
 		global scanReportFolder
 		
@@ -52,7 +52,7 @@ class manager(QObject):
 		self.setupConnections(self._theMainWindow)
 		self.theTimer = QTimer()
 		abnormalTermination = 0
-		scanReportStorageEnabled = 0
+		self.scanReportStorageEnabled = 0
 		scanReportPath = None
 		scanReportFolder = None
 		scanPath = None
@@ -179,7 +179,7 @@ class manager(QObject):
 		global scanReportFolder
 		global scanReportFile
 		global scanReportPath
-		global scanReportStorageEnabled
+		#global scanReportStorageEnabled
 		
 		closeWidget = True
 		
@@ -195,7 +195,8 @@ class manager(QObject):
 				scanParams.append(filesToScan)
 				#print("files to scan AFTER: " + str(filesToScan))
 				#print("Just after setting file extensions: " + str(scanParams))
-		if (scanReportStorageEnabled == 1) & (self.validateFileStorage()):
+		fileStorageOK = self.validateFileStorage()
+		if (self.scanReportStorageEnabled == 1) & (fileStorageOK):
 			scanParams.append("--report")
 			scanParams.append(scanReportPath)
 			#print(scanParams)
@@ -224,16 +225,24 @@ class manager(QObject):
 		#scanParameters = scanParams
 		print("Just set scanParameters: " + str(scanParameters))
 		
-		print("Clicked OK")
-		if self.validateFileStorage() & (scanReportStorageEnabled == 1):
+		#print("Clicked OK_1: " + "self.validateFileStorage: " + str(self.validateFileStorage()) + " scanReportStorageEnabled: " + str(self.scanReportStorageEnabled) )
+		if self.scanReportStorageEnabled == 1:
+			print("Level 1")
+			if fileStorageOK:
+				print("Level 2")
+				self._theMainWindow.theScan.theScanSettings.close()
+				print("just closed")
+		elif self.scanReportStorageEnabled == 0:
 			self._theMainWindow.theScan.theScanSettings.close()
+		#print("Clicked OK_2: " + "self.validateFileStorage: " + str(self.validateFileStorage()) + " scanReportStorageEnabled: " + str(self.scanReportStorageEnabled) )
+		#self._theMainWindow.theScan.theScanSettings.close()
 		
 	def selectScanReportFolder(self):
 		global scanReportFolder
-		global scanReportStorageEnabled
+		#global scanReportStorageEnabled
 		result = False
 		#if self._theMainWindow.theScan.theScanSettings.chkbFileStore.isChecked():
-		if scanReportStorageEnabled == 1:
+		if self.scanReportStorageEnabled == 1:
 			reportDir = ""
 			while not result:
 				self._theMainWindow.theScan.theScanSettings.theStoreFileDialog.ShowDirsOnly
@@ -255,12 +264,15 @@ class manager(QObject):
 		global scanReportPath
 		storagePathOK = True
 		
-		if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (scanReportStorageEnabled == 1):
+		if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (self.scanReportStorageEnabled == 1):
+			print("here...")
 			QMessageBox.information(None, "Προσοχή", "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης", 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
+			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.disconnect()
+			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
+			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.connect(self.enableStorage)
 			storagePathOK = False
-		if scanReportStorageEnabled == 1:
+		elif (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() != "") & (self.scanReportStorageEnabled == 1):
 			print("scanReportFolder is: " + str(scanReportFolder))
 			scanReportFile = self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText()
 			if scanReportFolder != None:
@@ -268,21 +280,26 @@ class manager(QObject):
 			else:
 				scanReportPath = scanReportFile
 			storagePathOK = True
+		return storagePathOK
 		#print("scanReportPath is: " + str(scanReportPath))
 		
 		return storagePathOK
 			 
 	def enableStorage(self):
-		global scanReportStorageEnabled
+		#global scanReportStorageEnabled
 			   
-		if scanReportStorageEnabled == 0:
+		if self.scanReportStorageEnabled == 0:
 			self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setEnabled(True)
 			self._theMainWindow.theScan.theScanSettings.textStoreFile.setEnabled(True)
-			scanReportStorageEnabled = 1
+			#print("setting to 1")
+			#print("sender: " + str(self.sender().objectName()))
+			self.scanReportStorageEnabled = 1
 		else:
 			self._theMainWindow.theScan.theScanSettings.btnSelectFolder.setDisabled(True)
 			self._theMainWindow.theScan.theScanSettings.textStoreFile.setDisabled(True)
-			scanReportStorageEnabled = 0
+			#print("Setting to 0")
+			#print("sender: " + str(self.sender().objectName()))
+			self.scanReportStorageEnabled = 0
 
 ##################################################################################################
 		
