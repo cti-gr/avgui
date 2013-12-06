@@ -16,7 +16,7 @@ global qt_version
 global python_version
 global username
 
-def init_config(devmode):
+def init_config(debugMode=False):
 	global daemonMonitor
 	global avgmonitor
 	global dbfilepath
@@ -33,11 +33,9 @@ def init_config(devmode):
 	dbfilename = "avghistory.sqlite"
 	homedir = expanduser("~")
 	avgdir = homedir + "/" + ".avgui"
-	if devmode:
+	if debugMode:
 		dbfilepath = dbfilename
 	else:
-		dbfilepath = homedir + "/.avgui/" + DBFILENAME
-		
-	
+		dbfilepath = homedir + "/.avgui/" + dbfilename
 	daemonMonitor = subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + "avgmonitor.py"
 	#avgmonitor = daemonPath + "/" + avgmonitor

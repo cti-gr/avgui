@@ -1104,3 +1104,23 @@ def setupSendMail():
 	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + systemSummary
 	print("url is: " + url)
 	webbrowser.open(url)
+
+# Parse Startup Parameters
+def parseParams(paramslist):
+	#print(paramslist[1][:7])
+	#print(paramslist[1][8:])
+	results ={0:"", 1:"Debug Mode On", 2:"Unknown Parameter or Value: usage [--debug=BOOL]", 3:"Too many parameters"}
+	if (len(paramslist) == 1):
+		return list(results.items())[0]
+	elif (len(paramslist) == 2):
+		if (paramslist[1][:7] == "--debug"):
+			if (paramslist[1][8:] == 'True'): 
+				return list(results.items())[1]
+			elif (paramslist[1][8:] == 'False'): 
+				return list(results.items())[0]
+			else:
+				return list(results.items())[2]
+		else:
+			return list(results.items())[2]
+	elif (len(paramslist) > 2):
+		return list(results.items())[3]

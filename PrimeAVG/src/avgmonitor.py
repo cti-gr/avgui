@@ -15,10 +15,6 @@ class AVGMonitor(simpledaemon.Daemon):
 	def run(self):
 		print(sys.argv[1:])
 		while True:
-			#for i in range(len(sys.argv)):
-			#	logging.info("argv[" + str(i) + "]" + " " + str(sys.argv[i]))
-			#logging.info(str(sys.argv[1]))
-			#logging.info(str(len(sys.argv)))
 			out = subprocess.call(["ps", "-C", "avgd"])
 			if out == 1:
 				os.kill(int(sys.argv[2]), signal.SIGALRM)
