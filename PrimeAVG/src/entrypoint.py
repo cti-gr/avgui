@@ -37,12 +37,12 @@ elif (len(sys.argv) == 2):
 		exit(1)
 else:
 	config.init_config(False)
-print(config.DBFILEPATH)
+print(config.dbfilepath)
 
 print(str(os.getpid()))
-print("Executing with Python: " + config.PYTHON_VERSION)
-print("Using PySide: " + config.PYSIDE_VERSION)
-print("Qt Framework used is: " + config.QT_VERSION)
+print("Executing with Python: " + config.python_version)
+print("Using PySide: " + config.pyside_version)
+print("Qt Framework used is: " + config.qt_version)
 
 def avgstopped_handler(signum, frame):
 	print("fooooooooooooooooooo")

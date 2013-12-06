@@ -2,35 +2,41 @@ from os.path import expanduser
 
 import PySide
 from PySide import QtCore
-import sys, subprocess
+import sys, subprocess, getpass
+from os.path import expanduser
+
 
 global avgmonitor
-global DBFILEPATH
+global dbfilepath
 global daemonMonitor
-
-global PYSIDE_VERSION
-global QT_VERSION
-global PYTHON_VERSION
+global homedir
+global avgdir
+global pyside_version
+global qt_version
+global python_version
+global username
 
 def init_config(devmode):
 	global daemonMonitor
 	global avgmonitor
-	global DBFILEPATH
-	global PYSIDE_VERSION
-	global QT_VERSION
-	global PYTHON_VERSION
+	global dbfilepath
+	global pyside_version
+	global qt_version
+	global python_version
+	global homedir
+	global username
 	
-	
-	
-	PYTHON_VERSION=sys.version
-	PYSIDE_VERSION=PySide.__version__
-	QT_VERSION=PySide.QtCore.__version__
-	DBFILENAME = "avghistory.sqlite"
+	username = getpass.getuser()
+	python_version=sys.version
+	pyside_version=PySide.__version__
+	qt_version=PySide.QtCore.__version__
+	dbfilename = "avghistory.sqlite"
 	homedir = expanduser("~")
+	avgdir = homedir + "/" + ".avgui"
 	if devmode:
-		DBFILEPATH = DBFILENAME
+		dbfilepath = dbfilename
 	else:
-		DBFILEPATH = homedir + "/.avgui/" + DBFILENAME
+		dbfilepath = homedir + "/.avgui/" + DBFILENAME
 		
 	
 	daemonMonitor = subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + "avgmonitor.py"

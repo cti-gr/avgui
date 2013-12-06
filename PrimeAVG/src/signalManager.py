@@ -60,10 +60,11 @@ class manager(QObject):
 		
 	def setupConnections(self, theMainWindow):
 		#Main Window
-		self._theMainWindow.logBtn.clicked.connect(self.emitHistory)
-		self._theMainWindow.scanBtn.clicked.connect(self.emitScan)
-		self._theMainWindow.updateBtn.clicked.connect(self.emitUpdate)
+		self._theMainWindow.btnHistory.clicked.connect(self.emitHistory)
+		self._theMainWindow.btnScan.clicked.connect(self.emitScan)
+		self._theMainWindow.btnUpdate.clicked.connect(self.emitUpdate)
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
+		self._theMainWindow.btnReportIssue.clicked.connect(utilities.setupSendMail)
 		
 		#Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
@@ -96,6 +97,8 @@ class manager(QObject):
 		self._theMainWindow.theUpdate.btnUpdateSet.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnOK.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnCancel.clicked.connect(self.setUpdateSettings)
+		
+		
 
 	def emitScan(self):
 		self._theMainWindow.sigMainSent.emit("SCAN")

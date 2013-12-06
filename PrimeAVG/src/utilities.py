@@ -8,6 +8,9 @@ import getpass
 import config
 import os, stat, gc
 import translation
+import tempfile
+import webbrowser
+import datetime
 
 # To add utility that periodically checks for size of the database !!!
 
@@ -1045,3 +1048,59 @@ def finalizeApp():
 	except Exception as err:
 		print("Error Shutting down avgmonitor daemon: " + str(err))
 		raise err
+		
+############# Reporting Problems Through Mails ############################
+def setupSendMail():
+	try:
+		systemSummary = "\r\n"
+		systemSummary +=  "*** Παρακαλώ περιγράψτε το πρόβλημα και τις συνθήκες δημιουργίας του ***"
+		systemSummary += "\r\n"
+		systemSummary += "\r\n"
+		systemSummary += "\r\n"
+		systemSummary += "\r\n"
+		systemSummary += "\r\n"
+		systemSummary += "*************************************************************************"
+		#systemSummary = tempfile.NamedTemporaryFile(mode="w", encoding="utf")
+		# create a temp systemSummary txt file
+		systemSummary += "ΠΡΟΣΟΧΗ! ΜΗΝ ΤΡΟΠΟΠΟΙΗΣΕΤΕ ΤΑ ΠΕΡΙΕΧΟΜΕΝΑ ΤΟΥ eMail ΑΠΟ ΑΥΤΗ ΤΗ ΓΡΑΜΜΗ ΚΑΙ ΚΑΤΩ"
+		systemSummary += "\r\n"
+		systemSummary += "----------------------------------------------------------------------------------------------------------"
+		systemSummary += "\r\n"
+		systemSummary += "************ Platform Info *****************"
+		systemSummary += "\r\n"
+		#	 get platform info
+		platform = subprocess.check_output(["lsb_release", "-a"]).decode("utf")
+		# write it to systemSummary
+		#systemSummary.write("************ Platform Info *****************")
+		#systemSummary.write(platform)
+		#systemSummary.write("\r\n")
+		systemSummary += platform
+		systemSummary += "\r\n"
+		# get mem info
+		memory = subprocess.check_output(["cat", "/proc/meminfo"]).decode("utf")
+		# write it to systemSummary
+		#systemSummary.write("************ Memory Info *****************")
+		#systemSummary.write(memory)
+		#systemSummary.write("\r\n")
+		systemSummary += "************ Memory Info *****************"
+		systemSummary += "\r\n"
+		systemSummary += memory
+		systemSummary += "\r\n"
+		# get cpu info
+		cpu = subprocess.check_output(["cat", "/proc/cpuinfo"]).decode("utf")
+		# write it to systemSummary
+		#systemSummary.write("************ CPU Info *****************")
+		#systemSummary.write(cpu)
+		#systemSummary.write("\r\n")
+		systemSummary += "************ CPU Info *****************"
+		systemSummary += "\r\n"
+		systemSummary += cpu
+		systemSummary += "\r\n"
+		print(systemSummary)
+	except Exception as err:
+		QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με τη δημιουργία email", 
+								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+	creationTimeStamp = datetime.datetime.now().isoformat()[:19]
+	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + systemSummary
+	print("url is: " + url)
+	webbrowser.open(url)
