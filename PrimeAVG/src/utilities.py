@@ -10,7 +10,7 @@ import os, stat, gc
 import translation
 import tempfile
 import webbrowser
-import datetime
+#import datetime
 
 # To add utility that periodically checks for size of the database !!!
 
@@ -588,7 +588,7 @@ class sqliteWorker(QtCore.QThread):
 			#print("Opening connection")	  
 			# open db connection and create cursor
 			# to replace the path in the connect statement
-			conn = sqlite3.connect(config.DBFILEPATH)
+			conn = sqlite3.connect(config.dbfilepath)
 			#print("Creating Cursor")	 
 			cur = conn.cursor()
 			
@@ -763,7 +763,7 @@ class sqliteWorker(QtCore.QThread):
 def populateVirusDBs():
 	availableDBs = []
 	try:
-		conn = sqlite3.connect(config.DBFILEPATH)
+		conn = sqlite3.connect(config.dbfilepath)
 		cur = conn.execute('select DBVersion from tblVirusDBs')
 		tmpList = cur.fetchall()
 		if len(tmpList) > 0:
@@ -779,7 +779,7 @@ def populateVirusDBs():
 def populateMalware():
 	availableMalware = []
 	try:
-		conn = sqlite3.connect(config.DBFILEPATH)
+		conn = sqlite3.connect(config.dbfilepath)
 		cur = conn.execute('select Name from tblMalware')
 		tmpList = cur.fetchall()
 		if len(tmpList) > 0:
@@ -839,7 +839,7 @@ class malwareModel(QtCore.QAbstractListModel):
 def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =''):
 	
 	try:
-		conn = sqlite3.connect(config.DBFILEPATH)
+		conn = sqlite3.connect(config.dbfilepath)
 		cur = conn.cursor()
 		querySelect = 'SELECT DISTINCT tblScanEvent.User, tblScanEvent.NoOfInfections '
 		queryFrom = 'FROM tblScanEvent '
@@ -1100,7 +1100,7 @@ def setupSendMail():
 	except Exception as err:
 		QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με τη δημιουργία email", 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-	creationTimeStamp = datetime.datetime.now().isoformat()[:19]
+	creationTimeStamp = datetime.now().isoformat()[:19]
 	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + systemSummary
 	print("url is: " + url)
 	webbrowser.open(url)
