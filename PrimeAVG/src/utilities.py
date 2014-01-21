@@ -1052,18 +1052,19 @@ def finalizeApp():
 ############# Reporting Problems Through Mails ############################
 def setupSendMail():
 	try:
-		systemSummary = "\r\n"
-		systemSummary +=  "*** Παρακαλώ περιγράψτε το πρόβλημα και τις συνθήκες δημιουργίας του ***"
-		systemSummary += "\r\n"
-		systemSummary += "\r\n"
-		systemSummary += "\r\n"
-		systemSummary += "\r\n"
-		systemSummary += "\r\n"
-		systemSummary += "*************************************************************************"
+		print("here")
+		#systemSummary = ""
+		systemSummary =  "*** Παρακαλώ περιγράψτε το πρόβλημα και τις συνθήκες δημιουργίας του ***"
+		systemSummary += "\n"
+		#systemSummary += "\n"
+		#systemSummary += "\n"
+		#systemSummary += "\n"
+		#systemSummary += "\n"
+		systemSummary += "\n*************************************************************************"
 		#systemSummary = tempfile.NamedTemporaryFile(mode="w", encoding="utf")
 		# create a temp systemSummary txt file
 		systemSummary += "ΠΡΟΣΟΧΗ! ΜΗΝ ΤΡΟΠΟΠΟΙΗΣΕΤΕ ΤΑ ΠΕΡΙΕΧΟΜΕΝΑ ΤΟΥ eMail ΑΠΟ ΑΥΤΗ ΤΗ ΓΡΑΜΜΗ ΚΑΙ ΚΑΤΩ"
-		systemSummary += "\r\n"
+		systemSummary += "\n"
 		systemSummary += "----------------------------------------------------------------------------------------------------------"
 		systemSummary += "\r\n"
 		systemSummary += "************ Platform Info *****************"
@@ -1098,10 +1099,10 @@ def setupSendMail():
 		systemSummary += "\r\n"
 		print(systemSummary)
 	except Exception as err:
-		QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με τη δημιουργία email", 
-								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+		QtGui.QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με τη δημιουργία email: " + str(err), 
+								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 	creationTimeStamp = datetime.now().isoformat()[:19]
-	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + systemSummary
+	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + str(systemSummary) 
 	print("url is: " + url)
 	webbrowser.open(url)
 

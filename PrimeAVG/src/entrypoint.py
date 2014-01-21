@@ -35,6 +35,7 @@ if __name__=="__main__":
 	print(utilities.parseParams(sys.argv))
 	#print(len(sys.argv))
 	#if utilities.parseParams() == 0
+	## setup language
 	app = QApplication(sys.argv)
 
 	if utilities.parseParams(sys.argv)[0] == 0:

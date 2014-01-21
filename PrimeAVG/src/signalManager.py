@@ -64,7 +64,7 @@ class manager(QObject):
 		self._theMainWindow.btnScan.clicked.connect(self.emitScan)
 		self._theMainWindow.btnUpdate.clicked.connect(self.emitUpdate)
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
-		self._theMainWindow.btnReportIssue.clicked.connect(utilities.setupSendMail)
+		self._theMainWindow.btnReportIssue.clicked.connect(self.problemSubmission)
 		
 		#Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
@@ -747,7 +747,9 @@ class manager(QObject):
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
 
-
+	def problemSubmission(self):
+		self._theMainWindow.theProblemSubmission.show()
+	
 	def getSettings(self):
 		# Automatic Program Update
 		self.autoProgUpdateOut = subprocess.check_output(["avgcfgctl", "UpdateProgram.sched.Task.Disabled"])

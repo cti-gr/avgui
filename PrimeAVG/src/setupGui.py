@@ -1,4 +1,5 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, updateSettingsUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI
+
 import utilities
 from PySide import QtGui, QtCore
 from datetime import date
@@ -184,6 +185,13 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
 		self.theUpdateProgress = updateProgress(self)
 		self.theUpdateSettings = updateSettings(self)
 
+class problemsubmissionDialog(QtGui.QDialog, problemSubmissionUI.Ui_problemDialog):
+	def __init__(self, parent=None):
+		super(problemsubmissionDialog, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnCancel, QtCore.SIGNAL("clicked()"), self.close)
+
+
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 	
 	sigMainSent = QtCore.Signal(str)
@@ -195,6 +203,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		
 		self.theUpdate = updateDialog(self)
 		self.theScan = scanDialog(self)
+		self.theProblemSubmission = problemsubmissionDialog(self)
 		self.theHistory = historyDialog(self)
 		#self.theScanProgress = scanProgress()
 		

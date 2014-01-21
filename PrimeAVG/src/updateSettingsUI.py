@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateSettings.ui'
 #
-# Created: Fri Dec  6 11:07:20 2013
+# Created: Tue Jan 21 12:14:59 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
