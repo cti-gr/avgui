@@ -10,6 +10,7 @@ import os
 import signal
 import subprocess
 import logging
+import conf.language.lang as langmodule
 
 
 #import avg_icons_rc
@@ -35,7 +36,7 @@ if __name__=="__main__":
 	print(utilities.parseParams(sys.argv))
 	#print(len(sys.argv))
 	#if utilities.parseParams() == 0
-	## setup language
+	langmodule.setuplang()
 	app = QApplication(sys.argv)
 
 	if utilities.parseParams(sys.argv)[0] == 0:

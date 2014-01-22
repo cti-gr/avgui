@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_scanDialog(object):
     def setupUi(self, scanDialog):
@@ -142,17 +143,19 @@ class Ui_scanDialog(object):
         QtCore.QMetaObject.connectSlotsByName(scanDialog)
 
     def retranslateUi(self, scanDialog):
-        scanDialog.setWindowTitle(QtGui.QApplication.translate("scanDialog", "Αναζήτηση Ιών", None, QtGui.QApplication.UnicodeUTF8))
-        scanDialog.setToolTip(QtGui.QApplication.translate("scanDialog", "Εκκίνηση Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnBeginScan.setText(QtGui.QApplication.translate("scanDialog", "Έναρξη Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnScanSettings.setText(QtGui.QApplication.translate("scanDialog", "Ρυθμίσεις Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnSelectF.setToolTip(QtGui.QApplication.translate("scanDialog", "Επιλογή Αρχείων / Φακέλων", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnSelectF.setText(QtGui.QApplication.translate("scanDialog", "Επιλογή Αρχείων", None, QtGui.QApplication.UnicodeUTF8))
-        self.fileToScanLabel.setToolTip(QtGui.QApplication.translate("scanDialog", "Αρχεία / Φάκελοι για αναζήτηση κακόβουλου λογισμικού", None, QtGui.QApplication.UnicodeUTF8))
-        self.fileToScanLabel.setText(QtGui.QApplication.translate("scanDialog", "Δεν έχουν επιλεγεί αρχεία / φάκελοι", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitButton.setToolTip(QtGui.QApplication.translate("scanDialog", "Κλείσιμο Παραθύρου", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitButton.setText(QtGui.QApplication.translate("scanDialog", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        scanDialog.setWindowTitle(QtGui.QApplication.translate("scanDialog", langmodule.dialogScanTitle, None, QtGui.QApplication.UnicodeUTF8))
+        #scanDialog.setToolTip(QtGui.QApplication.translate("scanDialog", dialogScanTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnBeginScan.setText(QtGui.QApplication.translate("scanDialog", langmodule.btnBeginScanTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnScanSettings.setText(QtGui.QApplication.translate("scanDialog", langmodule.btnScanSettingsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        #self.btnSelectF.setToolTip(QtGui.QApplication.translate("scanDialog", "Επιλογή Αρχείων / Φακέλων", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnSelectF.setText(QtGui.QApplication.translate("scanDialog", langmodule.btnChooseFolderTitle, None, QtGui.QApplication.UnicodeUTF8))
+        #self.fileToScanLabel.setToolTip(QtGui.QApplication.translate("scanDialog", "Αρχεία / Φάκελοι για αναζήτηση κακόβουλου λογισμικού", None, QtGui.QApplication.UnicodeUTF8))
+        self.fileToScanLabel.setText(QtGui.QApplication.translate("scanDialog", langmodule.lblFoldersSelectedTitle, None, QtGui.QApplication.UnicodeUTF8))
+        #self.exitButton.setToolTip(QtGui.QApplication.translate("scanDialog", "Κλείσιμο Παραθύρου", None, QtGui.QApplication.UnicodeUTF8))
+        self.exitButton.setText(QtGui.QApplication.translate("scanDialog", langmodule.btnExitScanTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc
 import avg_rc
 import avg_rc
+
+

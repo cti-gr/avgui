@@ -126,7 +126,7 @@ class scanSelect(QtGui.QDialog, scanSelectUI.Ui_scanSelectDialog):
 	def __init__(self, parent=None):
 		super(scanSelect, self).__init__(parent)
 		self.setupUi(self)
-		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 		self.selectDialog = QtGui.QFileDialog(self)
 
 	def clear(self):

@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -134,14 +135,17 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Προστασία από Κακόβουλο Λογισμικό", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnScan.setText(QtGui.QApplication.translate("MainWindow", "Αναζήτηση για Ιούς", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnUpdate.setText(QtGui.QApplication.translate("MainWindow", "Ενημέρωση Προγράμματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnReportIssue.setText(QtGui.QApplication.translate("MainWindow", "Αναφορά Προβλήματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnHistory.setText(QtGui.QApplication.translate("MainWindow", "Ιστορικό", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExitMain.setText(QtGui.QApplication.translate("MainWindow", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
-        self.menu.setTitle(QtGui.QApplication.translate("MainWindow", "Σχετικά", None, QtGui.QApplication.UnicodeUTF8))
-        self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", "Πρόγραμμα ΠροστασίαςAVG", None, QtGui.QApplication.UnicodeUTF8))
-        self.action.setText(QtGui.QApplication.translate("MainWindow", "Γραφικό Περιβάλλον", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", langmodule.mainWindowTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnScan.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainScanTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnUpdate.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainUpdateTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnReportIssue.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainIssueTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnHistory.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainHistoryTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExitMain.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnExitTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.menu.setTitle(QtGui.QApplication.translate("MainWindow", langmodule.lblAboutTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblAvgProtectionTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.action.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
+        
+        
+        
 
 import avg_rc

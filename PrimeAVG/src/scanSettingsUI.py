@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_scanSettingsDialog(object):
     def setupUi(self, scanSettingsDialog):
@@ -108,21 +109,21 @@ class Ui_scanSettingsDialog(object):
         QtCore.QMetaObject.connectSlotsByName(scanSettingsDialog)
 
     def retranslateUi(self, scanSettingsDialog):
-        scanSettingsDialog.setWindowTitle(QtGui.QApplication.translate("scanSettingsDialog", "Ρυθμίσεις Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbIfType.setText(QtGui.QApplication.translate("scanSettingsDialog", "Σάρωση συγκεκριμένων τύπων αρχείων", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbFileStore.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αποθήκευση αποτελεσμάτων σε αρχείο", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnSelectFolder.setText(QtGui.QApplication.translate("scanSettingsDialog", "Επιλογή Φακέλου Αποθήκευσης", None, QtGui.QApplication.UnicodeUTF8))
-        self.textStoreFile.setToolTip(QtGui.QApplication.translate("scanSettingsDialog", "<html><head/><body><p><span style=\" font-style:italic;\">Εισάγετε εδώ το όνομα του αρχείου στο οποίο θα αποθηκευτεί το αποτέλεσμα αναζήτησης...</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbBackUpFiles.setText(QtGui.QApplication.translate("scanSettingsDialog", "Διατήρηση αντιγράφων αρχείων που πρόκειται να διαγραφούν ", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbArchive.setText(QtGui.QApplication.translate("scanSettingsDialog", "Σάρωση archive files (.zip, .rar κ.λ.π.)", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbBootSec.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αναζήτηση στον τομέα εκκίνησης (boot sector)", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbCookies.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αναζήτηση στα cookies", None, QtGui.QApplication.UnicodeUTF8))
-        self.chkbMultimedia.setText(QtGui.QApplication.translate("scanSettingsDialog", "Να μη γίνει αναζήτηση σε πολυμεσικά αρχεία", None, QtGui.QApplication.UnicodeUTF8))
-        self.labelHandle.setText(QtGui.QApplication.translate("scanSettingsDialog", "Χειρισμός Μολυσμένων Αρχείων", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioDelete.setText(QtGui.QApplication.translate("scanSettingsDialog", "Διαγραφή", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioHeal.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αποκατάσταση", None, QtGui.QApplication.UnicodeUTF8))
-        self.radioVault.setText(QtGui.QApplication.translate("scanSettingsDialog", "Αποκλεισμός", None, QtGui.QApplication.UnicodeUTF8))
+        scanSettingsDialog.setWindowTitle(QtGui.QApplication.translate("scanSettingsDialog", langmodule.dialogScanSettingsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbIfType.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbIfTypeTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbFileStore.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbFileStoreTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnSelectFolder.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.btnSelectFolderTitle, None, QtGui.QApplication.UnicodeUTF8))
+        #self.textStoreFile.setToolTip(QtGui.QApplication.translate("scanSettingsDialog", "<html><head/><body><p><span style=\" font-style:italic;\">Εισάγετε εδώ το όνομα του αρχείου στο οποίο θα αποθηκευτεί το αποτέλεσμα αναζήτησης...</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbBackUpFiles.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbBackUpFilesTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbArchive.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbArchiveTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbBootSec.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbBootSecTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbCookies.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbCookiesTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.chkbMultimedia.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.chkbMultimediaTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.labelHandle.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.lblHandleTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.radioDelete.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.radioDeleteTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.radioHeal.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.radioHealTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.radioVault.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.radioVaultTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.btnOK.setText(QtGui.QApplication.translate("scanSettingsDialog", "OK", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExit.setText(QtGui.QApplication.translate("scanSettingsDialog", "Άκυρο", None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("scanSettingsDialog", langmodule.btnScanSettingsCancelTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc
