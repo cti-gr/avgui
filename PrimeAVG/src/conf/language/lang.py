@@ -461,3 +461,5 @@ def setuplang():
 	scanDateTimeTitle = langpack.scanDateTimeTitle
 	virusDBTitle = langpack.virusDBTitle
 	malwareFoundTitle = langpack.malwareFoundTitle
+	updateDateTimeTitle = langpack.updateDateTimeTitle
+	coreAndVirusDBVersionsTitle = langpack.coreAndVirusDBVersionsTitle
