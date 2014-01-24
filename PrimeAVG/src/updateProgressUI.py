@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_dialogUpdateProg(object):
     def setupUi(self, dialogUpdateProg):
@@ -191,7 +192,7 @@ class Ui_dialogUpdateProg(object):
         QtCore.QMetaObject.connectSlotsByName(dialogUpdateProg)
 
     def retranslateUi(self, dialogUpdateProg):
-        dialogUpdateProg.setWindowTitle(QtGui.QApplication.translate("dialogUpdateProg", "Διαδικασία Ενημέρωσης Λογισμικού", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExit.setText(QtGui.QApplication.translate("dialogUpdateProg", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        dialogUpdateProg.setWindowTitle(QtGui.QApplication.translate("dialogUpdateProg", langmodule.dialogUpdateProgTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("dialogUpdateProg", langmodule.btnExitUpdateProgTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc

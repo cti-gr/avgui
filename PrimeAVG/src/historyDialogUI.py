@@ -2,12 +2,13 @@
 
 # Form implementation generated from reading ui file 'historyDialog.ui'
 #
-# Created: Tue Jan 21 12:14:57 2014
+# Created: Thu Jan 23 18:55:42 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_historyDialog(object):
     def setupUi(self, historyDialog):
@@ -99,30 +100,30 @@ class Ui_historyDialog(object):
         self.btnHistoryDB.setFont(font)
         self.btnHistoryDB.setObjectName("btnHistoryDB")
         self.historyTabWidget.addTab(self.upTab, "")
-        self.exitButton = QtGui.QPushButton(historyDialog)
-        self.exitButton.setGeometry(QtCore.QRect(200, 420, 111, 41))
+        self.btnExit = QtGui.QPushButton(historyDialog)
+        self.btnExit.setGeometry(QtCore.QRect(200, 420, 111, 41))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
-        self.exitButton.setFont(font)
-        self.exitButton.setAutoDefault(False)
-        self.exitButton.setObjectName("exitButton")
+        self.btnExit.setFont(font)
+        self.btnExit.setAutoDefault(False)
+        self.btnExit.setObjectName("btnExit")
 
         self.retranslateUi(historyDialog)
         self.historyTabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(historyDialog)
 
     def retranslateUi(self, historyDialog):
-        historyDialog.setWindowTitle(QtGui.QApplication.translate("historyDialog", "Ιστορικό Προγράμματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblTo.setText(QtGui.QApplication.translate("historyDialog", "Εώς (Ημερομηνία)", None, QtGui.QApplication.UnicodeUTF8))
+        historyDialog.setWindowTitle(QtGui.QApplication.translate("historyDialog", langmodule.dialogHistoryTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblTo.setText(QtGui.QApplication.translate("historyDialog", langmodule.lblToTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.comEndDate.setDisplayFormat(QtGui.QApplication.translate("historyDialog", "dd.MM.yyyy", None, QtGui.QApplication.UnicodeUTF8))
         self.comStartDate.setDisplayFormat(QtGui.QApplication.translate("historyDialog", "dd.MM.yyyy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblMalware.setText(QtGui.QApplication.translate("historyDialog", "Κακόβουλο λογισμικό που εντοπίστηκε", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblDatabase.setText(QtGui.QApplication.translate("historyDialog", "Βάση ιών που χρησιμοποιήθηκε", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblFrom.setText(QtGui.QApplication.translate("historyDialog", "Από (Ημερομηνία)", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExecute.setText(QtGui.QApplication.translate("historyDialog", "Εκτέλεση Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.searchTab), QtGui.QApplication.translate("historyDialog", "Ιστορικό Αναζητήσεων", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnHistoryDB.setText(QtGui.QApplication.translate("historyDialog", "Ιστορικό Ενημερώσεων Βάσης Ιών", None, QtGui.QApplication.UnicodeUTF8))
-        self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.upTab), QtGui.QApplication.translate("historyDialog", "Ιστορικό Ενημερώσεων", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitButton.setText(QtGui.QApplication.translate("historyDialog", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        self.lblMalware.setText(QtGui.QApplication.translate("historyDialog", langmodule.lblMalwareTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblDatabase.setText(QtGui.QApplication.translate("historyDialog", langmodule.lblDatabaseTable, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblFrom.setText(QtGui.QApplication.translate("historyDialog", langmodule.lblFromTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExecute.setText(QtGui.QApplication.translate("historyDialog", langmodule.btnExecuteTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.searchTab), QtGui.QApplication.translate("historyDialog", langmodule.historyTabWidgetScansTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnHistoryDB.setText(QtGui.QApplication.translate("historyDialog", langmodule.btnHistoryDBTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.historyTabWidget.setTabText(self.historyTabWidget.indexOf(self.upTab), QtGui.QApplication.translate("historyDialog", langmodule.historyTabWidgetUpdatesTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("historyDialog", langmodule.btnExitHistoryTitle, None, QtGui.QApplication.UnicodeUTF8))
 

@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_dialogDBResults(object):
     def setupUi(self, dialogDBResults):
@@ -45,6 +46,6 @@ class Ui_dialogDBResults(object):
         QtCore.QMetaObject.connectSlotsByName(dialogDBResults)
 
     def retranslateUi(self, dialogDBResults):
-        dialogDBResults.setWindowTitle(QtGui.QApplication.translate("dialogDBResults", "Ιστορικό Ενημερώσεων Βάσης Ιών", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExit.setText(QtGui.QApplication.translate("dialogDBResults", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        dialogDBResults.setWindowTitle(QtGui.QApplication.translate("dialogDBResults", langmodule.btnHistoryDBTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("dialogDBResults", langmodule.btnExitFormCheckTitle, None, QtGui.QApplication.UnicodeUTF8))
 

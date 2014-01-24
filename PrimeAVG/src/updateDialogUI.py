@@ -2,12 +2,13 @@
 
 # Form implementation generated from reading ui file 'updateDialog.ui'
 #
-# Created: Tue Jan 21 12:14:58 2014
+# Created: Thu Jan 23 15:27:56 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_updateDialog(object):
     def setupUi(self, updateDialog):
@@ -76,19 +77,19 @@ class Ui_updateDialog(object):
         self.labelLogo.setPixmap(QtGui.QPixmap(":/avg_logo.png"))
         self.labelLogo.setScaledContents(True)
         self.labelLogo.setObjectName("labelLogo")
-        self.exitButton = QtGui.QPushButton(updateDialog)
-        self.exitButton.setGeometry(QtCore.QRect(140, 230, 111, 41))
-        self.exitButton.setAutoDefault(False)
-        self.exitButton.setObjectName("exitButton")
+        self.btnExit = QtGui.QPushButton(updateDialog)
+        self.btnExit.setGeometry(QtCore.QRect(140, 230, 111, 41))
+        self.btnExit.setAutoDefault(False)
+        self.btnExit.setObjectName("btnExit")
 
         self.retranslateUi(updateDialog)
         QtCore.QMetaObject.connectSlotsByName(updateDialog)
 
     def retranslateUi(self, updateDialog):
-        updateDialog.setWindowTitle(QtGui.QApplication.translate("updateDialog", "Ενημέρωση Προγράμματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnUpdate.setText(QtGui.QApplication.translate("updateDialog", "Ενημέρωση Προγράμματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnUpdateSet.setText(QtGui.QApplication.translate("updateDialog", "Ρύθμιση Ενημερώσεων", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnUpdateCheck.setText(QtGui.QApplication.translate("updateDialog", "Έλεγχος Κατάστασης", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitButton.setText(QtGui.QApplication.translate("updateDialog", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        updateDialog.setWindowTitle(QtGui.QApplication.translate("updateDialog", langmodule.dialogUpdateTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnUpdate.setText(QtGui.QApplication.translate("updateDialog", langmodule.btnUpdateTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnUpdateSet.setText(QtGui.QApplication.translate("updateDialog", langmodule.btnUpdateSetTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnUpdateCheck.setText(QtGui.QApplication.translate("updateDialog", langmodule.btnUpdateCheckTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("updateDialog", langmodule.btnExitUpdateDialogTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc

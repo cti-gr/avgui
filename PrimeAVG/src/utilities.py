@@ -10,6 +10,7 @@ import os, stat, gc
 import translation
 import tempfile
 import webbrowser
+import conf.language.lang as langmodule
 #import datetime
 
 # To add utility that periodically checks for size of the database !!!
@@ -324,7 +325,7 @@ def checkFolderPermissions(filepath=""):
 	# either as owner, group or otheir
 	
 	if filepath == "":
-		QtGui.QMessageBox.critical(None, "Προσοχή", "Δεν ήταν δυνατόν ο έλεγχος δικαιωμάτων του συγκεκριμένου directory", 
+		QtGui.QMessageBox.critical(None, langmodule.attention, langmodule.unableToCheckDirRights, 
 								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 		return False
 	else:
@@ -339,7 +340,7 @@ def checkFolderPermissions(filepath=""):
 			else:
 				return bool(st.st_mode & stat.S_IWOTH)	
 		except Exception as error:
-			QtGui.QMessageBox.critical(None, "Προσοχή", "Δεν ήταν δυνατόν ο έλεγχος δικαιωμάτων του συγκεκριμένου directory" + str(error), 
+			QtGui.QMessageBox.critical(None, langmodule.attention, langmodule.unableToCheckDirRights + str(error), 
 								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 			raise(error)
 	
@@ -771,7 +772,7 @@ def populateVirusDBs():
 			for i in range(count):
 				availableDBs.append(tmpList[i][0])
 	except Exception as errinit:
-		 QtGui.QMessageBox.critical(None, "Προσοχή", "Σφάλμα κατά την αρχικοποίηση Virus DB Combo Box: " + str(errinit), 
+		 QtGui.QMessageBox.critical(None, langmodule.attention, langmodule.virusDBCmbInitError + str(errinit), 
 								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 	return availableDBs
 					
@@ -787,7 +788,7 @@ def populateMalware():
 			for i in range(count):
 				availableMalware.append(tmpList[i][0])
 	except Exception as errinit:
-		 QtGui.QMessageBox.critical(None, "Προσοχή", "Σφάλμα κατά την αρχικοποίηση Malware Combo Box: " + str(errinit), 
+		 QtGui.QMessageBox.critical(None, langmodule.attention, langmodule.malwareCmbInitError + str(errinit), 
 								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 	return availableMalware
 		 
@@ -879,7 +880,7 @@ def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =
 		#print("resultsList: " + str(resultsList))
 	
 	except Exception as errcon:
-		QtGui.QMessageBox.critical(None, "Προσοχή", "Σφάλμα κατά την αναζήτηση περιεχομένου στη βάση: " + str(errcon), 
+		QtGui.QMessageBox.critical(None, langmodule.attention, langmodule.errorQueringDB + str(errcon), 
 								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
 	return resultsList
 	 
@@ -917,9 +918,10 @@ class scanResultsTableModel(QtCore.QAbstractTableModel):
 	def headerData(self, section, orientation, role):
 		
 		
-		headersList = [['Χρήστης', 'Αριθμός Ευρημάτων', 'Ημερομηνία - Ώρα Αναζήτησης'], ['Χρήστης', 'Αριθμός Ευρημάτων', 'Βάση Ιών', 'Ημερομηνία - Ώρα Αναζήτησης'],
-					   ['Χρήστης', 'Αριθμός Ευρημάτων', 'Κακόβουλο Λογισμικό', 'Ημερομηνία - Ώρα Αναζήτησης'], 
-					   ['Χρήστης', 'Αριθμός Ευρημάτων', 'Κακόβουλο Λογισμικό', 'Βάση Ιών', 'Ημερομηνία - Ώρα Αναζήτησης']]
+		headersList = [[langmodule.userTitle, langmodule.noOfResultsTitle, langmodule.scanDateTimeTitle], 
+						[langmodule.userTitle, langmodule.noOfResultsTitle, langmodule.virusDBTitle, langmodule.scanDateTimeTitle],
+						[langmodule.userTitle, langmodule.noOfResultsTitle, langmodule.malwareFoundTitle, langmodule.scanDateTimeTitle], 
+						[langmodule.userTitle, langmodule.noOfResultsTitle, langmodule.malwareFoundTitle, langmodule.virusDBTitle, langmodule.scanDateTimeTitle]]
 		
 		if role == QtCore.Qt.DisplayRole:
 			if orientation == QtCore.Qt.Horizontal:
@@ -966,7 +968,7 @@ class dbHistoryTableModel(QtCore.QAbstractTableModel):
 	def headerData(self, section, orientation, role):
 		
 		
-		headers = ["Ημερομηνία / Ώρα Ανανέωσης", "Έκδοση Core AVG / Βάση Ιών"]
+		headers = [langmodule.updateDateTimeTitle, langmodule.coreAndVirusDBVersionsTitle]
 		
 		if role == QtCore.Qt.DisplayRole:
 			if orientation == QtCore.Qt.Horizontal:
@@ -991,7 +993,7 @@ class dbHistoryWorker(QtCore.QThread):
 				
 	def run(self): 
 		try:
-			self.dbupdhist = subprocess.check_output(["gksu","--description=Ιστορικό", "--message='H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)'", "avgevtlog"]).decode("utf")
+			self.dbupdhist = subprocess.check_output(["gksu","--description=Ιστορικό", "--message=" + langmodule.dbHistoryMustSudo, "avgevtlog"]).decode("utf")
 		except subprocess.CalledProcessError as cpe:
 			print(str(cpe))				   
 		print(type(self.dbupdhist))

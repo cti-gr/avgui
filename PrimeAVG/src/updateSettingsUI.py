@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_dialogUpdateSettings(object):
     def setupUi(self, dialogUpdateSettings):
@@ -182,22 +183,22 @@ class Ui_dialogUpdateSettings(object):
         QtCore.QMetaObject.connectSlotsByName(dialogUpdateSettings)
 
     def retranslateUi(self, dialogUpdateSettings):
-        dialogUpdateSettings.setWindowTitle(QtGui.QApplication.translate("dialogUpdateSettings", "Ρυθμίσεις Ενημέρωσης Λογισμικού και Βάσης Ιών", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblInterrupt.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Συνθήκες διακοπής διαδικασίας ενημέρωσης λογισμικού", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblMinSpeed.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ελάχιστη Ταχύτητα (bytes / sec)", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblMaxTime.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Χρονικό Διάστημα (sec)", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxy.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ρυθμίσεις σχετικά με χρήση διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyPass.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Κωδικός Χρήστη (password)", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyMode.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Χρήση Διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyName.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Όνομα Διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyUsername.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Όνομα Χρήστη (username)", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblUseLogIn.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Απαιτείται Log In στον Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyAuthType.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Τύπος Authentication", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProxyPort.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Θύρα Διακομιστή Proxy", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnOK.setText(QtGui.QApplication.translate("dialogUpdateSettings", "OK", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnCancel.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ακύρωση", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAutoUpdateProg.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ενεργοποίηση Αυτόματων Ενημερώσεων Λογισμικού  ", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAutoUpdateVir.setText(QtGui.QApplication.translate("dialogUpdateSettings", "Ενεργοποίηση Αυτόματων Ενημερώσεων Βάσης Ιών    ", None, QtGui.QApplication.UnicodeUTF8))
+        dialogUpdateSettings.setWindowTitle(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.dialogUpdateSettingsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblInterrupt.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblInterruptTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblMinSpeed.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblMinSpeedTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblMaxTime.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblMaxTimeTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxy.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyPass.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyPassTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyMode.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyModeTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyName.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyNameTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyUsername.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyUsernameTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblUseLogIn.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblUseLogInTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyAuthType.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyAuthTypeTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProxyPort.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblProxyPortTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnOK.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.btnOkUpdateSettingsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnCancel.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.btnCancelUpdateSettingsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAutoUpdateProg.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblAutoUpdateProgTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAutoUpdateVir.setText(QtGui.QApplication.translate("dialogUpdateSettings", langmodule.lblAutoUpdateVirTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc
 import avg_rc

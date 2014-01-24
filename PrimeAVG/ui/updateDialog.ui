@@ -192,7 +192,7 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="exitButton">
+  <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
      <x>140</x>

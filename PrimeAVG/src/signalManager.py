@@ -10,7 +10,7 @@ import setupGui
 import gc, re
 import getpass
 import translation
-
+import conf.language.lang as langmodule
 
 ########################################################################################################
 # IMPORTANT NOTICE!!!! TO CHECK CLASS-LEVEL PARAMETERS!!!!
@@ -138,7 +138,7 @@ class manager(QObject):
 			self._theMainWindow.theHistory.comDatabase.setModel(modelDBs)
 			
 		else:
-			QMessageBox.critical(None, "Προσοχή", "Η εφαρμογή παρουσίασε σφάλμα", 
+			QMessageBox.critical(None, langmodule.attention, langmodule.applicationError, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 	
 	def selectWhatToScan(self):
@@ -148,26 +148,26 @@ class manager(QObject):
 	def emitFileSelected(self):
 		global scanPath
 		options = QFileDialog.DontResolveSymlinks 
-		scanPath = QFileDialog.getOpenFileName(self._theMainWindow.theScan.theSelect, 'Επιλογή Αρχείου προς Σάρωση', '/home', 'All files (*.*)', "",  options)[0]
+		scanPath = QFileDialog.getOpenFileName(self._theMainWindow.theScan.theSelect, langmodule.chooseFileToScan, '/home', 'All files (*.*)', "",  options)[0]
 		print("scan path is: " + scanPath)
 		if scanPath == "":
 			scanPath=None
 			return
 		else:
-			self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στο ακόλουθο αρχείο")
+			self._theMainWindow.theScan.infoLabel.setText(langmodule.scanFileTitle)
 			self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
 		self._theMainWindow.theScan.theSelect.close()
 		
 	def emitFolderSelected(self):
 		global scanPath
 		options = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
-		scanPath = QFileDialog.getExistingDirectory(self._theMainWindow.theScan.theSelect, 'Επιλογή Φακέλου προς Σάρωση', '/home', options)
+		scanPath = QFileDialog.getExistingDirectory(self._theMainWindow.theScan.theSelect, langmodule.chooseFolderToScan, '/home', options)
 		print("scan path is: " + scanPath)
 		if scanPath == "":
 			scanPath=None
 			return
 		else:
-			self._theMainWindow.theScan.infoLabel.setText("Η αναζήτηση θα γίνει στον ακόλουθο φάκελο")
+			self._theMainWindow.theScan.infoLabel.setText(langmodule.scanFolderTitle)
 			self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
 		self._theMainWindow.theScan.theSelect.close()
 
@@ -255,7 +255,7 @@ class manager(QObject):
 					return
 				result = utilities.checkFolderPermissions(reportDir)
 				if not result:
-					QMessageBox.information(None, "Προσοχή", "Δεν έχετε τα κατάλληλα δικαιώματα για το συγκεκριμένο directory - Παρακαλώ επιλέξτε άλλο directory", 
+					QMessageBox.information(None, langmodule.attention, langmodule.noAccessRights, 
 									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 				else:					
 					scanReportFolder = reportDir
@@ -269,7 +269,7 @@ class manager(QObject):
 		
 		if (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() == "") & (self.scanReportStorageEnabled == 1):
 			print("here...")
-			QMessageBox.information(None, "Προσοχή", "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης", 
+			QMessageBox.information(None, langmodule.attention, langmodule.noFileNameProvided, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.disconnect()
 			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
@@ -332,10 +332,10 @@ class manager(QObject):
 		global scanParameters
 		self.getScanSettings()
 		abnormalTermination = 0
-		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Τερματισμός Ελέγχου")
+		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText(langmodule.terminateScan)
 		#print("Scan path is: " + str(scanPath))
 		if scanPath == None:
-			QMessageBox.information(None, "Προσοχή", "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση", 
+			QMessageBox.information(None, langmodule.attention, langmodule.noFilesChosen, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			return -1
 		
@@ -391,7 +391,7 @@ class manager(QObject):
 			self.theScanWorker.exit()
 			while not self.theScanWorker.wait():
 				print("Waiting for scan worker to finish")
-		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText("Κλείσιμο Παραθύρου")
+		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText(langmodule.btnExitUpdateProgTitle)
 		'''
 			if self.theScanWorker.isFinished():
 				print("The Scan Worker is FINISHED")
@@ -427,7 +427,7 @@ class manager(QObject):
 		flag = 0
 		
 		if (self._theMainWindow.theHistory.comStartDate.date() > self._theMainWindow.theHistory.comEndDate.date()):
-			QMessageBox.information(None, "Λάθος Ημερομηνίες", "Έχετε χρησιμοποιήσει λάθος διάταξη στις ημερομηνίες", 
+			QMessageBox.information(None, langmodule.wrongDates1, langmodule.wrongDates2, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			return
 		
@@ -443,7 +443,7 @@ class manager(QObject):
 		virusDB = self._theMainWindow.theHistory.comDatabase.currentText()
 		results = utilities.scanSearchQuery(dateFrom, dateTo, malware, virusDB)
 		if not results:
-			QMessageBox.information(None, "Κανένα Αποτέλεσμα", "Δεν βρέθηκαν αποτελέσματα με τα συγκεκριμένα κριτήρια αναζήτησης", 
+			QMessageBox.information(None, langmodule.noResults, langmodule.noResultsCriteria, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 		else:
 			
@@ -490,12 +490,12 @@ class manager(QObject):
 			now = datetime.now().isoformat().split('T')
 			filename='scanLog_' + now[0][0:10] + '_' + now[1][0:8] + '.txt'
 			flags = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly
-			folder = QFileDialog.getExistingDirectory(self._theMainWindow.theHistory.theResults, "Επιλογή Φακέλου για Αποθήκευση text Αρχείου", homeDir, flags)
+			folder = QFileDialog.getExistingDirectory(self._theMainWindow.theHistory.theResults, langmodule.chooseFolderToStoreText, homeDir, flags)
 			print(filename)
 			print(manager._resultsToPrint)
 			path = folder + '/' + filename
 			with open(path, 'w') as file:
-				file.write("Χρήστης" + '\t\t\t' + "Αριθμός Ευρημάτων"  + '\t\t' + "Ημερομηνία και ώρα αναζήτησης" + '\n') # linux specific newline - not portable!
+				file.write(langmodule.userTitle + '\t\t\t' + langmodule.noOfResultsTitle  + '\t\t' + langmodule.scanDateTimeTitle + '\n') # linux specific newline - not portable!
 				file.write("----------------------------------------------------------------------------------" + '\n') # linux specific newline - not portable!
 				for inlist in manager._resultsToPrint:
 					file.write(inlist[0] + '\t\t\t')
@@ -505,10 +505,10 @@ class manager(QObject):
 		except IOError as error:
 			print(str(error)[0:13])
 			if "Permission denied" in str(error):
-				QMessageBox.critical(None, "Προσοχή", "Δεν έχετε δικαιώματα αποθήκευσης αρχείων στο συγκεκριμένο φάκελο", 
+				QMessageBox.critical(None, langmodule.attention, langmodule.noAccessRightsInFolder, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 		except Exception:
-			QMessageBox.critical(None, "Προσοχή", "Παρουσιάστηκε σφάλμα κατά την αποθήκευση του αρχείου", 
+			QMessageBox.critical(None, langmodule.attention, langmodule.errorStoringFile, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 	def clearResults(self):
 		manager._resultsToPrint = []
@@ -550,7 +550,7 @@ class manager(QObject):
 		except Exception as err:
 			print("Error disconnecting timeout signal from timer")
 		if result == 1: # process failed to start
-			QMessageBox.critical(None, "Προσοχή", "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων", 
+			QMessageBox.critical(None, langmodule.attention, langmodule.restartUpdate, 
 				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			self._theMainWindow.theUpdate.theCountDown.close()
 		if result == 2:
@@ -648,7 +648,7 @@ class manager(QObject):
 	def onUpdateFinish(self, exitCode):
 		print("EXIT CODE IS: " + str(exitCode))
 		if exitCode == 1: # process did not start
-			QMessageBox.critical(None, "Προσοχή", "Αποτυχία εκκίνησης διαδικασίας ενημέρωσης - Επανεκκινήστε την διαδικασία", 
+			QMessageBox.critical(None, langmodule,attention, langmodule.restartUpdate, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			if hasattr(self, 'theUpdateChecker'):
 				self.theUpdateChecker.exit()

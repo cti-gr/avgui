@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_DiaScanProg(object):
     def setupUi(self, DiaScanProg):
@@ -191,7 +192,7 @@ class Ui_DiaScanProg(object):
         QtCore.QMetaObject.connectSlotsByName(DiaScanProg)
 
     def retranslateUi(self, DiaScanProg):
-        DiaScanProg.setWindowTitle(QtGui.QApplication.translate("DiaScanProg", "Έλεγχος για Κακόβουλο Λογισμικό", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExitScan.setText(QtGui.QApplication.translate("DiaScanProg", "Τερματισμός Ελέγχου", None, QtGui.QApplication.UnicodeUTF8))
+        DiaScanProg.setWindowTitle(QtGui.QApplication.translate("DiaScanProg", langmodule.dialogScanProgressTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExitScan.setText(QtGui.QApplication.translate("DiaScanProg", langmodule.dialogScanProgressStopTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc

@@ -213,7 +213,7 @@
     </widget>
    </widget>
   </widget>
-  <widget class="QPushButton" name="exitButton">
+  <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
      <x>200</x>

@@ -2,12 +2,13 @@
 
 # Form implementation generated from reading ui file 'problemSubmission.ui'
 #
-# Created: Tue Jan 21 12:14:57 2014
+# Created: Thu Jan 23 21:05:01 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_problemDialog(object):
     def setupUi(self, problemDialog):
@@ -35,6 +36,10 @@ class Ui_problemDialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lblUser.sizePolicy().hasHeightForWidth())
         self.lblUser.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.lblUser.setFont(font)
         self.lblUser.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblUser.setFrameShadow(QtGui.QFrame.Raised)
         self.lblUser.setLineWidth(1)
@@ -55,10 +60,18 @@ class Ui_problemDialog(object):
         self.lblKernel = QtGui.QLabel(self.gridLayoutWidget)
         self.lblKernel.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblKernel.setFrameShadow(QtGui.QFrame.Raised)
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.lblKernel.setFont(font)
         self.lblKernel.setAlignment(QtCore.Qt.AlignCenter)
         self.lblKernel.setObjectName("lblKernel")
         self.gridLayout.addWidget(self.lblKernel, 4, 0, 1, 2)
         self.lblUbuntu = QtGui.QLabel(self.gridLayoutWidget)
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.lblUbuntu.setFont(font)
         self.lblUbuntu.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblUbuntu.setFrameShadow(QtGui.QFrame.Raised)
         self.lblUbuntu.setAlignment(QtCore.Qt.AlignCenter)
@@ -71,8 +84,8 @@ class Ui_problemDialog(object):
         sizePolicy.setHeightForWidth(self.lblUserValue.sizePolicy().hasHeightForWidth())
         self.lblUserValue.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
-        font.setWeight(50)
-        font.setBold(False)
+        font.setWeight(75)
+        font.setBold(True)
         self.lblUserValue.setFont(font)
         self.lblUserValue.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblUserValue.setFrameShadow(QtGui.QFrame.Raised)
@@ -82,8 +95,8 @@ class Ui_problemDialog(object):
         self.gridLayout.addWidget(self.lblUserValue, 2, 2, 1, 1)
         self.lblKernelValue = QtGui.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
-        font.setWeight(50)
-        font.setBold(False)
+        font.setWeight(75)
+        font.setBold(True)
         self.lblKernelValue.setFont(font)
         self.lblKernelValue.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblKernelValue.setFrameShadow(QtGui.QFrame.Raised)
@@ -93,8 +106,8 @@ class Ui_problemDialog(object):
         self.gridLayout.addWidget(self.lblKernelValue, 4, 2, 1, 1)
         self.lblUbuntuValue = QtGui.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
-        font.setWeight(50)
-        font.setBold(False)
+        font.setWeight(75)
+        font.setBold(True)
         self.lblUbuntuValue.setFont(font)
         self.lblUbuntuValue.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblUbuntuValue.setFrameShadow(QtGui.QFrame.Raised)
@@ -104,8 +117,8 @@ class Ui_problemDialog(object):
         self.gridLayout.addWidget(self.lblUbuntuValue, 3, 2, 1, 1)
         self.lblAvguiValue = QtGui.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
-        font.setWeight(50)
-        font.setBold(False)
+        font.setWeight(75)
+        font.setBold(True)
         self.lblAvguiValue.setFont(font)
         self.lblAvguiValue.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblAvguiValue.setFrameShadow(QtGui.QFrame.Raised)
@@ -115,8 +128,8 @@ class Ui_problemDialog(object):
         self.gridLayout.addWidget(self.lblAvguiValue, 5, 2, 1, 1)
         self.lblAvgValue = QtGui.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
-        font.setWeight(50)
-        font.setBold(False)
+        font.setWeight(75)
+        font.setBold(True)
         self.lblAvgValue.setFont(font)
         self.lblAvgValue.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblAvgValue.setFrameShadow(QtGui.QFrame.Raised)
@@ -136,6 +149,10 @@ class Ui_problemDialog(object):
         self.gridLayout.addWidget(self.lblAvgui, 5, 0, 1, 2)
         self.btnSubmit = QtGui.QPushButton(problemDialog)
         self.btnSubmit.setGeometry(QtCore.QRect(110, 760, 141, 41))
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.btnSubmit.setFont(font)
         self.btnSubmit.setObjectName("btnSubmit")
         self.btnCancel = QtGui.QPushButton(problemDialog)
         self.btnCancel.setGeometry(QtCore.QRect(270, 760, 141, 41))
@@ -151,6 +168,10 @@ class Ui_problemDialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.lblProbDesc.sizePolicy().hasHeightForWidth())
         self.lblProbDesc.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setWeight(75)
+        font.setBold(True)
+        self.lblProbDesc.setFont(font)
         self.lblProbDesc.setFrameShape(QtGui.QFrame.WinPanel)
         self.lblProbDesc.setFrameShadow(QtGui.QFrame.Raised)
         self.lblProbDesc.setLineWidth(1)
@@ -165,14 +186,14 @@ class Ui_problemDialog(object):
         QtCore.QMetaObject.connectSlotsByName(problemDialog)
 
     def retranslateUi(self, problemDialog):
-        problemDialog.setWindowTitle(QtGui.QApplication.translate("problemDialog", "Υποβολή Προβλήματος", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblUser.setText(QtGui.QApplication.translate("problemDialog", "Χρήστης", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAvg.setText(QtGui.QApplication.translate("problemDialog", "Έκδοση avg", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblKernel.setText(QtGui.QApplication.translate("problemDialog", "Έκδοση Kernel", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblUbuntu.setText(QtGui.QApplication.translate("problemDialog", "Έκδοση Ubuntu", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblAvgui.setText(QtGui.QApplication.translate("problemDialog", "Έκδοση avgui", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnSubmit.setText(QtGui.QApplication.translate("problemDialog", "Υποβολή", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnCancel.setText(QtGui.QApplication.translate("problemDialog", "Ακύρωση", None, QtGui.QApplication.UnicodeUTF8))
-        self.lblProbDesc.setText(QtGui.QApplication.translate("problemDialog", "Περιγραφή Προβλήματος", None, QtGui.QApplication.UnicodeUTF8))
+        problemDialog.setWindowTitle(QtGui.QApplication.translate("problemDialog", langmodule.dialogProblemTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblUser.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblUserTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAvg.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblAvgTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblKernel.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblKernelTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblUbuntu.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblUbuntuTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblAvgui.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblAvguiTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnSubmit.setText(QtGui.QApplication.translate("problemDialog", langmodule.btnSubmitProblemSubmissionTitle , None, QtGui.QApplication.UnicodeUTF8))
+        self.btnCancel.setText(QtGui.QApplication.translate("problemDialog", langmodule.btnCancelProblemSubmissionTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.lblProbDesc.setText(QtGui.QApplication.translate("problemDialog", langmodule.lblProbDescTitle, None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc

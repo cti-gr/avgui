@@ -41,7 +41,7 @@
     <double>30.000000000000000</double>
    </property>
   </widget>
-  <widget class="QLabel" name="countDownLabel">
+  <widget class="QLabel" name="lblCountDown">
    <property name="geometry">
     <rect>
      <x>40</x>
@@ -60,7 +60,7 @@
     <string>Παρακαλώ περιμένετε ενώ γίνεται έλεγχος για διαθέσιμες ενημερώσεις</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label">
+  <widget class="QLabel" name="lblTimeToCompletion">
    <property name="geometry">
     <rect>
      <x>100</x>

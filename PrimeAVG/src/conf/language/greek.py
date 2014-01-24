@@ -39,3 +39,107 @@ lblScanSelectTitle = "Αναζήτηση Κακόβουλου Λογισμικο
 radioFileTitle = "Σε Αρχείο"
 radioFolderTitle = "Σε Φάκελο"
 btnExitScanSelectTitle = "Έξοδος"
+
+#Scan Progress
+dialogScanProgressTitle = "Αναζήτηση για κακόβουλο λογισμικό"
+dialogScanProgressStopTitle = "Τερματισμός Αναζήτησης"
+
+# Update Dialog
+dialogUpdateTitle = "Διαθεσιμότητα Ενημερώσεων Προγράμματος Προστασίας AVG"
+btnUpdateTitle = "Ενημέρωση Προγράμματος"
+btnUpdateSetTitle = "Ρύθμιση Ενημερώσεων"
+btnUpdateCheckTitle = "Έλεγχος Διαθέσιμων Ενημερώσεων"
+btnExitUpdateDialogTitle = "Έξοδος"
+
+# Update Progress
+dialogUpdateProgTitle = "Διαδικασία Ενημέρωσης Λογισμικού"
+btnExitUpdateProgTitle = "Κλείσιμο Παραθύρου"
+
+# Check Panel
+formCheckTitle = "Έλεγχος Ενημερώσεων"
+btnExitFormCheckTitle = "Έξοδος"
+
+# Update Settings
+dialogUpdateSettingsTitle = "Ρυθμίσεις Ενημέρωσης Λογισμικού και Βάσης Ιών"
+lblInterruptTitle = "Συνθήκες διακοπής διαδικασίας ενημέρωσης λογισμικού"
+lblMinSpeedTitle = "Ελάχιστη Ταχύτητα (bytes / sec)"
+lblMaxTimeTitle = "Χρονικό Διάστημα (sec)"
+lblProxyTitle = "Ρυθμίσεις σχετικά με χρήση διακομιστή Proxy"
+lblProxyPassTitle = "Κωδικός Χρήστη (password)"
+lblProxyModeTitle = "Χρήση Διακομιστή Proxy"
+lblProxyNameTitle = "Όνομα Διακομιστή Proxy"
+lblProxyUsernameTitle = "Όνομα Χρήστη (username)"
+lblUseLogInTitle = "Απαιτείται Log In στον Proxy"
+lblProxyAuthTypeTitle = "Τύπος Authentication"
+lblProxyPortTitle = "Θύρα Διακομιστή Proxy"
+btnOkUpdateSettingsTitle = "OK"
+btnCancelUpdateSettingsTitle = "Ακύρωση"
+lblAutoUpdateProgTitle = "Ενεργοποίηση Αυτόματων Ενημερώσεων Λογισμικού  "
+lblAutoUpdateVirTitle = "Ενεργοποίηση Αυτόματων Ενημερώσεων Βάσης Ιών    "
+
+# History Dialog
+dialogHistoryTitle = "Ιστορικό Προγράμματος"
+lblToTitle = "Εώς (Ημερομηνία)"
+lblFromTitle = "Από (Ημερομηνία)"
+lblMalwareTitle = "Κακόβουλο Λογισμικό που Εντοπίστηκε"
+lblDatabaseTable = "Βάση Ιών που Χρησιμοποιήθηκε"
+btnExecuteTitle = "Εκτέλεση Αναζήτησης"
+historyTabWidgetScansTitle = "Ιστορικό Αναζητήσεων"
+historyTabWidgetUpdatesTitle = "Ιστορικό Ενημερώσεων"
+btnHistoryDBTitle = "Ιστορικό Ενημερώσεων Βάσης Ιών"
+btnExitHistoryTitle = "Έξοδος"
+
+# Scan History Results
+dialogHistoryScanResultsTitle = "Αποτελέσματα Αναζήτησης"
+extractToTextTitle = "Εξαγωγή Αποτελεσμάτων σε .txt αρχείο"
+btnDialogHistoryScanResultsTitle = "Έξοδος"
+
+# Count Down 
+formCountDownTitle = "Αναζήτηση Ενημερώσεων..."
+lblCountDownTitle = "Παρακαλώ περιμένετε ενώ γίνεται έλεγχος για διαθέσιμες ενημερώσεις"
+lblCountDownTimeToCompletionTitle = "Αναμενόμενος μέγιστος χρόνος ολοκλήρωσης ελέγχου..."
+
+# Problem Submission
+dialogProblemTitle = "Υποβολή Προβλήματος"
+lblUserTitle = "Χρήστης"
+lblAvgTitle = "Έκδοση AVG"
+lblKernelTitle = "Έκδοση Kernel"
+lblUbuntuTitle = "Έκδοση Ubuntu"
+lblAvguiTitle = "Έκδοση AVGui"
+btnSubmitProblemSubmissionTitle = "Υποβολή"
+btnCancelProblemSubmissionTitle = "Ακύρωση"
+lblProbDescTitle = "Περιγραφή Προβλήματος"
+
+# Informative / Warning / Error Messages
+dbHistoryMustSudo = "H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)"
+unableToCheckDirRights = "Δεν κατέστη δυνατός ο έλεγχος δικαιωμάτων του συγκεκριμένου φακέλου!"
+attention = "Προσοχή!"
+virusDBCmbInitError = "Σφάλμα κατά την αρχικοποίηση Virus DB Combo Box: "
+malwareCmbInitError = "Σφάλμα κατά την αρχικοποίηση Malware Combo Box: "
+errorQueringDB = "Σφάλμα κατά την αναζήτηση περιεχομένου στη βάση: "
+noFilesChosen = "Δεν έχουν επιλεγεί αρχεία / φάκελοι προς σάρωση"
+terminateScan = "Τερματισμός Ελέγχου"
+noFileNameProvided = "Δεν δώσατε όνομα αρχείου αποθήκευσης αποτελεσμάτων σάρωσης"
+noAccessRights = "Δεν έχετε τα κατάλληλα δικαιώματα για το συγκεκριμένο directory - Παρακαλώ επιλέξτε άλλο directory"
+scanFolderTitle = "Η αναζήτηση για κακόβουλο λογισμικό θα γίνει στον ακόλουθο φάκελο"
+scanFileTitle = "Η αναζήτηση για κακόβουλο λογισμικό θα γίνει στον ακόλουθο αρχείο"
+applicationError = "Η εφαρμογή παρουσίασε σφάλμα"
+chooseFolderToScan = "Επιλογή φακέλου προς αναζήτηση κακόβουλου λογισμικού"
+chooseFileToScan = "Επιλογή αρχείου προς αναζήτηση κακόβουλου λογισμικού"
+wrongDates1 = "Λάθος Ημερομηνίες"
+wrongDates2 = "Έχετε χρησιμοποιήσει λάθος διάταξη στις ημερομηνίες"
+noResults = "Κανένα αποτέλεσμα"
+noResultsCriteria = "Δεν βρέθηκαν αποτελέσματα με τα συγκεκριμένα κριτήρια αναζήτησης"
+chooseFolderToStoreText = "Επιλογή Φακέλου για Αποθήκευση text Αρχείου"
+noAccessRightsInFolder = "Δεν έχετε δικαιώματα αποθήκευσης αρχείων στο συγκεκριμένο φάκελο"
+errorStoringFile = "Παρουσιάστηκε σφάλμα κατά την αποθήκευση του αρχείου"
+restartUpdate = "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων"
+
+# Table Column Labels
+userTitle = "Χρήστης"
+noOfResultsTitle = "Αριθμός Ευρημάτων"
+scanDateTimeTitle = "Ημερομηνία - Ώρα Αναζήτησης"
+virusDBTitle = "Βάση Ιών"
+malwareFoundTitle = "Κακόβουλο Λογισμικό"
+updateDateTimeTitle = "Ημερομηνία / Ώρα Ανανέωσης"
+coreAndVirusDBVersionsTitle = "Έκδοση Core AVG / Βάση Ιών"

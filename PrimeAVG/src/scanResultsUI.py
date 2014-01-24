@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_dialogScanResults(object):
     def setupUi(self, dialogScanResults):
@@ -54,7 +55,7 @@ class Ui_dialogScanResults(object):
         QtCore.QMetaObject.connectSlotsByName(dialogScanResults)
 
     def retranslateUi(self, dialogScanResults):
-        dialogScanResults.setWindowTitle(QtGui.QApplication.translate("dialogScanResults", "Αποτελέσματα Αναζήτησης", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExtractTxt.setText(QtGui.QApplication.translate("dialogScanResults", "Εξαγωγή Αποτελεσμάτων σε .txt αρχείο", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExit.setText(QtGui.QApplication.translate("dialogScanResults", "Έξοδος", None, QtGui.QApplication.UnicodeUTF8))
+        dialogScanResults.setWindowTitle(QtGui.QApplication.translate("dialogScanResults", langmodule.dialogHistoryScanResultsTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExtractTxt.setText(QtGui.QApplication.translate("dialogScanResults", langmodule.extractToTextTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("dialogScanResults", langmodule.btnDialogHistoryScanResultsTitle, None, QtGui.QApplication.UnicodeUTF8))
 

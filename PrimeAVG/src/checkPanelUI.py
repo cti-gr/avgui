@@ -8,6 +8,7 @@
 # WARNING! All changes made in this file will be lost!
 
 from PySide import QtCore, QtGui
+import conf.language.lang as langmodule
 
 class Ui_formCheck(object):
     def setupUi(self, formCheck):
@@ -35,6 +36,6 @@ class Ui_formCheck(object):
         QtCore.QMetaObject.connectSlotsByName(formCheck)
 
     def retranslateUi(self, formCheck):
-        formCheck.setWindowTitle(QtGui.QApplication.translate("formCheck", "Έλεγχος Ενημερώσεων", None, QtGui.QApplication.UnicodeUTF8))
-        self.btnExit.setText(QtGui.QApplication.translate("formCheck", "Κλείσιμο Παραθύρου", None, QtGui.QApplication.UnicodeUTF8))
+        formCheck.setWindowTitle(QtGui.QApplication.translate("formCheck", langmodule.formCheckTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnExit.setText(QtGui.QApplication.translate("formCheck", langmodule.btnExitFormCheckTitle, None, QtGui.QApplication.UnicodeUTF8))
 

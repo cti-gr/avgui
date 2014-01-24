@@ -168,7 +168,7 @@ class historyDialog(QtGui.QDialog, historyDialogUI.Ui_historyDialog):
 	def __init__(self, parent=None):
 		super(historyDialog, self).__init__(parent)
 		self.setupUi(self)
-		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 		
 		self.theResults = scanResults(self)
 		self.theHistdbResults = histdbResults(self)
@@ -178,7 +178,7 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
 	def __init__(self, parent=None):
 		super(updateDialog, self).__init__(parent)
 		self.setupUi(self)
-		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 		 
 		self.theCountDown = countDown(self)
 		self.theCheckPanel = checkPanel(self)
