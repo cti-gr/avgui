@@ -142,6 +142,13 @@ global errorStoringFile
 global restartUpdate
 global chooseFileToScan
 global chooseFolderToScan
+global noProxyTitle
+global yesProxyTitle
+global dependsProxyTitle
+global autoProxyAuthTitle
+global basicProxyAuthTitle
+global ntlmProxyAuthTitle
+global needRestartTitle
 
 # Table Column Headers
 global userTitle
@@ -151,6 +158,9 @@ global virusDBTitle
 global malwareFoundTitle
 global updateDateTimeTitle
 global coreAndVirusDBVersionsTitle
+
+# Real Time Messages
+global translationDict
 
 def setuplang():
 
@@ -262,7 +272,7 @@ def setuplang():
 	global btnCancelProblemSubmissionTitle
 	global lblProbDescTitle
 	
-	# Warning / Error Messages
+	# Informative / Warning / Error Messages
 	global dbHistoryMustSudo
 	global unableToCheckDirRights
 	global attention
@@ -287,6 +297,13 @@ def setuplang():
 	global restartUpdate
 	global chooseFileToScan
 	global chooseFolderToScan
+	global noProxyTitle
+	global yesProxyTitle
+	global dependsProxyTitle
+	global autoProxyAuthTitle
+	global basicProxyAuthTitle
+	global ntlmProxyAuthTitle
+	global needRestartTitle
 	
 	# Scan Progress
 	global dialogScanProgressTitle
@@ -301,6 +318,9 @@ def setuplang():
 	global updateDateTimeTitle
 	global coreAndVirusDBVersionsTitle
 	global noAccessRightsInFolder
+	
+	# Real Time Messages
+	global translationDict
 
 
 	print(subprocess.check_output(["ls"]))
@@ -312,9 +332,9 @@ def setuplang():
 	lang = configparser.get("Language", 'lang')
 	print(str(lang))
 	
-	if lang == "el-gr":
+	if lang == "EL":
 		import conf.language.greek as langpack
-	elif lang == "en-gb":
+	elif lang == "EN":
 		import conf.language.english as langpack
 	
 	# Main Window
@@ -454,6 +474,13 @@ def setuplang():
 	noAccessRightsInFolder = langpack.noAccessRightsInFolder
 	errorStoringFile = langpack.errorStoringFile
 	restartUpdate = langpack.restartUpdate
+	noProxyTitle = langpack.noProxyTitle
+	yesProxyTitle = langpack.yesProxyTitle
+	dependsProxyTitle = langpack.dependsProxyTitle
+	autoProxyAuthTitle = langpack.autoProxyAuthTitle
+	basicProxyAuthTitle = langpack.basicProxyAuthTitle
+	ntlmProxyAuthTitle = langpack.ntlmProxyAuthTitle
+	needRestartTitle = langpack.needRestartTitle
 
 	# Table Column Labels
 	userTitle  = langpack.userTitle
@@ -463,3 +490,6 @@ def setuplang():
 	malwareFoundTitle = langpack.malwareFoundTitle
 	updateDateTimeTitle = langpack.updateDateTimeTitle
 	coreAndVirusDBVersionsTitle = langpack.coreAndVirusDBVersionsTitle
+	
+	# Real Time Messages
+	translationDict = langpack.translationDict

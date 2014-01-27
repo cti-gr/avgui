@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created: Tue Jan 21 12:14:57 2014
+# Created: Mon Jan 27 16:34:52 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -113,6 +113,16 @@ class Ui_MainWindow(object):
         icon5.addPixmap(QtGui.QPixmap(":/power_off.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btnExitMain.setIcon(icon5)
         self.btnExitMain.setObjectName("btnExitMain")
+        self.comLangsel = QtGui.QComboBox(self.centralwidget)
+        self.comLangsel.setGeometry(QtCore.QRect(680, 10, 78, 27))
+        self.comLangsel.setInsertPolicy(QtGui.QComboBox.NoInsert)
+        self.comLangsel.setObjectName("comLangsel")
+        icon6 = QtGui.QIcon()
+        icon6.addPixmap(QtGui.QPixmap(":/flagGreece.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.comLangsel.addItem(icon6, "")
+        icon7 = QtGui.QIcon()
+        icon7.addPixmap(QtGui.QPixmap(":/flagUK.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.comLangsel.addItem(icon7, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 766, 25))
@@ -144,8 +154,7 @@ class Ui_MainWindow(object):
         self.menu.setTitle(QtGui.QApplication.translate("MainWindow", langmodule.lblAboutTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblAvgProtectionTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.action.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
-        
-        
-        
+        self.comLangsel.setItemText(0, QtGui.QApplication.translate("MainWindow", "EL", None, QtGui.QApplication.UnicodeUTF8))
+        self.comLangsel.setItemText(1, QtGui.QApplication.translate("MainWindow", "EN", None, QtGui.QApplication.UnicodeUTF8))
 
 import avg_rc

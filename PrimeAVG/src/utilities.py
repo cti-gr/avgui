@@ -7,7 +7,6 @@ import sqlite3
 import getpass
 import config
 import os, stat, gc
-import translation
 import tempfile
 import webbrowser
 import conf.language.lang as langmodule
@@ -176,7 +175,7 @@ class chkUpdateWorker(QtCore.QThread):
 		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running):
 			getLines = self.avgchkupProc.read(self.avgchkupProc.bytesAvailable())
 			self.theOutput += str(getLines)
-		for i,j in translation.translationDict.items(): 
+		for i,j in langmodule.translationDict.items(): 
 			self.theOutput = self.theOutput.replace(i,j)
 		#print(str(self.theOutput))
 	

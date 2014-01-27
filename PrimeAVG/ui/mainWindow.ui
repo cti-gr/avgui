@@ -265,6 +265,37 @@ border-radius: 5px ;
       <normaloff>:/power_off.png</normaloff>:/power_off.png</iconset>
     </property>
    </widget>
+   <widget class="QComboBox" name="comLangsel">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>10</y>
+      <width>78</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="insertPolicy">
+     <enum>QComboBox::NoInsert</enum>
+    </property>
+    <item>
+     <property name="text">
+      <string>EL</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../media/avg.qrc">
+       <normaloff>:/flagGreece.png</normaloff>:/flagGreece.png</iconset>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>EN</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../media/avg.qrc">
+       <normaloff>:/flagUK.png</normaloff>:/flagUK.png</iconset>
+     </property>
+    </item>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

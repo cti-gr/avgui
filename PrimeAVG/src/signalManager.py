@@ -9,9 +9,9 @@ import subprocess, sys, time, weakref
 import setupGui
 import gc, re
 import getpass
-import translation
 import conf.language.lang as langmodule
-
+from configparser import SafeConfigParser
+import os
 ########################################################################################################
 # IMPORTANT NOTICE!!!! TO CHECK CLASS-LEVEL PARAMETERS!!!!
 ########################################################################################################
@@ -43,11 +43,16 @@ class manager(QObject):
 		global abnormalTermination
 		global scanPath
 		global homeDir
-		#global scanReportStorageEnabled
 		global scanReportPath
 		global scanReportFolder
-		
 		super(manager, self).__init__(parent)
+		
+		# Opening Configuration File
+		self.confileName = os.getcwd() + "/conf/config.ini"
+		self.configparser = SafeConfigParser()
+		self.configparser.read(self.confileName)
+		
+		
 		self._theMainWindow = theMainWindow
 		self.setupConnections(self._theMainWindow)
 		self.theTimer = QTimer()
@@ -56,7 +61,7 @@ class manager(QObject):
 		scanReportPath = None
 		scanReportFolder = None
 		scanPath = None
-		homeDir = expanduser("~")	 
+		homeDir = expanduser("~")
 		
 	def setupConnections(self, theMainWindow):
 		#Main Window
@@ -65,6 +70,7 @@ class manager(QObject):
 		self._theMainWindow.btnUpdate.clicked.connect(self.emitUpdate)
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
 		self._theMainWindow.btnReportIssue.clicked.connect(self.problemSubmission)
+		self._theMainWindow.comLangsel.currentIndexChanged.connect(self.setLanguage)
 		
 		#Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
@@ -170,6 +176,23 @@ class manager(QObject):
 			self._theMainWindow.theScan.infoLabel.setText(langmodule.scanFolderTitle)
 			self._theMainWindow.theScan.fileToScanLabel.setText(str(scanPath))
 		self._theMainWindow.theScan.theSelect.close()
+		
+############################################ Setting Language #############################################################
+
+	def setLanguage(self):
+		
+		oldLang = self.configparser.get('Language', 'lang')
+		print("oldLang: " + oldLang)
+		newLang = self._theMainWindow.comLangsel.currentText()
+		self.configparser.set('Language', 'lang', newLang)
+		print("newLang: " + newLang)
+		if oldLang != newLang:
+			QMessageBox.information(None, langmodule.attention, langmodule.needRestartTitle, 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			self.configparser.set('Language', 'lang', newLang)
+			with open(self.confileName, 'r+') as confile:
+				self.configparser.write(confile)
+
 
 ################################### Methods related to setting the Scan Settings ##########################################
 
@@ -366,7 +389,7 @@ class manager(QObject):
   
 	def printToWidget(self, linetoappend):
 		#print("Signal Received!!!!!")
-		for i,j in translation.translationDict.items(): 
+		for i,j in langmodule.translationDict.items(): 
 			linetoappend = linetoappend.replace(i,j)
 		curDateTime = datetime.now().isoformat(' ')[:19]
 		self._theMainWindow.theScan.theScanProgress.textScanProg.appendPlainText(linetoappend)

@@ -134,6 +134,13 @@ chooseFolderToStoreText = "Επιλογή Φακέλου για Αποθήκευ
 noAccessRightsInFolder = "Δεν έχετε δικαιώματα αποθήκευσης αρχείων στο συγκεκριμένο φάκελο"
 errorStoringFile = "Παρουσιάστηκε σφάλμα κατά την αποθήκευση του αρχείου"
 restartUpdate = "Η εφαρμογή παρουσίασε σφάλμα - Παρακαλώ επανεκκινήστε την διαδικασία ελέγχου ενημερώσεων"
+noProxyTitle = "Χωρίς Proxy"
+yesProxyTitle = "Χρήση Proxy για λήψη ενημερώσεων"
+dependsProxyTitle = "Χρήση Proxy μόνο αν είναι διαθέσιμος"
+autoProxyAuthTitle = "Αυτόματη Επιλογή Πιστοποίησης Χρήστη"
+basicProxyAuthTitle = "Βασική Πιστοποίηση Χρήστη"
+ntlmProxyAuthTitle = "NTLM Πιστοποίηση Χρήστη"
+needRestartTitle = "Η εφαρμογή πρέπει να επανεκκινήσει προκειμένου να εφαρμοστούν οι νέες ρυθμίσεις"
 
 # Table Column Labels
 userTitle = "Χρήστης"
@@ -143,3 +150,28 @@ virusDBTitle = "Βάση Ιών"
 malwareFoundTitle = "Κακόβουλο Λογισμικό"
 updateDateTimeTitle = "Ημερομηνία / Ώρα Ανανέωσης"
 coreAndVirusDBVersionsTitle = "Έκδοση Core AVG / Βάση Ιών"
+
+# Real Time Messages
+translationDict = {
+'You are currently up-to-date':'Δεν υπάρχουν πρόσφατες ενημερώσεις',
+'Update was successfully completed':'Η διαδικασία ελέγχου ενημερώσεων ολοκληρώθηκε επιτυχώς',
+'Virus update':'Βάση Ιών',
+'Download':'Μέγεθος Αρχείου:',
+'Component':'Μέρος Προγράμματος',
+'priority':'Προτεραιότητα Ενημέρωσης',
+'Installed version':'Έγκατεστημένη έκδοση',
+'Available version':'Έκδοση διαθέσιμη για μεταφόρτωση',
+'Recommended update':'Συνιστώμενη Ενημέρωση',
+'Program update':'Ενημέρωση Προγράμματος',
+'iAVI database':'Βάση iAVI',
+'Running update.':'Έλεγχος Διαθεσιμότητας Ενημερώσεων',
+'Operation failed. The exit code could not be got because the thread or process is still alive.':'Η Διεργασία Δεν Μπόρεσε να Ολοκληρωθεί. Παρακαλούμε Επαναλάβατε την Εκτέλεσή της.',
+'Initializing':'Αρχικοποίηση',
+'Analyzing':'Ανάλυση Διαθέσιμων Ενημερώσεων',
+'Files scanned':'Αρχεία που εξετάστηκαν για κακόβουλο λογισμικό',
+'Infections found':'Αρχεία που έχουν προσβληθεί',
+'PUPs found':'Πιθανώς Ανεπιθύμητα Προγράμματα',
+'Files healed':'Αρχεία που αποκαταστάθηκαν',
+'Warnings reported':'Προειδοποιήσεις για πιθανά προβλήματα',
+'Errors reported':'Λάθη κατά τη διαδικασία σάρωσης'
+}

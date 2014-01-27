@@ -1,8 +1,11 @@
 import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI
 
 import utilities
+import os
 from PySide import QtGui, QtCore
 from datetime import date
+from configparser import SafeConfigParser
+import conf.language.lang as langmodule
 
 class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 
@@ -15,12 +18,12 @@ class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 		self.leditProxyPort.setValidator(self.proxyValidator)
 		self.leditMinSpeed.setValidator(QtGui.QIntValidator())
 		self.leditMaxTime.setValidator(QtGui.QIntValidator())
-		self.cmbBoxProxyMode.insertItem(0, "Χωρίς Proxy")	
-		self.cmbBoxProxyMode.insertItem(1, "Χρήση Proxy για λήψη ενημερώσεων")	
-		self.cmbBoxProxyMode.insertItem(2, "Χρήση Proxy μόνο αν είναι διαθέσιμος")	
-		self.cmbBoxProxyAuthType.insertItem(0, "Αυτόματη Επιλογή Πιστοποίησης Χρήστη")	
-		self.cmbBoxProxyAuthType.insertItem(1, "Βασική Πιστοποίηση Χρήστη")	
-		self.cmbBoxProxyAuthType.insertItem(2, "NTLM Πιστοποίηση Χρήστη")	
+		self.cmbBoxProxyMode.insertItem(0, langmodule.noProxyTitle)	
+		self.cmbBoxProxyMode.insertItem(1, langmodule.yesProxyTitle)	
+		self.cmbBoxProxyMode.insertItem(2, langmodule.dependsProxyTitle)	
+		self.cmbBoxProxyAuthType.insertItem(0, langmodule.autoProxyAuthTitle)	
+		self.cmbBoxProxyAuthType.insertItem(1, langmodule.basicProxyAuthTitle)	
+		self.cmbBoxProxyAuthType.insertItem(2, langmodule.ntlmProxyAuthTitle)	
 
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
@@ -200,7 +203,15 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		super(mainWindow, self).__init__(parent)
 		self.setupUi(self)
 		
-		
+		# Opening Configuration File
+		self.confileName = os.getcwd() + "/conf/config.ini"
+		self.configparser = SafeConfigParser()
+		self.configparser.read(self.confileName)
+		lang = self.configparser.get('Language', 'lang')
+		if lang == "EL":
+			self.comLangsel.setCurrentIndex(0)
+		elif lang == "EN":
+			self.comLangsel.setCurrentIndex(1)
 		self.theUpdate = updateDialog(self)
 		self.theScan = scanDialog(self)
 		self.theProblemSubmission = problemsubmissionDialog(self)

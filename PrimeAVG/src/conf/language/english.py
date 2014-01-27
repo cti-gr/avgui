@@ -134,6 +134,13 @@ chooseFolderToStoreText = "Choose folder to store the .txt file"
 noAccessRightsInFolder = "You do not have write permissions in the specific directory"
 errorStoringFile = "An error occurred when trying to save the file"
 restartUpdate = "An error occurred - Please re-initiate the update process"
+noProxyTitle = "Disable Proxy"
+yesProxyTitle = "Enable Proxy"
+dependsProxyTitle = "Enable proxy. If proxy connection fails, try direct connection to update server"
+autoProxyAuthTitle = "Choose authentication type automatically"
+basicProxyAuthTitle = "Use basic proxy authentication"
+ntlmProxyAuthTitle = "Use NTLM proxy authentication"
+needRestartTitle = "The application must be restarted to apply the new settings"
 
 # Table Column Labels
 userTitle = "User"
@@ -143,3 +150,27 @@ virusDBTitle = "Virus DB"
 malwareFoundTitle = "Malware"
 updateDateTimeTitle = "Update Date / Time"
 coreAndVirusDBVersionsTitle = "Core AVG / Virus DB Version"
+
+translationDict = {
+'You are currently up-to-date':'You are currently up-to-date',
+'Update was successfully completed':'Update was successfully completed',
+'Virus update':'Virus Update',
+'Download':'Download:',
+'Component':'Component',
+'priority':'priotity',
+'Installed version':'Installed Version',
+'Available version':'Available Version',
+'Recommended update':'Recommended Update',
+'Program update':'Program Update',
+'iAVI database':'iAVI database',
+'Running update.':'Running update',
+'Operation failed. The exit code could not be got because the thread or process is still alive.':'Operation failed. The exit code could not be got because the thread or process is still alive.',
+'Initializing':'Initializing',
+'Analyzing':'Analyzing',
+'Files scanned':'Files Scanned',
+'Infections found':'Infections Found',
+'PUPs found':'Potientially Unwanted Programs Found',
+'Files healed':'Files Healed',
+'Warnings reported':'Warnings Reported',
+'Errors reported':'Errors Reported'
+}
