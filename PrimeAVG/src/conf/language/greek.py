@@ -111,7 +111,7 @@ btnCancelProblemSubmissionTitle = "Ακύρωση"
 lblProbDescTitle = "Περιγραφή Προβλήματος"
 
 # Informative / Warning / Error Messages
-dbHistoryMustSudo = "H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)"
+mustSudo = "H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)"
 unableToCheckDirRights = "Δεν κατέστη δυνατός ο έλεγχος δικαιωμάτων του συγκεκριμένου φακέλου!"
 attention = "Προσοχή!"
 virusDBCmbInitError = "Σφάλμα κατά την αρχικοποίηση Virus DB Combo Box: "
@@ -141,6 +141,12 @@ autoProxyAuthTitle = "Αυτόματη Επιλογή Πιστοποίησης �
 basicProxyAuthTitle = "Βασική Πιστοποίηση Χρήστη"
 ntlmProxyAuthTitle = "NTLM Πιστοποίηση Χρήστη"
 needRestartTitle = "Η εφαρμογή πρέπει να επανεκκινήσει προκειμένου να εφαρμοστούν οι νέες ρυθμίσεις"
+noPasswordInserted = "Δεν έχετε εισάγει το password σας"
+noEmailInserted = "Δεν έχετε εισάγει το email σας"
+noCorrectMailAddress = "Δεν είναι σωστή συντακτικά η διεύθυνση email που εισάγατε"
+passwordsDoNotMatch = "Οι δύο κωδικοί ασφαλείας που εισάγατε είναι διαφορετικοί μεταξύ τους"
+mustFillInAllFields = "Πρέπει να συμπληρώσετε όλα τα πεδία"
+historyLog = "Ιστορικό"
 
 # Table Column Labels
 userTitle = "Χρήστης"

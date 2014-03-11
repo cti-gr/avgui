@@ -118,7 +118,7 @@ global btnCancelProblemSubmissionTitle
 global lblProbDescTitle
 
 # Informative / Warning / Error Messages
-global dbHistoryMustSudo
+global mustSudo
 global unableToCheckDirRights
 global attention
 global virusDBCmbInitError
@@ -149,6 +149,12 @@ global autoProxyAuthTitle
 global basicProxyAuthTitle
 global ntlmProxyAuthTitle
 global needRestartTitle
+global noPasswordInserted
+global noEmailInserted
+global noCorrectMailAddress
+global passwordsDoNotMatch
+global mustFillInAllFields
+global historyLog
 
 # Table Column Headers
 global userTitle
@@ -273,7 +279,7 @@ def setuplang():
 	global lblProbDescTitle
 	
 	# Informative / Warning / Error Messages
-	global dbHistoryMustSudo
+	global mustSudo
 	global unableToCheckDirRights
 	global attention
 	global virusDBCmbInitError
@@ -304,6 +310,12 @@ def setuplang():
 	global basicProxyAuthTitle
 	global ntlmProxyAuthTitle
 	global needRestartTitle
+	global noPasswordInserted
+	global noEmailInserted
+	global noCorrectMailAddress
+	global passwordsDoNotMatch
+	global mustFillInAllFields
+	global historyLog
 	
 	# Scan Progress
 	global dialogScanProgressTitle
@@ -323,14 +335,14 @@ def setuplang():
 	global translationDict
 
 
-	print(subprocess.check_output(["ls"]))
+	#print(subprocess.check_output(["ls"]))
 	confile = os.getcwd() + "/conf/config.ini"
 	configparser = SafeConfigParser()
 	f = open(confile, 'r')
 	configparser.read(confile)
-	print("Length is: " + str(len(configparser.sections())))
+	#print("Length is: " + str(len(configparser.sections())))
 	lang = configparser.get("Language", 'lang')
-	print(str(lang))
+	#print(str(lang))
 	
 	if lang == "EL":
 		import conf.language.greek as langpack
@@ -433,7 +445,6 @@ def setuplang():
 	extractToTextTitle = langpack.extractToTextTitle
 	btnDialogHistoryScanResultsTitle = langpack.btnDialogHistoryScanResultsTitle
 
-	
 	# Count Down
 	formCountDownTitle = langpack.formCountDownTitle
 	lblCountDownTitle = langpack.lblCountDownTitle
@@ -451,7 +462,7 @@ def setuplang():
 	lblProbDescTitle = langpack.lblProbDescTitle
 	
 	# Informative / Warning / Error Messages
-	dbHistoryMustSudo = langpack.dbHistoryMustSudo
+	mustSudo = langpack.mustSudo
 	unableToCheckDirRights = langpack.unableToCheckDirRights
 	attention = langpack.attention
 	virusDBCmbInitError = langpack.virusDBCmbInitError
@@ -481,7 +492,13 @@ def setuplang():
 	basicProxyAuthTitle = langpack.basicProxyAuthTitle
 	ntlmProxyAuthTitle = langpack.ntlmProxyAuthTitle
 	needRestartTitle = langpack.needRestartTitle
-
+	noPasswordInserted = langpack.noPasswordInserted
+	noEmailInserted = langpack.noEmailInserted
+	noCorrectMailAddress = langpack.noCorrectMailAddress
+	passwordsDoNotMatch = langpack.passwordsDoNotMatch
+	mustFillInAllFields = langpack.mustFillInAllFields
+	historyLog = langpack.historyLog
+	
 	# Table Column Labels
 	userTitle  = langpack.userTitle
 	noOfResultsTitle = langpack.noOfResultsTitle

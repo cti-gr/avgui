@@ -15,6 +15,12 @@ global pyside_version
 global qt_version
 global python_version
 global username
+global server_url
+global ubuntu_version
+global kernel_version
+global avgui_version
+global avg_version
+
 
 def init_config(debugMode=False):
 	global daemonMonitor
@@ -25,7 +31,17 @@ def init_config(debugMode=False):
 	global python_version
 	global homedir
 	global username
+	global server_url
+	global ubuntu_version
+	global kernel_version
+	global avgui_version
+	global avg_version
 	
+	avg_version = subprocess.check_output(["dpkg", "-s", "avg2013flx"]).split()[21].decode("utf")
+	avgui_version = subprocess.check_output(["dpkg", "-s", "avg2013flx"]).split()[21].decode("utf")
+	kernel_version = subprocess.check_output(["uname", "-r"]).decode("utf").split()[0]
+	ubuntu_version = subprocess.check_output(["lsb_release", "-a"]).split()[5].decode("utf")
+	server_url = 'http://httpbin.org/post'
 	username = getpass.getuser()
 	python_version=sys.version
 	pyside_version=PySide.__version__

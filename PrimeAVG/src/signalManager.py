@@ -1,17 +1,19 @@
 #!/usr/lib/python3.3
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication
-from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker, QTimer
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication, QCursor
+from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker, QTimer, Qt
 from datetime import datetime, date, time
 import utilities
 from io import open
 from os.path import expanduser
-import subprocess, sys, time, weakref
+import subprocess, sys, time, weakref, tempfile
 import setupGui
 import gc, re
 import getpass
 import conf.language.lang as langmodule
 from configparser import SafeConfigParser
-import os
+import os, config
+import hashlib
+from uuid import getnode
 ########################################################################################################
 # IMPORTANT NOTICE!!!! TO CHECK CLASS-LEVEL PARAMETERS!!!!
 ########################################################################################################
@@ -64,47 +66,50 @@ class manager(QObject):
 		homeDir = expanduser("~")
 		
 	def setupConnections(self, theMainWindow):
-		#Main Window
+		# Main Window
 		self._theMainWindow.btnHistory.clicked.connect(self.emitHistory)
 		self._theMainWindow.btnScan.clicked.connect(self.emitScan)
 		self._theMainWindow.btnUpdate.clicked.connect(self.emitUpdate)
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
-		self._theMainWindow.btnReportIssue.clicked.connect(self.problemSubmission)
+		self._theMainWindow.btnReportIssue.clicked.connect(self.checkRegistration)
 		self._theMainWindow.comLangsel.currentIndexChanged.connect(self.setLanguage)
 		
-		#Scan Dialog
+		# Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
 		self._theMainWindow.theScan.btnBeginScan.clicked.connect(self.beginScan)
 		self._theMainWindow.theScan.btnScanSettings.clicked.connect(self.setScanSettings)
 		self._theMainWindow.theScan.sigCleanScanDialog.connect(self.cleanUpScanSettings)
-		#Scan Select Dialog
-		#self._theMainWindow.theScan.theSelect.sigSelectType.connect(self.handleSelectScanTypeEmits)
+		
+		# Scan Select Dialog
+		# self._theMainWindow.theScan.theSelect.sigSelectType.connect(self.handleSelectScanTypeEmits)
 		self._theMainWindow.theScan.theSelect.radioFile.clicked.connect(self.emitFileSelected)
 		self._theMainWindow.theScan.theSelect.radioFolder.clicked.connect(self.emitFolderSelected)
 		
-		#Scan Settings Dialog
+		# Scan Settings Dialog
 		self._theMainWindow.theScan.theScanSettings.btnOK.clicked.connect(self.getScanSettings)
 		self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.connect(self.enableStorage)
 		self._theMainWindow.theScan.theScanSettings.btnSelectFolder.clicked.connect(self.selectScanReportFolder)
 		
-		#Scan Progress Dialog
+		# Scan Progress Dialog
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.clicked.connect(self.terminateScan)
 		self._theMainWindow.theScan.theScanProgress.sigCloseEvent.connect(self.terminateScan)
 		
-		#Scan History Dialog
+		# Scan History Dialog
 		self._theMainWindow.theHistory.btnExecute.clicked.connect(self.execSearch)
 		self._theMainWindow.theHistory.btnHistoryDB.clicked.connect(self.retrieveDBHistory)
 		self._theMainWindow.theHistory.theResults.btnExtractTxt.clicked.connect(self.extractToText)
 		self._theMainWindow.theHistory.theResults.sigCloseEvent.connect(self.clearResults)
 
-		#Update Dialog
+		# Update Dialog
 		self._theMainWindow.theUpdate.btnUpdateCheck.clicked.connect(self.checkUpdates)
 		self._theMainWindow.theUpdate.btnUpdate.clicked.connect(self.performUpdate)		   
 		self._theMainWindow.theUpdate.btnUpdateSet.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnOK.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnCancel.clicked.connect(self.setUpdateSettings)
 		
-		
+		# Registration and Problem Submission Dialogs
+		self._theMainWindow.theRegistration.btnSubmit.clicked.connect(self.postRegistration)
+		self._theMainWindow.theProblemSubmission.btnSubmit.clicked.connect(self.submitIssue)
 
 	def emitScan(self):
 		self._theMainWindow.sigMainSent.emit("SCAN")
@@ -769,9 +774,100 @@ class manager(QObject):
 				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
+# Check Registration
+	def checkRegistration(self):
+		subprocess.call(["sudo", "-k"])
+		self.checkThread = utilities.checkRegistrationThread()
+		self.checkThread.sigIsRegistered.connect(self.decideNext)
+		try:
+			self.checkThread.start()
+		except Exception as genericError:
+			QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με την υποβολή προβλήματος: " + str(genericError.returncode), 
+			 					 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 
-	def problemSubmission(self):
-		self._theMainWindow.theProblemSubmission.show()
+	def decideNext(self, isRegistered):
+		if isRegistered == True:
+			print("Is registered, will just submit issue")
+			# get and display username
+			self.username = config.username
+			self._theMainWindow.theProblemSubmission.lblUserValue.setText(self.username)
+			# get and display Ubuntu version
+			self.ubuntu_version = config.ubuntu_version
+			self._theMainWindow.theProblemSubmission.lblUbuntuValue.setText(self.ubuntu_version)
+			# get and display kernel version
+			self.kernel_version = config.kernel_version
+			self._theMainWindow.theProblemSubmission.lblKernelValue.setText(self.kernel_version)
+			# get and display avgui version
+			self.avgui_version = config.avgui_version
+			self._theMainWindow.theProblemSubmission.lblAvguiValue.setText(self.avgui_version)
+			# get avg version
+			self.avg_version = config.avg_version
+			self._theMainWindow.theProblemSubmission.lblAvgValue.setText(self.avgui_version) # intented BUG !!!
+			self._theMainWindow.theProblemSubmission.show()
+		elif isRegistered == False:
+			print("Is not registered, will initiate registration process")
+			self._theMainWindow.theRegistration.show()
+		
+			
+	def submitIssue(self):
+		print("Submitting issue...")
+		mac_address = getnode()
+		# get globalUUID for validating post
+		confileName = os.getcwd() + "/conf/config.ini"
+		conf = SafeConfigParser()
+		conf.read(confileName)
+		avguuid = conf.get('uuid', 'avguuid')
+		global_uuid = hashlib.sha512()
+		global_uuid.update(str(mac_address).encode("utf"))
+		global_uuid.update(str(avguuid).encode("utf"))
+		globalUUID = global_uuid.hexdigest()
+		
+		
+		# get user mail and password from the form
+		user_email = self._theMainWindow.theProblemSubmission.txtEmail.text()
+		if user_email == "":
+			QMessageBox.information(None, langmodule.attention, "Δεν έχετε εισάγει το email σας.", 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return
+		user_password = self._theMainWindow.theProblemSubmission.txtPassword.text()
+		if user_password == "":
+			QMessageBox.information(None, langmodule.attention, langmodule.noPasswordInserted, 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return
+		# hash the password
+		hashed_user_password = hashlib.sha512(user_password.encode("utf"))
+		# get problem description from the form
+		problem_description = self._theMainWindow.theProblemSubmission.txtProbDesc.toPlainText()
+		# create a temporary file from the problem description
+		with tempfile.NamedTemporaryFile(prefix="txt", delete=False) as pd:
+			pd.write(bytearray(problem_description.encode("utf")))
+			# pd.seek(0)
+			pd.close()
+		self.theProblemSubmissionThread = utilities.submitIssueThread(self.username, self.ubuntu_version, self.kernel_version, self.avgui_version, self.avg_version, user_email, hashed_user_password, pd)
+
+		self.theProblemSubmissionThread.start()
+		
+	def postRegistration(self):
+		email_pattern = r'[^@]+@[^@]+\.[^@]+'
+		email_address = self._theMainWindow.theRegistration.txtEmail.text()
+		password1 = self._theMainWindow.theRegistration.txtPassword.text()
+		password2 = self._theMainWindow.theRegistration.txtPassword2.text()
+		if not re.match(email_pattern, email_address):
+			QMessageBox.information(None, langmodule.attention, langmodule.noCorrectMailAddress, 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return
+		if password1 != password2:
+			QMessageBox.information(None, langmodule.attention, langmodule.passwordsDoNotMatch, 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return
+		if password1 == "" or password2 == "" or email_address == "":
+			QMessageBox.information(None, langmodule.attention, langmodule.mustFillInAllFields, 
+									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+			return
+		hashedpass = hashlib.sha512(self._theMainWindow.theRegistration.txtPassword2.text().encode("utf"))
+		passdigest = hashedpass.hexdigest()
+		self.theRegistrationThread = utilities.registrationThread(email_address, passdigest)
+		self.theRegistrationThread.start()
 	
 	def getSettings(self):
 		# Automatic Program Update

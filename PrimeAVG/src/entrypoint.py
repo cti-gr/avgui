@@ -33,20 +33,15 @@ if __name__=="__main__":
 		QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
 				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 		exit(1)
-	print(utilities.parseParams(sys.argv))
-	#print(len(sys.argv))
-	#if utilities.parseParams() == 0
 	langmodule.setuplang()
 	app = QApplication(sys.argv)
 
 	if utilities.parseParams(sys.argv)[0] == 0:
-		print("here")
 		config.init_config()
 	elif utilities.parseParams(sys.argv)[0] == 1:
-		print("There")
 		config.init_config(True)
 		print("Using database: " + str(config.dbfilepath))
-		print(str(os.getpid()))
+		# print(str(os.getpid()))
 		print("Executing with Python: " + config.python_version)
 		print("Using PySide: " + config.pyside_version)
 		print("Qt Framework used is: " + config.qt_version)
@@ -62,7 +57,6 @@ if __name__=="__main__":
 	theApp.theWindow.show()
 	gc.enable()
 
-#config.daemonPath = (subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + config.avgmonitor)
 	subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
 
 	app.exec_()

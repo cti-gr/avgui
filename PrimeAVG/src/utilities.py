@@ -10,6 +10,7 @@ import os, stat, gc
 import tempfile
 import webbrowser
 import conf.language.lang as langmodule
+import uuid, hashlib, shlex, requests
 #import datetime
 
 # To add utility that periodically checks for size of the database !!!
@@ -31,6 +32,84 @@ abnormalUpdateTermination = False
 
 # TO ADD function to check database existence and integrity
 
+################################# REGISTRATION & ISSUE SUBMISSION ###########################################
+class checkRegistrationThread(QtCore.QThread):
+	sigIsRegistered = QtCore.Signal(bool)
+		
+	def __init__(self, parent=None):
+		super(checkRegistrationThread, self).__init__(parent)
+			
+	def run(self):
+		try:
+			print('test4')
+			subprocess.check_output(['gksu', 'python3 checkStatus.py'])
+		except subprocess.CalledProcessError as myerr:
+			if myerr.returncode == 13:
+				print("emitting True")
+				self.sigIsRegistered.emit(True)
+			elif myerr.returncode == 14:
+				print("emitting False")
+				self.sigIsRegistered.emit(False)
+			elif myerr.returncode == 255: # user cancelled sudo
+				pass
+			elif myerr.returncode == 3: # 3 failed login attempts
+				pass
+			else:
+				raise Exception("Problem with error code")
+			print("Error Code: " + str(myerr.returncode))
+		# self.exec_()
+		
+		
+class registrationThread(QtCore.QThread):
+	def __init__(self, email, hashedpass, parent=None):
+		super(registrationThread, self).__init__(parent)
+		self.theEmail = email
+		self.theHashedpass = hashedpass
+	
+	def run(self):
+		# print(str(self.theEmail) + " " + str(self.theHashedpass))
+		try:
+			outer = subprocess.check_output(["gksu","python3 register.py" + " " + self.theEmail + " " + self.theHashedpass])
+			print(outer.decode("utf"))
+		except Exception as theError:
+			print("ERROR: " + str(theError.returncode))
+
+class submitIssueThread(QtCore.QThread):
+	sigFinished = QtCore.Signal()
+	
+	def __init__(self, username, ubuntu_version, kernel_version, avgui_version, avg_version, user_email, hashed_user_password, pd, parent=None):
+		super(submitIssueThread, self).__init__(parent)
+		self.username = username
+		self.ubuntu_version = ubuntu_version
+		self.kernel_version = kernel_version
+		self.avgui_version = avgui_version
+		self.avg_version = avg_version
+		self.user_email = user_email
+		self.hashed_user_password = hashed_user_password
+		self.pd = pd
+		#self.finished.connect(self.restoreCursor)
+	
+	def run(self):
+		url = config.server_url
+		# try to authenticate
+		authreq = requests.get(url, auth = (self.user_email, self.hashed_user_password))
+		if authreq.status_code != 200:
+			# QtGui.QMessageBox.critical(None, langmodule.attention, "Λάθος credentials", 
+			#					 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
+			print("ERROR!")
+			return
+		else:
+			checkuuid = {}
+			uuidreq = requests.get(url, )
+		payload = {'ubuntu_version':ubuntu_version, 'kernel_version': kernel_version, 'avgui_version': avgui_version, 'avg_version': avg_version}
+		files = {'file':open(self.pd.name, 'rb')}
+		r = requests.post(url, files=files)
+		r.text
+		print(r.status_code)
+	
+	def threadFinished(self):
+		self.sigFinished.emit()
+##################################### Check Daemon ##############################################################
 class checkDaemonD(QtCore.QThread):
 	
 	global abnormalCheckUpdatesTermination	
@@ -672,8 +751,6 @@ class sqliteWorker(QtCore.QThread):
 				raise Exception("Error getting dbID")
 				exit(-1)
 			else:
-				#print("foufoutos")
-				#exit(1)
 				dbID = dblist[0][0]
 		   
 					 
@@ -683,7 +760,7 @@ class sqliteWorker(QtCore.QThread):
 			
 			# inserting Scan Event
 			cur.execute('insert into tblScanEvent (User, NoOfInfections, NoOfHealings, DateTime, VirusDBID) values (?,?,?,?,?)', tupleToInsert)
-			#conn.commit()
+			
 			
 			################################
 			# for each file infected 
@@ -716,9 +793,7 @@ class sqliteWorker(QtCore.QThread):
 				try:
 					checkls = subprocess.check_output(["ls", "-i", str(inFile)])
 					inode = int(checkls.decode("utf").split()[0])
-					#print("inode " + str(inode))
 					inodesexisting = conn.execute("select Inode from tblInfections").fetchall()
-					#print("Existing inodes: " + str(inodesexisting))
 					if (inode,) in inodesexisting:
 						print("PROBLEM")
 						okGo = False
@@ -738,9 +813,7 @@ class sqliteWorker(QtCore.QThread):
 					infToInsert = (inFile, inode, scaneventID, malID)
 					# insert into tblInfections 
 					cur.execute('insert into tblInfections (FilePath, Inode, ScanEventID, MalwareID) values (?,?,?,?)', infToInsert)
-					#conn.commit()
-			
-			
+							
 			conn.commit()
 			conn.close()
 			malwareFound = []
@@ -992,7 +1065,7 @@ class dbHistoryWorker(QtCore.QThread):
 				
 	def run(self): 
 		try:
-			self.dbupdhist = subprocess.check_output(["gksu","--description=Ιστορικό", "--message=" + langmodule.dbHistoryMustSudo, "avgevtlog"]).decode("utf")
+			self.dbupdhist = subprocess.check_output(["gksu","--description=" + langmodule.historyLog, "--message=" + langmodule.mustSudo, "avgevtlog"]).decode("utf")
 		except subprocess.CalledProcessError as cpe:
 			print(str(cpe))				   
 		print(type(self.dbupdhist))
@@ -1050,62 +1123,7 @@ def finalizeApp():
 		print("Error Shutting down avgmonitor daemon: " + str(err))
 		raise err
 		
-############# Reporting Problems Through Mails ############################
-def setupSendMail():
-	try:
-		print("here")
-		#systemSummary = ""
-		systemSummary =  "*** Παρακαλώ περιγράψτε το πρόβλημα και τις συνθήκες δημιουργίας του ***"
-		systemSummary += "\n"
-		#systemSummary += "\n"
-		#systemSummary += "\n"
-		#systemSummary += "\n"
-		#systemSummary += "\n"
-		systemSummary += "\n*************************************************************************"
-		#systemSummary = tempfile.NamedTemporaryFile(mode="w", encoding="utf")
-		# create a temp systemSummary txt file
-		systemSummary += "ΠΡΟΣΟΧΗ! ΜΗΝ ΤΡΟΠΟΠΟΙΗΣΕΤΕ ΤΑ ΠΕΡΙΕΧΟΜΕΝΑ ΤΟΥ eMail ΑΠΟ ΑΥΤΗ ΤΗ ΓΡΑΜΜΗ ΚΑΙ ΚΑΤΩ"
-		systemSummary += "\n"
-		systemSummary += "----------------------------------------------------------------------------------------------------------"
-		systemSummary += "\r\n"
-		systemSummary += "************ Platform Info *****************"
-		systemSummary += "\r\n"
-		#	 get platform info
-		platform = subprocess.check_output(["lsb_release", "-a"]).decode("utf")
-		# write it to systemSummary
-		#systemSummary.write("************ Platform Info *****************")
-		#systemSummary.write(platform)
-		#systemSummary.write("\r\n")
-		systemSummary += platform
-		systemSummary += "\r\n"
-		# get mem info
-		memory = subprocess.check_output(["cat", "/proc/meminfo"]).decode("utf")
-		# write it to systemSummary
-		#systemSummary.write("************ Memory Info *****************")
-		#systemSummary.write(memory)
-		#systemSummary.write("\r\n")
-		systemSummary += "************ Memory Info *****************"
-		systemSummary += "\r\n"
-		systemSummary += memory
-		systemSummary += "\r\n"
-		# get cpu info
-		cpu = subprocess.check_output(["cat", "/proc/cpuinfo"]).decode("utf")
-		# write it to systemSummary
-		#systemSummary.write("************ CPU Info *****************")
-		#systemSummary.write(cpu)
-		#systemSummary.write("\r\n")
-		systemSummary += "************ CPU Info *****************"
-		systemSummary += "\r\n"
-		systemSummary += cpu
-		systemSummary += "\r\n"
-		print(systemSummary)
-	except Exception as err:
-		QtGui.QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με τη δημιουργία email: " + str(err), 
-								 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
-	creationTimeStamp = datetime.now().isoformat()[:19]
-	url = 'mailto:pkaramol@cti.gr?subject=Reporting Issue from User ' + config.username + ' on: ' + creationTimeStamp + '&body=' + str(systemSummary) 
-	print("url is: " + url)
-	webbrowser.open(url)
+
 
 # Parse Startup Parameters
 def parseParams(paramslist):

@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI
 
 import utilities
 import os
@@ -27,14 +27,18 @@ class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
-		
 	
 	def __init__(self, parent=None):
 		super(checkPanel, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
-	
+class registrationDialog(QtGui.QDialog, registrationUI.Ui_dialogRegistration):
+	def __init__(self, parent=None):
+		super(registrationDialog, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnCancel, QtCore.SIGNAL("clicked()"), self.close)
+
 class countDown(QtGui.QDialog, countDownUI.Ui_formCountDown):
 	
 	sigCloseEvent = QtCore.Signal(str)
@@ -215,6 +219,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		self.theUpdate = updateDialog(self)
 		self.theScan = scanDialog(self)
 		self.theProblemSubmission = problemsubmissionDialog(self)
+		self.theRegistration = registrationDialog(self)
 		self.theHistory = historyDialog(self)
 		#self.theScanProgress = scanProgress()
 		
