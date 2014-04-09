@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created: Mon Jan 27 16:34:52 2014
+# Created: Wed Apr  9 12:19:02 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setStyleSheet("")
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtGui.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(69, 40, 631, 311))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(70, 40, 631, 311))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtGui.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(5, 0, 5, 0)
@@ -66,18 +66,18 @@ class Ui_MainWindow(object):
         self.btnUpdate.setIconSize(QtCore.QSize(64, 64))
         self.btnUpdate.setObjectName("btnUpdate")
         self.gridLayout.addWidget(self.btnUpdate, 1, 0, 1, 1)
-        self.btnReportIssue = QtGui.QPushButton(self.gridLayoutWidget)
-        self.btnReportIssue.setMinimumSize(QtCore.QSize(200, 100))
+        self.btnStatus = QtGui.QPushButton(self.gridLayoutWidget)
+        self.btnStatus.setMinimumSize(QtCore.QSize(200, 100))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
-        self.btnReportIssue.setFont(font)
+        self.btnStatus.setFont(font)
         icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(":/issue.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btnReportIssue.setIcon(icon3)
-        self.btnReportIssue.setIconSize(QtCore.QSize(64, 64))
-        self.btnReportIssue.setObjectName("btnReportIssue")
-        self.gridLayout.addWidget(self.btnReportIssue, 1, 1, 1, 1)
+        icon3.addPixmap(QtGui.QPixmap(":/status.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btnStatus.setIcon(icon3)
+        self.btnStatus.setIconSize(QtCore.QSize(64, 64))
+        self.btnStatus.setObjectName("btnStatus")
+        self.gridLayout.addWidget(self.btnStatus, 1, 1, 1, 1)
         self.btnHistory = QtGui.QPushButton(self.gridLayoutWidget)
         self.btnHistory.setMinimumSize(QtCore.QSize(200, 100))
         font = QtGui.QFont()
@@ -148,13 +148,14 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", langmodule.mainWindowTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.btnScan.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainScanTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.btnUpdate.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainUpdateTitle, None, QtGui.QApplication.UnicodeUTF8))
-        self.btnReportIssue.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainIssueTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.btnStatus.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainStatusTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.btnHistory.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnMainHistoryTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.btnExitMain.setText(QtGui.QApplication.translate("MainWindow", langmodule.btnExitTitle, None, QtGui.QApplication.UnicodeUTF8))
-        self.menu.setTitle(QtGui.QApplication.translate("MainWindow", langmodule.lblAboutTitle, None, QtGui.QApplication.UnicodeUTF8))
-        self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblAvgProtectionTitle, None, QtGui.QApplication.UnicodeUTF8))
-        self.action.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
         self.comLangsel.setItemText(0, QtGui.QApplication.translate("MainWindow", "EL", None, QtGui.QApplication.UnicodeUTF8))
         self.comLangsel.setItemText(1, QtGui.QApplication.translate("MainWindow", "EN", None, QtGui.QApplication.UnicodeUTF8))
+        self.menu.setTitle(QtGui.QApplication.translate("MainWindow", "Σχετικά", None, QtGui.QApplication.UnicodeUTF8))
+        self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblAvgProtectionTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.action.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
+
 
 import avg_rc

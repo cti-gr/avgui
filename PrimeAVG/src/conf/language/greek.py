@@ -2,7 +2,7 @@
 mainWindowTitle = "Προστασία από Κακόβουλο Λογισμικό"
 btnMainScanTitle = "Αναζήτηση για Ιούς"
 btnMainUpdateTitle = "Ενημέρωση Λογισμικού"
-btnMainIssueTitle = "Αναφορά Προβλήματος"
+btnMainStatusTitle = "Πληροφορίες Προγράμματος"
 btnMainHistoryTitle = "Ιστορικό"
 btnExitTitle = "Έξοδος"
 lblAboutTitle = "Σχετικά με το Πρόγραμμα"
@@ -147,6 +147,22 @@ noCorrectMailAddress = "Δεν είναι σωστή συντακτικά η δ�
 passwordsDoNotMatch = "Οι δύο κωδικοί ασφαλείας που εισάγατε είναι διαφορετικοί μεταξύ τους"
 mustFillInAllFields = "Πρέπει να συμπληρώσετε όλα τα πεδία"
 historyLog = "Ιστορικό"
+
+# Status Widget
+programInfo = "Πληροφορίες Προγράμματος"
+avgTitle = "Έκδοση AVG"
+lastUpdateTitle = "Τελευταία Ενημέρωση"
+licenceTitle = "Αριθμός Άδειας / Έκδοση Άδειας"
+aviUsedTitle = "Έκδοση Βάσης Ιών σε Χρήση"
+aviDateTitle = "Ημερομηνία Έκδοσης Βάσης Ιών"
+serviceStatusTitle = "Κατάσταση Υπηρεσιών"
+oadStatusTitle = "Προστασία Πραγματικού Χρόνου"
+genericON = "Εκτελείται"
+genericOFF = "Δεν Εκτελείται"
+schedStatusTitle = "Χρονοπρογραμματισμός Υπηρεσιών"
+nextiAVIupdate = "Επόμενος Έλεγχος Βάσης Ιών"
+nextProgramUpdate = "Next Scheduled Program update"
+
 
 # Table Column Labels
 userTitle = "Χρήστης"

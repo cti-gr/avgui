@@ -8,7 +8,7 @@ import subprocess
 global mainWindowTitle
 global btnMainScanTitle
 global btnMainUpdateTitle
-global btnMainIssueTitle
+global btnMainStatusTitle
 global btnMainHistoryTitle
 global btnExitTitle
 global lblAboutTitle
@@ -156,6 +156,21 @@ global passwordsDoNotMatch
 global mustFillInAllFields
 global historyLog
 
+# Status Widget
+global programInfo
+global avgTitle
+global lastUpdateTitle
+global licenceTitle
+global aviUsedTitle
+global aviDateTitle
+global serviceStatusTitle
+global oadStatusTitle
+global genericON
+global genericOFF
+global schedStatusTitle
+global nextiAVIupdate
+global nextProgramUpdate
+
 # Table Column Headers
 global userTitle
 global noOfResultsTitle
@@ -174,7 +189,7 @@ def setuplang():
 	global mainWindowTitle
 	global btnMainScanTitle
 	global btnMainUpdateTitle
-	global btnMainIssueTitle
+	global btnMainStatusTitle
 	global btnMainHistoryTitle
 	global lblAboutTitle
 	global lblAvgProtectionTitle
@@ -321,6 +336,21 @@ def setuplang():
 	global dialogScanProgressTitle
 	global dialogScanProgressStopTitle
 	
+	# Status Widget
+	global programInfo
+	global avgTitle
+	global lastUpdateTitle
+	global licenceTitle
+	global aviUsedTitle
+	global aviDateTitle
+	global serviceStatusTitle
+	global oadStatusTitle
+	global genericON
+	global genericOFF
+	global schedStatusTitle
+	global nextiAVIupdate
+	global nextProgramUpdate
+	
 	# Table Column Headers
 	global userTitle
 	global noOfResultsTitle
@@ -353,7 +383,7 @@ def setuplang():
 	mainWindowTitle = langpack.mainWindowTitle
 	btnMainScanTitle = langpack.btnMainScanTitle
 	btnMainUpdateTitle = langpack.btnMainUpdateTitle
-	btnMainIssueTitle = langpack.btnMainIssueTitle
+	btnMainStatusTitle = langpack.btnMainStatusTitle
 	btnMainHistoryTitle = langpack.btnMainHistoryTitle
 	btnExitTitle = langpack.btnExitTitle
 	lblAboutTitle = langpack.lblAboutTitle
@@ -498,6 +528,21 @@ def setuplang():
 	passwordsDoNotMatch = langpack.passwordsDoNotMatch
 	mustFillInAllFields = langpack.mustFillInAllFields
 	historyLog = langpack.historyLog
+	
+	# Status Widget
+	programInfo  = langpack.programInfo
+	avgTitle = langpack.avgTitle
+	lastUpdateTitle = langpack.lastUpdateTitle
+	licenceTitle = langpack.licenceTitle
+	aviUsedTitle = langpack.aviUsedTitle
+	aviDateTitle = langpack.aviDateTitle
+	serviceStatusTitle = langpack.serviceStatusTitle
+	oadStatusTitle = langpack.oadStatusTitle
+	genericON = langpack.genericON
+	genericOFF = langpack.genericOFF
+	schedStatusTitle = langpack.schedStatusTitle
+	nextiAVIupdate = langpack.nextiAVIupdate
+	nextProgramUpdate = langpack.nextProgramUpdate
 	
 	# Table Column Labels
 	userTitle  = langpack.userTitle

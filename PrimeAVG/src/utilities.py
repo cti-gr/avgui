@@ -11,6 +11,7 @@ import tempfile
 import webbrowser
 import conf.language.lang as langmodule
 import uuid, hashlib, shlex, requests
+import conf.language.lang as langmodule
 #import datetime
 
 # To add utility that periodically checks for size of the database !!!
@@ -31,7 +32,7 @@ abnormalCheckUpdatesTermination = False
 abnormalUpdateTermination = False
 
 # TO ADD function to check database existence and integrity
-
+'''
 ################################# REGISTRATION & ISSUE SUBMISSION ###########################################
 class checkRegistrationThread(QtCore.QThread):
 	sigIsRegistered = QtCore.Signal(bool)
@@ -109,6 +110,7 @@ class submitIssueThread(QtCore.QThread):
 	
 	def threadFinished(self):
 		self.sigFinished.emit()
+'''
 ##################################### Check Daemon ##############################################################
 class checkDaemonD(QtCore.QThread):
 	
@@ -360,7 +362,7 @@ class updateWorker(QtCore.QThread):
 	def printOut(self):
 		try:
 			self.theLine = str(self.avgUpdateProc.read(self.avgUpdateProc.bytesAvailable()))
-			for i,j in translation.translationDict.items(): 
+			for i,j in langmodule.translationDict.items(): 
 				self.theLine = self.theLine.replace(i,j)
 			self.sigWriteUpdate.emit(self.theLine)
 		except UnicodeDecodeError as uderr:

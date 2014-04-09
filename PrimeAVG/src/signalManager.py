@@ -71,7 +71,7 @@ class manager(QObject):
 		self._theMainWindow.btnScan.clicked.connect(self.emitScan)
 		self._theMainWindow.btnUpdate.clicked.connect(self.emitUpdate)
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
-		self._theMainWindow.btnReportIssue.clicked.connect(self.checkRegistration)
+		self._theMainWindow.btnStatus.clicked.connect(self.showStatus)
 		self._theMainWindow.comLangsel.currentIndexChanged.connect(self.setLanguage)
 		
 		# Scan Dialog
@@ -107,10 +107,12 @@ class manager(QObject):
 		self._theMainWindow.theUpdate.theUpdateSettings.btnOK.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnCancel.clicked.connect(self.setUpdateSettings)
 		
+		'''
 		# Registration and Problem Submission Dialogs
 		self._theMainWindow.theRegistration.btnSubmit.clicked.connect(self.postRegistration)
 		self._theMainWindow.theProblemSubmission.btnSubmit.clicked.connect(self.submitIssue)
-
+		'''
+		
 	def emitScan(self):
 		self._theMainWindow.sigMainSent.emit("SCAN")
 		
@@ -676,7 +678,7 @@ class manager(QObject):
 	def onUpdateFinish(self, exitCode):
 		print("EXIT CODE IS: " + str(exitCode))
 		if exitCode == 1: # process did not start
-			QMessageBox.critical(None, langmodule,attention, langmodule.restartUpdate, 
+			QMessageBox.critical(None, langmodule.attention, langmodule.restartUpdate, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 			if hasattr(self, 'theUpdateChecker'):
 				self.theUpdateChecker.exit()
@@ -774,6 +776,64 @@ class manager(QObject):
 				self._theMainWindow.theUpdate.theUpdateSettings.cmbBoxProxyAuthType.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyUsername.setEnabled(False)
 				self._theMainWindow.theUpdate.theUpdateSettings.leditProxyPass.setEnabled(False)
+
+	def showStatus(self):
+		# !!!! NOT PORTABLE !!!! #
+		statusList = subprocess.check_output(["avgctl", "--stat-all"]).decode("utf").split('\n')
+		
+		avgVersion = statusList[5].split()[-1]
+		self._theMainWindow.theCurrentStatus.lblAVGtitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblAVGvalue.setText(avgVersion)
+		
+		lastUpdate = statusList[8].split()[4] + "/" + statusList[8].split()[5] + "/" + statusList[8].split()[6] + ", " + statusList[8].split()[7]
+		self._theMainWindow.theCurrentStatus.lblLastUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblLastUpdateValue.setText(lastUpdate)
+		
+		licence = statusList[11].split()[-1]
+		licenceNo = statusList[12].split()[-1]
+		self._theMainWindow.theCurrentStatus.lblLicenceTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblLicenceValue.setText(licence + " / " + licenceNo)
+		
+		aviVersion = statusList[37].split()[-1]
+		self._theMainWindow.theCurrentStatus.lblDatabaseTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblDatabaseValue.setText(aviVersion)
+		
+		aviDate = statusList[38].split()[6] + "/" + statusList[38].split()[7] + "/" + statusList[38].split()[8] + ", " + statusList[38].split()[9]
+		self._theMainWindow.theCurrentStatus.lblDBDateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblDBDateValue.setText(aviDate)
+		
+		oadStatus1 = statusList[21].split('\t')[2]
+		self._theMainWindow.theCurrentStatus.lblOADTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		if oadStatus1 == "running":
+			self._theMainWindow.theCurrentStatus.lblOADValue.setStyleSheet("QLabel { color : green; }");
+			oadStatus = langmodule.genericON
+			# perhaps add background color
+		else:
+			self._theMainWindow.theCurrentStatus.lblOADValue.setStyleSheet("QLabel { color : red; }");
+			oadStatus = langmodule.genericOFF
+		self._theMainWindow.theCurrentStatus.lblOADValue.setText(oadStatus)
+		
+		schedStatus1 = statusList[22].split('\t')[2]
+		self._theMainWindow.theCurrentStatus.lblSchedTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		if schedStatus1 == "running":
+			self._theMainWindow.theCurrentStatus.lblSchedValue.setStyleSheet("QLabel { color : green; }");
+			schedStatus = langmodule.genericON
+			# perhaps add background color
+		else:
+			self._theMainWindow.theCurrentStatus.lblSchedValue.setStyleSheet("QLabel { color : red; }");
+			schedStatus = langmodule.genericOFF
+		self._theMainWindow.theCurrentStatus.lblSchedValue.setText(schedStatus)
+
+		lastVirUpdate = statusList[29].split()[3] + "/" + statusList[29].split()[4] + "/" + statusList[29].split()[5] + ", " + statusList[29].split()[6]
+		self._theMainWindow.theCurrentStatus.lblNextVUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblNextVUpdateValue.setText(lastVirUpdate)
+		
+		lastProgUpdate = statusList[30].split()[3] + "/" + statusList[30].split()[4] + "/" + statusList[30].split()[5] + ", " + statusList[30].split()[6]
+		self._theMainWindow.theCurrentStatus.lblNextPUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+		self._theMainWindow.theCurrentStatus.lblNextPUpdateValue.setText(lastProgUpdate)
+		
+		self._theMainWindow.theCurrentStatus.show()
+	'''
 # Check Registration
 	def checkRegistration(self):
 		subprocess.call(["sudo", "-k"])
@@ -846,7 +906,7 @@ class manager(QObject):
 		self.theProblemSubmissionThread = utilities.submitIssueThread(self.username, self.ubuntu_version, self.kernel_version, self.avgui_version, self.avg_version, user_email, hashed_user_password, pd)
 
 		self.theProblemSubmissionThread.start()
-		
+	
 	def postRegistration(self):
 		email_pattern = r'[^@]+@[^@]+\.[^@]+'
 		email_address = self._theMainWindow.theRegistration.txtEmail.text()
@@ -868,7 +928,7 @@ class manager(QObject):
 		passdigest = hashedpass.hexdigest()
 		self.theRegistrationThread = utilities.registrationThread(email_address, passdigest)
 		self.theRegistrationThread.start()
-	
+	'''
 	def getSettings(self):
 		# Automatic Program Update
 		self.autoProgUpdateOut = subprocess.check_output(["avgcfgctl", "UpdateProgram.sched.Task.Disabled"])

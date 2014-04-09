@@ -142,7 +142,7 @@ border-radius: 5px ;
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QPushButton" name="btnReportIssue">
+      <widget class="QPushButton" name="btnStatus">
        <property name="minimumSize">
         <size>
          <width>200</width>
@@ -156,11 +156,11 @@ border-radius: 5px ;
         </font>
        </property>
        <property name="text">
-        <string>Αναφορά Προβλήματος</string>
+        <string>Κατάσταση Προγράμματος</string>
        </property>
        <property name="icon">
         <iconset resource="../media/avg.qrc">
-         <normaloff>:/issue.png</normaloff>:/issue.png</iconset>
+         <normaloff>:/status.png</normaloff>:/status.png</iconset>
        </property>
        <property name="iconSize">
         <size>

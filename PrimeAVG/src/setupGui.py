@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI
 
 import utilities
 import os
@@ -24,6 +24,13 @@ class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 		self.cmbBoxProxyAuthType.insertItem(0, langmodule.autoProxyAuthTitle)	
 		self.cmbBoxProxyAuthType.insertItem(1, langmodule.basicProxyAuthTitle)	
 		self.cmbBoxProxyAuthType.insertItem(2, langmodule.ntlmProxyAuthTitle)	
+
+class currentStatus(QtGui.QDialog, currentStatusUI.Ui_statusDialog):
+	
+	def __init__(self, parent=None):
+		super(currentStatus, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
 
 class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
@@ -219,7 +226,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		self.theUpdate = updateDialog(self)
 		self.theScan = scanDialog(self)
 		self.theProblemSubmission = problemsubmissionDialog(self)
-		self.theRegistration = registrationDialog(self)
+		self.theCurrentStatus = currentStatus(self)
 		self.theHistory = historyDialog(self)
 		#self.theScanProgress = scanProgress()
 		
