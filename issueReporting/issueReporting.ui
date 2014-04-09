@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>problemDialog</class>
+ <widget class="QDialog" name="problemDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>502</width>
+    <height>901</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Υποβολή Προβλήματος</string>
+  </property>
+  <widget class="QLabel" name="lblLogo">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>0</y>
+     <width>111</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>:/avg_logo.png</pixmap>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>461</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="3" column="0" colspan="2">
+     <widget class="QLabel" name="lblKernel">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="text">
+       <string>Έκδοση Kernel</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QLabel" name="lblKernelValue">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QLabel" name="lblUbuntuValue">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="2">
+     <widget class="QLabel" name="lblUbuntu">
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::WinPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="text">
+       <string>Έκδοση Ubuntu</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QPushButton" name="btnSubmit">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>850</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Υποβολή</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="btnCancel">
+   <property name="geometry">
+    <rect>
+     <x>260</x>
+     <y>850</y>
+     <width>141</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Ακύρωση</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblProbDesc">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>490</y>
+     <width>461</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>1</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="text">
+    <string>Περιγραφή Προβλήματος</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPlainTextEdit" name="txtProbDesc">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>540</y>
+     <width>461</width>
+     <height>291</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>150</y>
+     <width>461</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="2" column="0">
+     <widget class="QLabel" name="label">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>password</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="txtPassword"/>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="label_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>1</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="text">
+       <string>email</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="txtEmail">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>3</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QLabel" name="lblProbDesc_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>420</y>
+     <width>461</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>1</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="text">
+    <string> Σύνοψη (Τίτλος) Προβλήματος</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>460</y>
+     <width>461</width>
+     <height>27</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>290</y>
+     <width>461</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblProbDesc_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>250</y>
+     <width>461</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>1</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="text">
+    <string>Εφαρμογή στην οποία παρουσιάζεται το πρόβλημα</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblProbDesc_4">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>330</y>
+     <width>461</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>1</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="font">
+    <font>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::WinPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="midLineWidth">
+    <number>0</number>
+   </property>
+   <property name="text">
+    <string>'Εκδοση Εφαρμογής</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>370</y>
+     <width>461</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="../media/avg.qrc"/>
+  <include location="../../../../.designer/media/avg.qrc"/>
+ </resources>
+ <connections/>
+</ui>
