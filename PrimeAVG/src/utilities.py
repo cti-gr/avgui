@@ -277,7 +277,7 @@ class chkUpdateWorker(QtCore.QThread):
 	def onAVGprocFinish(self):
 		global abnormalCheckUpdatesTermination
 
-		print(" --- QProcess Terminated --- ")	
+		#print(" --- QProcess Terminated --- ")	
 		if hasattr(self, 'avgchkupProc'):
 			#self.avgchkupProc.close()
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
@@ -803,7 +803,7 @@ class sqliteWorker(QtCore.QThread):
 					raise Exception("Error while getting file's iNode number")
 				
 				if True:
-					mal = (malwareFound[i], )				 
+					mal = (malwareFound[i], )
 					f = conn.execute('select ID from tblMalware where name = ?', mal)
 					malist = f.fetchall()
 					if len(malist) != 1:

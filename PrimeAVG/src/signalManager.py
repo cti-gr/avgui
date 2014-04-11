@@ -1,5 +1,5 @@
 #!/usr/lib/python3.3
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication, QCursor
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication, QCursor, QListWidgetItem
 from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker, QTimer, Qt
 from datetime import datetime, date, time
 import utilities
@@ -26,7 +26,7 @@ global homeDir
 global scanReportFolder
 global scanReportFile
 global scanReportPath
-#global scanReportStorageEnabled
+global infectionsList
 mutexTermination = QMutex()
 
 class manager(QObject):
@@ -47,6 +47,7 @@ class manager(QObject):
 		global homeDir
 		global scanReportPath
 		global scanReportFolder
+		global infectionsList
 		super(manager, self).__init__(parent)
 		
 		# Opening Configuration File
@@ -356,6 +357,10 @@ class manager(QObject):
 	
 ########################################## SCAN ##################################################
 	def beginScan(self):
+		global infectionsList
+		infectionsList = []
+		print(infectionsList)
+		print("BEGIN!")
 		self.isCleanScan = False
 		global scanPath
 		global abnormalTermination
@@ -382,20 +387,25 @@ class manager(QObject):
 		#preparing to store scan event in a new thread
 		self.theSQLITEWorker = utilities.sqliteWorker()
 		self.theSQLITEWorker.finished.connect(self.onSQLiteFinish)
-			
-						   
-		'''	   
-		else:
-			QMessageBox.information(None, "Προσοχή", "Εκτελείται ήδη διαδικασία αναζήτησης κακόβουλου λογισμικού", 
-								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			#return -1
-		'''
+
 	def onSQLiteFinish(self):
 		pass
 		#print("Data Insertion Completed!!!!")
   
 	def printToWidget(self, linetoappend):
-		#print("Signal Received!!!!!")
+		global infectionsList
+		testList = []
+		infectionsTerms = ['Trojan horse', 'Could be infected', 'Virus identified']
+		lineList = (linetoappend.split('\n'))
+		for i in range(len(lineList)):
+			testList = list(filter(lambda x: x in lineList[i], infectionsTerms))
+			if testList:
+				# print("++++++++++++++++++++")
+				# print(lineList[0])
+				# print("++++++++++++++++++++")
+				infectionsList.append(lineList[0].split()[-1])
+		if infectionsList:
+			pass # show window
 		for i,j in langmodule.translationDict.items(): 
 			linetoappend = linetoappend.replace(i,j)
 		curDateTime = datetime.now().isoformat(' ')[:19]
@@ -403,6 +413,10 @@ class manager(QObject):
 				
 	
 	def terminateScan(self):
+		global infectionsList
+		
+		infectionsList = []
+		
 		if not self.isCleanScan:
 			global abnormalTermination
 			print("Entering terminateScan from signalManager")
@@ -416,18 +430,17 @@ class manager(QObject):
 		
 
 	def onScanFinish(self, normalTermination):
+		global infectionsList
+		
+		# infectionsList = []
+		
 		print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
 		if hasattr(self, 'theScanWorker'):
 			self.theScanWorker.exit()
 			while not self.theScanWorker.wait():
 				print("Waiting for scan worker to finish")
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText(langmodule.btnExitUpdateProgTitle)
-		'''
-			if self.theScanWorker.isFinished():
-				print("The Scan Worker is FINISHED")
-			elif self.theScanWorker.isRunning():
-				print("theScanWorker is RUNNING!")
-		'''
+		
 		if hasattr(self, 'theScanWorker'):
 			del self.theScanWorker
 			print("The Scan Worker is being Deleted")
@@ -436,12 +449,14 @@ class manager(QObject):
 		try:
 			lockerFinish = QMutexLocker(mutexTermination)		   
 			if normalTermination=="True":
-				print("normalTermination = " + normalTermination + " - Will START SQL")
+				if infectionsList:
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.listWidget.addItem("ΠΡΟΣΟΧΗ!!!!")
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.listWidget.addItems(infectionsList)
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.show()
 				self.theSQLITEWorker.start() 
 		except Exception as errnmut2:
 			print(str(errmut2))	  
-	   
-		#manager._scanParams = []
+
 		gc.collect()
 	
 
@@ -780,7 +795,6 @@ class manager(QObject):
 	def showStatus(self):
 		# !!!! NOT PORTABLE !!!! #
 		statusList = subprocess.check_output(["avgctl", "--stat-all"]).decode("utf").split('\n')
-		
 		avgVersion = statusList[5].split()[-1]
 		self._theMainWindow.theCurrentStatus.lblAVGtitle.setStyleSheet("QLabel { font-weight : bold; }");
 		self._theMainWindow.theCurrentStatus.lblAVGvalue.setText(avgVersion)
@@ -794,11 +808,11 @@ class manager(QObject):
 		self._theMainWindow.theCurrentStatus.lblLicenceTitle.setStyleSheet("QLabel { font-weight : bold; }");
 		self._theMainWindow.theCurrentStatus.lblLicenceValue.setText(licence + " / " + licenceNo)
 		
-		aviVersion = statusList[37].split()[-1]
+		aviVersion = statusList[45].split()[-1]
 		self._theMainWindow.theCurrentStatus.lblDatabaseTitle.setStyleSheet("QLabel { font-weight : bold; }");
 		self._theMainWindow.theCurrentStatus.lblDatabaseValue.setText(aviVersion)
 		
-		aviDate = statusList[38].split()[6] + "/" + statusList[38].split()[7] + "/" + statusList[38].split()[8] + ", " + statusList[38].split()[9]
+		aviDate = statusList[46].split()[6] + "/" + statusList[46].split()[7] + "/" + statusList[46].split()[8] + ", " + statusList[46].split()[9]
 		self._theMainWindow.theCurrentStatus.lblDBDateTitle.setStyleSheet("QLabel { font-weight : bold; }");
 		self._theMainWindow.theCurrentStatus.lblDBDateValue.setText(aviDate)
 		

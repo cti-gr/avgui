@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI, showScanResultsUI
 
 import utilities
 import os
@@ -96,7 +96,8 @@ class scanProgress(QtGui.QDialog, scanProgressUI.Ui_DiaScanProg):
 	def __init__(self, parent=None):
 		super(scanProgress, self).__init__(parent)
 		self.setupUi(self)
-
+		self.theShowScanResults = showScanResults(self)
+		
 	def closeEvent(self, event):
 		self.sigCloseEvent.emit()
 
@@ -165,7 +166,7 @@ class scanDialog(QtGui.QDialog, scanDialogUI.Ui_scanDialog):
 		self.theSelect = scanSelect(self)
 		self.theScanSettings = scanSettings(self)
 		self.theScanProgress = scanProgress(self)
-					   
+		
 		self.selectDialog = QtGui.QFileDialog(self)
 		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
 
@@ -199,12 +200,19 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
 		self.theUpdateProgress = updateProgress(self)
 		self.theUpdateSettings = updateSettings(self)
 
+'''
 class problemsubmissionDialog(QtGui.QDialog, problemSubmissionUI.Ui_problemDialog):
 	def __init__(self, parent=None):
 		super(problemsubmissionDialog, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnCancel, QtCore.SIGNAL("clicked()"), self.close)
+'''
 
+class showScanResults(QtGui.QDialog, showScanResultsUI.Ui_showScanResultsDialog):
+	def __init__(self, parent=None):
+		super(showScanResults, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 	
@@ -225,7 +233,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 			self.comLangsel.setCurrentIndex(1)
 		self.theUpdate = updateDialog(self)
 		self.theScan = scanDialog(self)
-		self.theProblemSubmission = problemsubmissionDialog(self)
+		#self.theProblemSubmission = problemsubmissionDialog(self)
 		self.theCurrentStatus = currentStatus(self)
 		self.theHistory = historyDialog(self)
 		#self.theScanProgress = scanProgress()
