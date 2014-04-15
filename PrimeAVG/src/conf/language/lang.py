@@ -171,6 +171,10 @@ global schedStatusTitle
 global nextiAVIupdate
 global nextProgramUpdate
 
+# Show Scan Results Widget
+global attentionMsg
+global scanResultsDialogTitle
+
 # Table Column Headers
 global userTitle
 global noOfResultsTitle
@@ -179,6 +183,8 @@ global virusDBTitle
 global malwareFoundTitle
 global updateDateTimeTitle
 global coreAndVirusDBVersionsTitle
+global threats
+global filesInfected
 
 # Real Time Messages
 global translationDict
@@ -351,6 +357,10 @@ def setuplang():
 	global nextiAVIupdate
 	global nextProgramUpdate
 	
+	# Show Scan Results Widget
+	global attentionMsg
+	global scanResultsDialogTitle
+	
 	# Table Column Headers
 	global userTitle
 	global noOfResultsTitle
@@ -360,6 +370,8 @@ def setuplang():
 	global updateDateTimeTitle
 	global coreAndVirusDBVersionsTitle
 	global noAccessRightsInFolder
+	global threats
+	global filesInfected
 	
 	# Real Time Messages
 	global translationDict
@@ -544,6 +556,10 @@ def setuplang():
 	nextiAVIupdate = langpack.nextiAVIupdate
 	nextProgramUpdate = langpack.nextProgramUpdate
 	
+	# Show Scan Results Widget
+	attentionMsg = langpack.attentionMsg
+	scanResultsDialogTitle = langpack.scanResultsDialogTitle
+	
 	# Table Column Labels
 	userTitle  = langpack.userTitle
 	noOfResultsTitle = langpack.noOfResultsTitle
@@ -552,6 +568,8 @@ def setuplang():
 	malwareFoundTitle = langpack.malwareFoundTitle
 	updateDateTimeTitle = langpack.updateDateTimeTitle
 	coreAndVirusDBVersionsTitle = langpack.coreAndVirusDBVersionsTitle
+	threats = langpack.threats
+	filesInfected = langpack.filesInfected
 	
 	# Real Time Messages
 	translationDict = langpack.translationDict

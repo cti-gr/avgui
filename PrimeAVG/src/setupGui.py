@@ -200,20 +200,13 @@ class updateDialog(QtGui.QDialog, updateDialogUI.Ui_updateDialog):
 		self.theUpdateProgress = updateProgress(self)
 		self.theUpdateSettings = updateSettings(self)
 
-'''
-class problemsubmissionDialog(QtGui.QDialog, problemSubmissionUI.Ui_problemDialog):
-	def __init__(self, parent=None):
-		super(problemsubmissionDialog, self).__init__(parent)
-		self.setupUi(self)
-		self.connect(self.btnCancel, QtCore.SIGNAL("clicked()"), self.close)
-'''
-
 class showScanResults(QtGui.QDialog, showScanResultsUI.Ui_showScanResultsDialog):
 	def __init__(self, parent=None):
 		super(showScanResults, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
-
+		
+		
 class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 	
 	sigMainSent = QtCore.Signal(str)

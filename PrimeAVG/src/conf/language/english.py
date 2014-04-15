@@ -163,6 +163,10 @@ schedStatusTitle = "Scheduler Status"
 nextiAVIupdate = "Next Scheduled iAVI update"
 nextProgramUpdate = "Next Scheduled Program update"
 
+# Show Scan Results Widget
+scanResultsDialogTitle = "Threats Found"
+attentionMsg = "Attention ! Malware was found during scan !"
+
 # Table Column Labels
 userTitle = "User"
 noOfResultsTitle = "No. of Results"
@@ -171,6 +175,8 @@ virusDBTitle = "Virus DB"
 malwareFoundTitle = "Malware"
 updateDateTimeTitle = "Update Date / Time"
 coreAndVirusDBVersionsTitle = "Core AVG / Virus DB Version"
+threats = "Threats"
+filesInfected = "Files Infected"
 
 translationDict = {
 'You are currently up-to-date':'You are currently up-to-date',

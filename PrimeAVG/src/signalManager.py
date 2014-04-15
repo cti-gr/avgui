@@ -1,5 +1,5 @@
 #!/usr/lib/python3.3
-from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication, QCursor, QListWidgetItem
+from PySide.QtGui import QMessageBox, QFileDialog, QDialog, QPlainTextEdit, QGridLayout, QApplication, QCursor, QTableWidgetItem
 from PySide.QtCore import QObject, QCoreApplication, QProcess, QThreadPool, QDate, QSize, QMutex, QMutexLocker, QTimer, Qt
 from datetime import datetime, date, time
 import utilities
@@ -27,6 +27,7 @@ global scanReportFolder
 global scanReportFile
 global scanReportPath
 global infectionsList
+global infectedFiles
 mutexTermination = QMutex()
 
 class manager(QObject):
@@ -48,13 +49,14 @@ class manager(QObject):
 		global scanReportPath
 		global scanReportFolder
 		global infectionsList
+		global infectedFiles
 		super(manager, self).__init__(parent)
 		
 		# Opening Configuration File
 		self.confileName = os.getcwd() + "/conf/config.ini"
 		self.configparser = SafeConfigParser()
 		self.configparser.read(self.confileName)
-		
+		self.mutexPrint = QMutex()
 		
 		self._theMainWindow = theMainWindow
 		self.setupConnections(self._theMainWindow)
@@ -65,7 +67,7 @@ class manager(QObject):
 		scanReportFolder = None
 		scanPath = None
 		homeDir = expanduser("~")
-		
+				
 	def setupConnections(self, theMainWindow):
 		# Main Window
 		self._theMainWindow.btnHistory.clicked.connect(self.emitHistory)
@@ -108,12 +110,7 @@ class manager(QObject):
 		self._theMainWindow.theUpdate.theUpdateSettings.btnOK.clicked.connect(self.setUpdateSettings)
 		self._theMainWindow.theUpdate.theUpdateSettings.btnCancel.clicked.connect(self.setUpdateSettings)
 		
-		'''
-		# Registration and Problem Submission Dialogs
-		self._theMainWindow.theRegistration.btnSubmit.clicked.connect(self.postRegistration)
-		self._theMainWindow.theProblemSubmission.btnSubmit.clicked.connect(self.submitIssue)
-		'''
-		
+				
 	def emitScan(self):
 		self._theMainWindow.sigMainSent.emit("SCAN")
 		
@@ -358,14 +355,16 @@ class manager(QObject):
 ########################################## SCAN ##################################################
 	def beginScan(self):
 		global infectionsList
-		infectionsList = []
-		print(infectionsList)
-		print("BEGIN!")
+		global infectedFiles
+		global infectionsList
+		self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.clear()
 		self.isCleanScan = False
 		global scanPath
 		global abnormalTermination
 		global scanParameters
 		self.getScanSettings()
+		infectedFiles = []
+		infectionsList = []
 		abnormalTermination = 0
 		self._theMainWindow.theScan.theScanProgress.btnExitScan.setText(langmodule.terminateScan)
 		#print("Scan path is: " + str(scanPath))
@@ -391,27 +390,33 @@ class manager(QObject):
 	def onSQLiteFinish(self):
 		pass
 		#print("Data Insertion Completed!!!!")
-  
+
 	def printToWidget(self, linetoappend):
+		self.mutexPrint.lock()
 		global infectionsList
-		testList = []
-		infectionsTerms = ['Trojan horse', 'Could be infected', 'Virus identified']
-		lineList = (linetoappend.split('\n'))
-		for i in range(len(lineList)):
-			testList = list(filter(lambda x: x in lineList[i], infectionsTerms))
-			if testList:
-				# print("++++++++++++++++++++")
-				# print(lineList[0])
-				# print("++++++++++++++++++++")
-				infectionsList.append(lineList[0].split()[-1])
-		if infectionsList:
-			pass # show window
+		global infectedFiles
+		lineList = (linetoappend.split())
+		if ("Trojan" in lineList):
+			position = lineList.index('Trojan')
+			infectedFiles.append(lineList[position - 1])
+			infectionsList.append(lineList[position +2])
+		if ("Virus" in lineList):
+			if ("identified" in lineList):
+				position = lineList.index('Virus')
+				infectedFiles.append(lineList[position - 1])
+				infectionsList.append(lineList[position +2])
+		if ("Could" in lineList):
+			position = lineList.index('Could')
+			infectedFiles.append(lineList[position - 1])
+			infectionsList.append(lineList[position +3])
+		print("Infected Files: " + str(infectedFiles))
+		print("List of Infections: " + str(infectionsList))
 		for i,j in langmodule.translationDict.items(): 
 			linetoappend = linetoappend.replace(i,j)
-		curDateTime = datetime.now().isoformat(' ')[:19]
+		# curDateTime = datetime.now().isoformat(' ')[:19]
 		self._theMainWindow.theScan.theScanProgress.textScanProg.appendPlainText(linetoappend)
-				
-	
+		self.mutexPrint.unlock()
+
 	def terminateScan(self):
 		global infectionsList
 		
@@ -431,7 +436,7 @@ class manager(QObject):
 
 	def onScanFinish(self, normalTermination):
 		global infectionsList
-		
+		self.theScanWorker.sigWriteScan.disconnect()
 		# infectionsList = []
 		
 		print("Entering onScanFinish, from signalManager, normalTermination = " + str(normalTermination))
@@ -450,12 +455,26 @@ class manager(QObject):
 			lockerFinish = QMutexLocker(mutexTermination)		   
 			if normalTermination=="True":
 				if infectionsList:
-					self._theMainWindow.theScan.theScanProgress.theShowScanResults.listWidget.addItem("ΠΡΟΣΟΧΗ!!!!")
-					self._theMainWindow.theScan.theScanProgress.theShowScanResults.listWidget.addItems(infectionsList)
+					header1 = QTableWidgetItem("Threats")
+					header2 = QTableWidgetItem(("Files"))
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setColumnCount(2)
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setRowCount(len(infectionsList))
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setHorizontalHeaderItem(0, header1)
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setHorizontalHeaderItem(1, header2)
+					self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.horizontalHeader().setStretchLastSection(True)
+					for i in range(1, len(infectionsList) + 1):
+							newItem0 = QTableWidgetItem(infectionsList[i-1])
+							newItem1 = QTableWidgetItem(infectedFiles[i-1])
+							print("line " + str(i) + ": " + newItem0.text())
+							print("line " + str(i) + ": " + newItem1.text())
+							self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setItem(i-1, 0, newItem0)
+							self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.setItem(i-1, 1, newItem1)
+							self._theMainWindow.theScan.theScanProgress.theShowScanResults.tableWidget.resizeColumnsToContents()
 					self._theMainWindow.theScan.theScanProgress.theShowScanResults.show()
 				self.theSQLITEWorker.start() 
-		except Exception as errnmut2:
-			print(str(errmut2))	  
+		except Exception as errmut2:
+			print(str(errmut2))
+			exit(-1)
 
 		gc.collect()
 	

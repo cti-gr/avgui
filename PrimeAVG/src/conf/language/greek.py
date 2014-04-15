@@ -163,6 +163,9 @@ schedStatusTitle = "Χρονοπρογραμματισμός Υπηρεσιών"
 nextiAVIupdate = "Επόμενος Έλεγχος Βάσης Ιών"
 nextProgramUpdate = "Next Scheduled Program update"
 
+# Show Scan Results Widget
+scanResultsDialogTitle = "Ευρήματα Αναζήτησης"
+attentionMsg = "Προσοχή ! Βρέθηκε Κακόβουλο Λογισμικό !"
 
 # Table Column Labels
 userTitle = "Χρήστης"
@@ -172,6 +175,8 @@ virusDBTitle = "Βάση Ιών"
 malwareFoundTitle = "Κακόβουλο Λογισμικό"
 updateDateTimeTitle = "Ημερομηνία / Ώρα Ανανέωσης"
 coreAndVirusDBVersionsTitle = "Έκδοση Core AVG / Βάση Ιών"
+threats = "Threats"
+filesInfected = "Files Infected"
 
 # Real Time Messages
 translationDict = {
