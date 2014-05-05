@@ -219,7 +219,8 @@ class chkUpdateWorker(QtCore.QThread):
 			#print("starting AVGUPDATE process with EUID: " + str(os.geteuid()))
 			#print("Now EUID is: " + str(os.geteuid()))
 			QtGui.QApplication.processEvents()
-			self.avgchkupProc.start("gksu", ["avgupdate -c"])
+			# self.avgchkupProc.start("gksu", ["avgupdate -c"])
+			self.avgchkupProc.start("gksu", ["--description=" + langmodule.chkUpdate, "--message=" + langmodule.mustSudo, "avgupdate -c"])
 			#print("started UPDATE PROCESS with state: " + str(self.avgchkupProc.state()))
 			if not self.avgchkupProc.waitForStarted(msecs=3000):
 				print("SOS: " + str(self.avgchkupProc.state()))
@@ -321,11 +322,11 @@ class updateWorker(QtCore.QThread):
 	def run(self):
 		self.finished.connect(self.onThreadTermination)
 		self.avgUpdateProc = QtCore.QProcess()
-		self.avgUpdateProc.open(QtCore.QIODevice.Unbuffered)
+		# self.avgUpdateProc.open(QtCore.QIODevice.Unbuffered)
 		self.avgUpdateProc.destroyed.connect(self.avgProcDestroyed)
 		self.avgUpdateProc.readyRead.connect(self.printOut)
 		self.avgUpdateProc.finished.connect(self.onAVGProcFinish)
-		self.avgUpdateProc.start("gksu", ["avgupdate"])
+		self.avgUpdateProc.start("gksu", ["--description=" + langmodule.avgUpdate, "--message=" + langmodule.mustSudo,"avgupdate"])
 		try:
 			startLocker = QtCore.QMutexLocker(mutexStartCheck)
 			while not self.avgUpdateProc.waitForStarted(msecs=2000):

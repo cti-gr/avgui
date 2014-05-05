@@ -156,8 +156,6 @@ global passwordsDoNotMatch
 global mustFillInAllFields
 global historyLog
 global avgnotrunning
-global chkUpdate
-global avgUpdate
 
 # Status Widget
 global programInfo
@@ -341,8 +339,6 @@ def setuplang():
 	global mustFillInAllFields
 	global historyLog
 	global avgnotrunning
-	global chkUpdate
-	global avgUpdate
 	
 	# Scan Progress
 	global dialogScanProgressTitle
@@ -546,10 +542,7 @@ def setuplang():
 	passwordsDoNotMatch = langpack.passwordsDoNotMatch
 	mustFillInAllFields = langpack.mustFillInAllFields
 	historyLog = langpack.historyLog
-	avgnotrunning = langpack.avgnotrunning
-	chkUpdate = langpack.chkUpdate
-	avgUpdate = langpack.avgUpdate
-
+	avgnotrunning = langpak.avgnotrunning
 	# Status Widget
 	programInfo  = langpack.programInfo
 	avgTitle = langpack.avgTitle

@@ -1,4 +1,4 @@
-#!/usr/bin/python3.3
+#!/usr/bin/python3.4
 import gc
 from PySide.QtGui import QApplication, QMessageBox
 import sys
@@ -29,11 +29,13 @@ class theApplication(object):
 		self.theInitializer =  signalManager.manager(self.theWindow)       
 
 if __name__=="__main__":
-	if not utilities.isAVGDRunning():
-		QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
-				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-		exit(1)
 	langmodule.setuplang()
+	if not utilities.isAVGDRunning():
+		#QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
+		#		QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+		print(langmodule.avgnotrunning)
+		exit(1)
+	
 	app = QApplication(sys.argv)
 
 	if utilities.parseParams(sys.argv)[0] == 0:
