@@ -158,6 +158,7 @@ global historyLog
 global avgnotrunning
 global chkUpdate
 global avgUpdate
+global noFilesFoldersSelected
 
 # Status Widget
 global programInfo
@@ -343,6 +344,7 @@ def setuplang():
 	global avgnotrunning
 	global chkUpdate
 	global avgUpdate
+	global noFilesFoldersSelected
 	
 	# Scan Progress
 	global dialogScanProgressTitle
@@ -384,7 +386,7 @@ def setuplang():
 
 
 	#print(subprocess.check_output(["ls"]))
-	confile = os.getcwd() + "/conf/config.ini"
+	confile = os.path.expanduser("~") + "/.avgui/config.ini"
 	configparser = SafeConfigParser()
 	f = open(confile, 'r')
 	configparser.read(confile)
@@ -549,6 +551,7 @@ def setuplang():
 	avgnotrunning = langpack.avgnotrunning
 	chkUpdate = langpack.chkUpdate
 	avgUpdate = langpack.avgUpdate
+	noFilesFoldersSelected = langpack.noFilesFoldersSelected
 
 	# Status Widget
 	programInfo  = langpack.programInfo

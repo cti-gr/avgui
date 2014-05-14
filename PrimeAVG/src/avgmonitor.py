@@ -9,7 +9,7 @@ import os
 import signal
 
 class AVGMonitor(simpledaemon.Daemon):
-	default_conf = '../log/hellodaemon.conf'
+	default_conf = os.path.expanduser("~") + '/.avgui/log/hellodaemon.conf'
 	section = 'hello'
 
 	def run(self):

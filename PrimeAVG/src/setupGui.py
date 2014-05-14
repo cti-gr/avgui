@@ -171,7 +171,7 @@ class scanDialog(QtGui.QDialog, scanDialogUI.Ui_scanDialog):
 		self.connect(self.exitButton, QtCore.SIGNAL("clicked()"), self.close)
 
 	def clear(self):
-		self.fileToScanLabel.setText("Δεν έχουν επιλεγεί αρχεία / φάκελοι")
+		self.fileToScanLabel.setText(langmodule.noFilesFoldersSelected)
 		self.infoLabel.setText("")
 
 	def closeEvent(self, event):
@@ -216,7 +216,7 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		self.setupUi(self)
 		
 		# Opening Configuration File
-		self.confileName = os.getcwd() + "/conf/config.ini"
+		self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
 		self.configparser = SafeConfigParser()
 		self.configparser.read(self.confileName)
 		lang = self.configparser.get('Language', 'lang')

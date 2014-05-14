@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=avgui
+Type=Application
+Version=0.80
+Comment=User Interface for performing some elementary actions with AVG Free for Linux
+Exec=/usr/share/avgui/src/entrypoint.py
+Icon=/usr/share/avgui/media/avg_logo.png
+Terminal=false
+Categories=Application;Antivirus;Qt;

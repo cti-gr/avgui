@@ -150,6 +150,7 @@ historyLog = "Updates and Scans Log"
 avgnotrunning = "AVG service is not running - The AVGui will now terminate !"
 chkUpdate = "Checking Updates"
 avgUpdate = "Performing Update"
+noFilesFoldersSelected = "No Files / Folders Selected"
 
 # Status Widget
 programInfo = "Program Information"

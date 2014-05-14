@@ -59,7 +59,7 @@ if __name__=="__main__":
 	theApp.theWindow.show()
 	gc.enable()
 
-	subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
+	subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--start", str(mainpid)])
 
 	app.exec_()
 # to add finalization operation, e.g. closing the cursor
