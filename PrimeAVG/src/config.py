@@ -20,6 +20,7 @@ global ubuntu_version
 global kernel_version
 global avgui_version
 global avg_version
+global debug
 
 
 def init_config(debugMode=False):
@@ -36,12 +37,14 @@ def init_config(debugMode=False):
 	global kernel_version
 	global avgui_version
 	global avg_version
+	global debug
 	
+	debug = debugMode
 	avg_version = subprocess.check_output(["dpkg", "-s", "avg2013flx"]).split()[21].decode("utf")
 	avgui_version = subprocess.check_output(["dpkg", "-s", "avg2013flx"]).split()[21].decode("utf")
 	kernel_version = subprocess.check_output(["uname", "-r"]).decode("utf").split()[0]
 	ubuntu_version = subprocess.check_output(["lsb_release", "-a"]).split()[5].decode("utf")
-	server_url = 'http://httpbin.org/post'
+	#server_url = 'http://httpbin.org/post'
 	username = getpass.getuser()
 	python_version=sys.version
 	pyside_version=PySide.__version__

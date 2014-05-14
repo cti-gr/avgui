@@ -151,6 +151,8 @@ avgnotrunning = "To πρόγραμμα προστασίας από κακόβο�
 chkUpdate = "Έλεγχος Διαθέσιμων Ενημερώσεων"
 avgUpdate = "Ενημέρωση Προγράμματος και Βάσης Ιών"
 noFilesFoldersSelected = "Δεν έχουν επιλεγεί αρχεία / φάκελοι"
+avgStopped = "TΟ AVG ΣΤΑΜΑΤΗΣΕ ΝΑ ΕΚΤΕΛΕΙΤΑΙ - Η εφαρμογή θα τερματίσει!"
+failedToStartDaemon = "Αποτυχία εκκίνησης daemon παρακολούθησης avg antivirus!"
 
 # Status Widget
 programInfo = "Πληροφορίες Προγράμματος"
@@ -165,7 +167,7 @@ genericON = "Εκτελείται"
 genericOFF = "Δεν Εκτελείται"
 schedStatusTitle = "Χρονοπρογραμματισμός Υπηρεσιών"
 nextiAVIupdate = "Επόμενος Έλεγχος Βάσης Ιών"
-nextProgramUpdate = "Next Scheduled Program update"
+nextProgramUpdate = "Επόμενος Έλεγχος Έκδοσης Προγράμματος"
 
 # Show Scan Results Widget
 scanResultsDialogTitle = "Ευρήματα Αναζήτησης"

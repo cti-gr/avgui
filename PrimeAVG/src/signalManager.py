@@ -814,13 +814,16 @@ class manager(QObject):
 	def showStatus(self):
 		# !!!! NOT PORTABLE !!!! #
 		statusList = subprocess.check_output(["avgctl", "--stat-all"]).decode("utf").split('\n')
+		
+			
 		avgVersion = statusList[5].split()[-1]
 		self._theMainWindow.theCurrentStatus.lblAVGtitle.setStyleSheet("QLabel { font-weight : bold; }");
 		self._theMainWindow.theCurrentStatus.lblAVGvalue.setText(avgVersion)
 		
-		lastUpdate = statusList[8].split()[4] + "/" + statusList[8].split()[5] + "/" + statusList[8].split()[6] + ", " + statusList[8].split()[7]
-		self._theMainWindow.theCurrentStatus.lblLastUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
-		self._theMainWindow.theCurrentStatus.lblLastUpdateValue.setText(lastUpdate)
+		if ("-" not in statusList[8]): # checking if at least one update has taken place
+			lastUpdate = statusList[8].split()[4] + "/" + statusList[8].split()[5] + "/" + statusList[8].split()[6] + ", " + statusList[8].split()[7]
+			self._theMainWindow.theCurrentStatus.lblLastUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+			self._theMainWindow.theCurrentStatus.lblLastUpdateValue.setText(lastUpdate)
 		
 		licence = statusList[11].split()[-1]
 		licenceNo = statusList[12].split()[-1]
@@ -857,13 +860,20 @@ class manager(QObject):
 			schedStatus = langmodule.genericOFF
 		self._theMainWindow.theCurrentStatus.lblSchedValue.setText(schedStatus)
 
-		lastVirUpdate = statusList[29].split()[3] + "/" + statusList[29].split()[4] + "/" + statusList[29].split()[5] + ", " + statusList[29].split()[6]
-		self._theMainWindow.theCurrentStatus.lblNextVUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
-		self._theMainWindow.theCurrentStatus.lblNextVUpdateValue.setText(lastVirUpdate)
+		if ("-" not in statusList[29]): # checking if at least one virus update has taken place
+			lastVirUpdate = statusList[29].split()[3] + "/" + statusList[29].split()[4] + "/" + statusList[29].split()[5] + ", " + statusList[29].split()[6]
+			self._theMainWindow.theCurrentStatus.lblNextVUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+			self._theMainWindow.theCurrentStatus.lblNextVUpdateValue.setText(lastVirUpdate)
+		else: 
+			self._theMainWindow.theCurrentStatus.lblNextVUpdateValue.setText(" ")
 		
-		lastProgUpdate = statusList[30].split()[3] + "/" + statusList[30].split()[4] + "/" + statusList[30].split()[5] + ", " + statusList[30].split()[6]
-		self._theMainWindow.theCurrentStatus.lblNextPUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
-		self._theMainWindow.theCurrentStatus.lblNextPUpdateValue.setText(lastProgUpdate)
+		if ("-" not in statusList[30]): # checking if at least one program update has taken place
+			lastProgUpdate = statusList[30].split()[3] + "/" + statusList[30].split()[4] + "/" + statusList[30].split()[5] + ", " + statusList[30].split()[6]
+			self._theMainWindow.theCurrentStatus.lblNextPUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+			self._theMainWindow.theCurrentStatus.lblNextPUpdateValue.setText(lastProgUpdate)
+		else:
+			self._theMainWindow.theCurrentStatus.lblNextPUpdateTitle.setStyleSheet("QLabel { font-weight : bold; }");
+			self._theMainWindow.theCurrentStatus.lblNextPUpdateValue.setText(" ")
 		
 		self._theMainWindow.theCurrentStatus.show()
 	'''

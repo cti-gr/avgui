@@ -18,7 +18,7 @@ import conf.language.lang as langmodule
 # Should incorporate code to include AVG installation check
 
 def avgstopped_handler(signum, frame):
-	QMessageBox.critical(None, "Προσοχή", "TΟ AVG ΣΤΑΜΑΤΗΣΕ ΝΑ ΕΚΤΕΛΕΙΤΑΙ - Η εφαρμογή θα τερματίσει", 
+	QMessageBox.critical(None, langmodule.attention, langmodule.avgStopped, 
 				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 	app.exit(1)
 
@@ -48,7 +48,7 @@ if __name__=="__main__":
 		print("Using PySide: " + config.pyside_version)
 		print("Qt Framework used is: " + config.qt_version)
 	else:
-		QMessageBox.critical(None, "Προσοχή", "Λάθος στις Παραμέτρους Εκκίνησης", 
+		QMessageBox.critical(None, langmodule.attention, "Λάθος στις Παραμέτρους Εκκίνησης", 
 				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 		sys.exit(1)
 
@@ -58,8 +58,15 @@ if __name__=="__main__":
 	theApp = theApplication()
 	theApp.theWindow.show()
 	gc.enable()
-
-	subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--start", str(mainpid)])
+	
+	try:
+		if config.debug:
+			subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
+		else:
+			subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--start", str(mainpid)])
+	except Exception as exc:
+		QMessageBox.critical(None, langmodule.attention, langmodule.failedToStartDaemon, 
+				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 
 	app.exec_()
 # to add finalization operation, e.g. closing the cursor

@@ -151,6 +151,9 @@ avgnotrunning = "AVG service is not running - The AVGui will now terminate !"
 chkUpdate = "Checking Updates"
 avgUpdate = "Performing Update"
 noFilesFoldersSelected = "No Files / Folders Selected"
+avgStopped = "AVG Antivirus has stopped - AVGui will now exit!" 
+failedToStartDaemon = "Failed to start avg monitor daemon!"
+
 
 # Status Widget
 programInfo = "Program Information"

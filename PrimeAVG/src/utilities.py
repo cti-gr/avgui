@@ -1121,7 +1121,10 @@ class dbHistoryWorker(QtCore.QThread):
 # Stop avgmonitor daemon
 def finalizeApp():
 	try:
-		subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--stop"])
+		if config.debug:
+			subprocess.call([config.daemonMonitor, "--stop"])
+		else:
+			subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--stop"])
 	except Exception as err:
 		print("Error Shutting down avgmonitor daemon: " + str(err))
 		raise err

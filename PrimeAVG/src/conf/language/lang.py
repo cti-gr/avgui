@@ -159,6 +159,8 @@ global avgnotrunning
 global chkUpdate
 global avgUpdate
 global noFilesFoldersSelected
+global avgStopped
+global failedToStartDaemon
 
 # Status Widget
 global programInfo
@@ -345,6 +347,9 @@ def setuplang():
 	global chkUpdate
 	global avgUpdate
 	global noFilesFoldersSelected
+	global avgStopped
+	global failedToStartDaemon
+
 	
 	# Scan Progress
 	global dialogScanProgressTitle
@@ -552,6 +557,10 @@ def setuplang():
 	chkUpdate = langpack.chkUpdate
 	avgUpdate = langpack.avgUpdate
 	noFilesFoldersSelected = langpack.noFilesFoldersSelected
+	avgStopped = langpack.avgStopped
+	failedToStartDaemon = langpack.failedToStartDaemon
+
+
 
 	# Status Widget
 	programInfo  = langpack.programInfo
