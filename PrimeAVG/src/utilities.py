@@ -32,85 +32,7 @@ abnormalCheckUpdatesTermination = False
 abnormalUpdateTermination = False
 
 # TO ADD function to check database existence and integrity
-'''
-################################# REGISTRATION & ISSUE SUBMISSION ###########################################
-class checkRegistrationThread(QtCore.QThread):
-	sigIsRegistered = QtCore.Signal(bool)
-		
-	def __init__(self, parent=None):
-		super(checkRegistrationThread, self).__init__(parent)
-			
-	def run(self):
-		try:
-			print('test4')
-			subprocess.check_output(['gksu', 'python3 checkStatus.py'])
-		except subprocess.CalledProcessError as myerr:
-			if myerr.returncode == 13:
-				print("emitting True")
-				self.sigIsRegistered.emit(True)
-			elif myerr.returncode == 14:
-				print("emitting False")
-				self.sigIsRegistered.emit(False)
-			elif myerr.returncode == 255: # user cancelled sudo
-				pass
-			elif myerr.returncode == 3: # 3 failed login attempts
-				pass
-			else:
-				raise Exception("Problem with error code")
-			print("Error Code: " + str(myerr.returncode))
-		# self.exec_()
-		
-		
-class registrationThread(QtCore.QThread):
-	def __init__(self, email, hashedpass, parent=None):
-		super(registrationThread, self).__init__(parent)
-		self.theEmail = email
-		self.theHashedpass = hashedpass
-	
-	def run(self):
-		# print(str(self.theEmail) + " " + str(self.theHashedpass))
-		try:
-			outer = subprocess.check_output(["gksu","python3 register.py" + " " + self.theEmail + " " + self.theHashedpass])
-			print(outer.decode("utf"))
-		except Exception as theError:
-			print("ERROR: " + str(theError.returncode))
 
-class submitIssueThread(QtCore.QThread):
-	sigFinished = QtCore.Signal()
-	
-	def __init__(self, username, ubuntu_version, kernel_version, avgui_version, avg_version, user_email, hashed_user_password, pd, parent=None):
-		super(submitIssueThread, self).__init__(parent)
-		self.username = username
-		self.ubuntu_version = ubuntu_version
-		self.kernel_version = kernel_version
-		self.avgui_version = avgui_version
-		self.avg_version = avg_version
-		self.user_email = user_email
-		self.hashed_user_password = hashed_user_password
-		self.pd = pd
-		#self.finished.connect(self.restoreCursor)
-	
-	def run(self):
-		url = config.server_url
-		# try to authenticate
-		authreq = requests.get(url, auth = (self.user_email, self.hashed_user_password))
-		if authreq.status_code != 200:
-			# QtGui.QMessageBox.critical(None, langmodule.attention, "Λάθος credentials", 
-			#					 QtGui.QMessageBox.Ok | QtGui.QMessageBox.Default, QtGui.QMessageBox.NoButton)
-			print("ERROR!")
-			return
-		else:
-			checkuuid = {}
-			uuidreq = requests.get(url, )
-		payload = {'ubuntu_version':ubuntu_version, 'kernel_version': kernel_version, 'avgui_version': avgui_version, 'avg_version': avg_version}
-		files = {'file':open(self.pd.name, 'rb')}
-		r = requests.post(url, files=files)
-		r.text
-		print(r.status_code)
-	
-	def threadFinished(self):
-		self.sigFinished.emit()
-'''
 ##################################### Check Daemon ##############################################################
 class checkDaemonD(QtCore.QThread):
 	
@@ -155,7 +77,7 @@ class checkDaemonD(QtCore.QThread):
 				#out2.kill()
 				break
 			else:
-				print("Retries: " + str(self.retriesCnt))
+				#print("Retries: " + str(self.retriesCnt))
 				self.retriesCnt += 1
 				if self.retriesCnt > 20:
 					if self.gksuHasStarted & (int(self.linecount2) > 1):
@@ -189,17 +111,13 @@ class chkUpdateWorker(QtCore.QThread):
 	sigFailed = QtCore.Signal(bool, str)
 	sigCheckFinished = QtCore.Signal(bool, str)
 
-	#def getProcState(self):
-	#	if hasattr(self, 'avgchkProc'):
-	#		print("Proc State from Within: " + str(self.avgchkProc.state()))
-	#		return str(self.avgchkProc.state())
-
 	def __init__(self, parent=None):
 		super(chkUpdateWorker, self).__init__(parent)
 		abnormalCheckUpdatesTermination = False
 	
 	def emitProcStarted(self):
-		print("------------- PROCESS STARTED!!! ------------------ " + str(self.avgchkupProc.state()))	
+		#print("------------- PROCESS STARTED!!! ------------------ " + str(self.avgchkupProc.state()))	
+		pass
 		
 	def run(self):
 		self.theOutput = ""
@@ -244,14 +162,15 @@ class chkUpdateWorker(QtCore.QThread):
 			abnormalCheckUpdatesTermination = True
 			if hasattr(self, 'avgchupProc'):	
 				while not self.avgchkupProc.waitForFinished():
-					print("Waiting for proc to finish")
+					#print("Waiting for proc to finish")
 					self.avgchkupProc.finished.emit(255)
 			else:
 				pass
 			#print(str(self.avgchkupProc.state()))
 	
 	def procDestroyed(self):
-		print("AVG UPDATE CHECK DESTROYED!!!")
+		# print("AVG UPDATE CHECK DESTROYED!!!")
+		pass
 		
 	def parseOutput(self):
 		if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running):
@@ -268,7 +187,8 @@ class chkUpdateWorker(QtCore.QThread):
 				del self.avgchkupProc
 				
 	def onThreadTermination(self):
-		print("Thread finished")
+		#print("Thread finished")
+		pass
 				
 	#def __del__(self):
 	#	if hasattr(self, 'avgchkupProc'):
@@ -286,9 +206,9 @@ class chkUpdateWorker(QtCore.QThread):
 				self.avgchkupProc.kill()
 		#if hasattr(self, 'avgchkupProc'):
 		#	del self.avgchkupProc
-		print("checking...")	
+		#print("checking...")	
 		if hasattr(self, 'avgchkupProc'):
-			print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
+			#print("EXIT CODE: " + str(self.avgchkupProc.exitCode()))
 			if (self.avgchkupProc.exitCode() == 1) | (self.avgchkupProc.exitCode() == 2) :
 				abnormalCheckUpdatesTermination = False
 			else:
@@ -297,7 +217,7 @@ class chkUpdateWorker(QtCore.QThread):
 		else:
 			self.abnormalCheckUpdatesTermination = True
 			self.sigCheckFinished.emit(abnormalCheckUpdatesTermination, self.theOutput)
-		print("emitted with: " + str(abnormalCheckUpdatesTermination))
+		#print("emitted with: " + str(abnormalCheckUpdatesTermination))
 		#print("EXIT CODE: " + str(self.avgUpdateProc.exitCode()))
 		if hasattr(self, 'avgchkupProc'):
 			del self.avgchkupProc		
@@ -317,7 +237,8 @@ class updateWorker(QtCore.QThread):
 		super(updateWorker, self).__init__(parent)
 
 	def onThreadTermination(self):
-		print("- - - Update Thread Terminated - - -")
+		#print("- - - Update Thread Terminated - - -")
+		pass
 
 	def run(self):
 		self.finished.connect(self.onThreadTermination)
@@ -348,17 +269,19 @@ class updateWorker(QtCore.QThread):
 		#abnormalTermination = True
 		if hasattr(self, 'avgUpdateProc'):
 			if (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Starting):
-				print("OK GOT IT")
+				#print("OK GOT IT")
 				self.exitCode = 299
 				self.avgUpdateProc.finished.emit(self.exitCode)
 			if hasattr(self, 'avgUpdateProc'):	
 				while not self.avgUpdateProc.waitForFinished():
-					print("Waiting for update process to finish")
+					#print("Waiting for update process to finish")
+					pass
 			else:
 				pass
 	
 	def avgProcDestroyed(self):
-		print(" - Update Process Destroyed - ")
+		#print(" - Update Process Destroyed - ")
+		pass
 	
 	def printOut(self):
 		try:
@@ -588,6 +511,10 @@ class scanWorker(QtCore.QThread):
 				if str(i).find("Virus database release date") != -1:
 					#print("i: " + str(i))
 					dbRelDate = i[29:] 
+				if str(i).find("Could be infected") != -1:
+					#print("i: " + str(i))
+					infectedFiles.append(i.split()[0])
+					malwareFound.append(i.split()[4])
 				if str(i).find("Virus identified") != -1:
 					#print("i: " + str(i))
 					infectedFiles.append(i.split()[0])
@@ -1110,8 +1037,8 @@ class dbHistoryWorker(QtCore.QThread):
 		#self.exec_()
 
 	def ondbHistoryProcessFinish(self):
-		print("Results")
-		print(len(self.__results))
+		#print("Results")
+		#print(len(self.__results))
 		self.sigHistoryRetrieved.emit(self.__results)
 		#self.dbHistoryProc.terminate()
 		self.exit()
@@ -1133,9 +1060,7 @@ def finalizeApp():
 
 # Parse Startup Parameters
 def parseParams(paramslist):
-	#print(paramslist[1][:7])
-	#print(paramslist[1][8:])
-	results ={0:"", 1:"Debug Mode On", 2:"Unknown Parameter or Value: usage [--debug=BOOL]", 3:"Too many parameters"}
+	results ={0:"", 1:"Debug Mode On", 2:"Unknown Parameter or Value: usage [--debug]", 3:"Too many parameters"}
 	if (len(paramslist) == 1):
 		return list(results.items())[0]
 	elif (len(paramslist) == 2):

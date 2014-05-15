@@ -38,19 +38,17 @@ if __name__=="__main__":
 	
 	app = QApplication(sys.argv)
 
-	if utilities.parseParams(sys.argv)[0] == 0:
-		config.init_config()
-	elif utilities.parseParams(sys.argv)[0] == 1:
-		config.init_config(True)
-		print("Using database: " + str(config.dbfilepath))
-		# print(str(os.getpid()))
-		print("Executing with Python: " + config.python_version)
-		print("Using PySide: " + config.pyside_version)
-		print("Qt Framework used is: " + config.qt_version)
-	else:
-		QMessageBox.critical(None, langmodule.attention, "Λάθος στις Παραμέτρους Εκκίνησης", 
-				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+	if len(sys.argv) > 2:
+		print("Too many arguments - Exiting")
 		sys.exit(1)
+	elif sys.argv[1] != "--debug":
+		print("Unknown argument - Exiting")
+		sys.exit(1)
+	elif sys.argv[1] == "--debug":
+		config.init_config(True)
+	else:
+		config.init_config()
+	
 
 	signal.signal(signal.SIGALRM, avgstopped_handler)
 	mainpid = os.getpid()

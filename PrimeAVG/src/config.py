@@ -57,4 +57,8 @@ def init_config(debugMode=False):
 	else:
 		dbfilepath = homedir + "/.avgui/" + dbfilename
 	daemonMonitor = subprocess.check_output(["pwd"]).decode("utf").rstrip() + "/" + "avgmonitor.py"
+	print("Using database: " + str(dbfilepath))
+	print("Executing with Python: " + python_version)
+	print("Using PySide: " + pyside_version)
+	print("Qt Framework used is: " + qt_version)
 	#avgmonitor = daemonPath + "/" + avgmonitor
