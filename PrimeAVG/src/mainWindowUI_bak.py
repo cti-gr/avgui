@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainWindow.ui'
 #
-# Created: Fri May 16 13:00:24 2014
+# Created: Wed Apr  9 12:19:02 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -137,10 +137,8 @@ class Ui_MainWindow(object):
         self.action_AVG.setObjectName("action_AVG")
         self.action = QtGui.QAction(MainWindow)
         self.action.setObjectName("action")
-        self.action_AVGui = QtGui.QAction(MainWindow)
-        self.action_AVGui.setObjectName("action_AVGui")
         self.menu.addAction(self.action_AVG)
-        self.menu.addAction(self.action_AVGui)
+        self.menu.addAction(self.action)
         self.menubar.addAction(self.menu.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -157,6 +155,7 @@ class Ui_MainWindow(object):
         self.comLangsel.setItemText(1, QtGui.QApplication.translate("MainWindow", "EN", None, QtGui.QApplication.UnicodeUTF8))
         self.menu.setTitle(QtGui.QApplication.translate("MainWindow", langmodule.lblAbout, None, QtGui.QApplication.UnicodeUTF8))
         self.action_AVG.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblAvgProtectionTitle, None, QtGui.QApplication.UnicodeUTF8))
-        self.action_AVGui.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
+        self.action.setText(QtGui.QApplication.translate("MainWindow", langmodule.lblGraphicFrameworkTitle, None, QtGui.QApplication.UnicodeUTF8))
+
 
 import avg_rc

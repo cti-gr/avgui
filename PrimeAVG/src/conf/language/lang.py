@@ -14,6 +14,7 @@ global btnExitTitle
 global lblAboutTitle
 global lblAvgProtectionTitle
 global lblGraphicFrameworkTitle
+global lblAbout
 
 # Scan Dialog
 global dialogScanTitle
@@ -162,6 +163,7 @@ global noFilesFoldersSelected
 global avgStopped
 global failedToStartDaemon
 
+
 # Status Widget
 global programInfo
 global avgTitle
@@ -207,7 +209,8 @@ def setuplang():
 	global lblAvgProtectionTitle
 	global lblGraphicFrameworkTitle
 	global btnExitTitle
-	
+	global lblAbout
+
 	# Scan Dialog
 	global dialogScanTitle
 	global btnBeginScanTitle
@@ -349,6 +352,7 @@ def setuplang():
 	global noFilesFoldersSelected
 	global avgStopped
 	global failedToStartDaemon
+	
 
 	
 	# Scan Progress
@@ -414,6 +418,7 @@ def setuplang():
 	lblAboutTitle = langpack.lblAboutTitle
 	lblAvgProtectionTitle = langpack.lblAvgProtectionTitle
 	lblGraphicFrameworkTitle = langpack.lblGraphicFrameworkTitle
+	lblAbout = langpack.lblAbout
 	
 	# Scan Dialog
 	dialogScanTitle = langpack.dialogScanTitle
@@ -559,7 +564,7 @@ def setuplang():
 	noFilesFoldersSelected = langpack.noFilesFoldersSelected
 	avgStopped = langpack.avgStopped
 	failedToStartDaemon = langpack.failedToStartDaemon
-
+	
 
 
 	# Status Widget

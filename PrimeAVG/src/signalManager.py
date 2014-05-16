@@ -67,6 +67,9 @@ class manager(QObject):
 		scanReportFolder = None
 		scanPath = None
 		homeDir = expanduser("~")
+	
+	def printSth(self):
+		print("test")
 				
 	def setupConnections(self, theMainWindow):
 		# Main Window
@@ -76,6 +79,7 @@ class manager(QObject):
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
 		self._theMainWindow.btnStatus.clicked.connect(self.showStatus)
 		self._theMainWindow.comLangsel.currentIndexChanged.connect(self.setLanguage)
+		self._theMainWindow.action_AVG.triggered.connect(self.printSth)
 		
 		# Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)
@@ -876,102 +880,7 @@ class manager(QObject):
 			self._theMainWindow.theCurrentStatus.lblNextPUpdateValue.setText(" ")
 		
 		self._theMainWindow.theCurrentStatus.show()
-	'''
-# Check Registration
-	def checkRegistration(self):
-		subprocess.call(["sudo", "-k"])
-		self.checkThread = utilities.checkRegistrationThread()
-		self.checkThread.sigIsRegistered.connect(self.decideNext)
-		try:
-			self.checkThread.start()
-		except Exception as genericError:
-			QMessageBox.critical(None, "Προσοχή", "Πρόβλημα με την υποβολή προβλήματος: " + str(genericError.returncode), 
-			 					 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
 
-	def decideNext(self, isRegistered):
-		if isRegistered == True:
-			print("Is registered, will just submit issue")
-			# get and display username
-			self.username = config.username
-			self._theMainWindow.theProblemSubmission.lblUserValue.setText(self.username)
-			# get and display Ubuntu version
-			self.ubuntu_version = config.ubuntu_version
-			self._theMainWindow.theProblemSubmission.lblUbuntuValue.setText(self.ubuntu_version)
-			# get and display kernel version
-			self.kernel_version = config.kernel_version
-			self._theMainWindow.theProblemSubmission.lblKernelValue.setText(self.kernel_version)
-			# get and display avgui version
-			self.avgui_version = config.avgui_version
-			self._theMainWindow.theProblemSubmission.lblAvguiValue.setText(self.avgui_version)
-			# get avg version
-			self.avg_version = config.avg_version
-			self._theMainWindow.theProblemSubmission.lblAvgValue.setText(self.avgui_version) # intented BUG !!!
-			self._theMainWindow.theProblemSubmission.show()
-		elif isRegistered == False:
-			print("Is not registered, will initiate registration process")
-			self._theMainWindow.theRegistration.show()
-		
-			
-	def submitIssue(self):
-		print("Submitting issue...")
-		mac_address = getnode()
-		# get globalUUID for validating post
-		confileName = os.getcwd() + "/conf/config.ini"
-		conf = SafeConfigParser()
-		conf.read(confileName)
-		avguuid = conf.get('uuid', 'avguuid')
-		global_uuid = hashlib.sha512()
-		global_uuid.update(str(mac_address).encode("utf"))
-		global_uuid.update(str(avguuid).encode("utf"))
-		globalUUID = global_uuid.hexdigest()
-		
-		
-		# get user mail and password from the form
-		user_email = self._theMainWindow.theProblemSubmission.txtEmail.text()
-		if user_email == "":
-			QMessageBox.information(None, langmodule.attention, "Δεν έχετε εισάγει το email σας.", 
-									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			return
-		user_password = self._theMainWindow.theProblemSubmission.txtPassword.text()
-		if user_password == "":
-			QMessageBox.information(None, langmodule.attention, langmodule.noPasswordInserted, 
-									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			return
-		# hash the password
-		hashed_user_password = hashlib.sha512(user_password.encode("utf"))
-		# get problem description from the form
-		problem_description = self._theMainWindow.theProblemSubmission.txtProbDesc.toPlainText()
-		# create a temporary file from the problem description
-		with tempfile.NamedTemporaryFile(prefix="txt", delete=False) as pd:
-			pd.write(bytearray(problem_description.encode("utf")))
-			# pd.seek(0)
-			pd.close()
-		self.theProblemSubmissionThread = utilities.submitIssueThread(self.username, self.ubuntu_version, self.kernel_version, self.avgui_version, self.avg_version, user_email, hashed_user_password, pd)
-
-		self.theProblemSubmissionThread.start()
-	
-	def postRegistration(self):
-		email_pattern = r'[^@]+@[^@]+\.[^@]+'
-		email_address = self._theMainWindow.theRegistration.txtEmail.text()
-		password1 = self._theMainWindow.theRegistration.txtPassword.text()
-		password2 = self._theMainWindow.theRegistration.txtPassword2.text()
-		if not re.match(email_pattern, email_address):
-			QMessageBox.information(None, langmodule.attention, langmodule.noCorrectMailAddress, 
-									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			return
-		if password1 != password2:
-			QMessageBox.information(None, langmodule.attention, langmodule.passwordsDoNotMatch, 
-									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			return
-		if password1 == "" or password2 == "" or email_address == "":
-			QMessageBox.information(None, langmodule.attention, langmodule.mustFillInAllFields, 
-									QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			return
-		hashedpass = hashlib.sha512(self._theMainWindow.theRegistration.txtPassword2.text().encode("utf"))
-		passdigest = hashedpass.hexdigest()
-		self.theRegistrationThread = utilities.registrationThread(email_address, passdigest)
-		self.theRegistrationThread.start()
-	'''
 	def getSettings(self):
 		# Automatic Program Update
 		self.autoProgUpdateOut = subprocess.check_output(["avgcfgctl", "UpdateProgram.sched.Task.Disabled"])

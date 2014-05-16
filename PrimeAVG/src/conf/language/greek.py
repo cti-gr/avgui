@@ -8,6 +8,7 @@ btnExitTitle = "Έξοδος"
 lblAboutTitle = "Σχετικά με το Πρόγραμμα"
 lblAvgProtectionTitle = "Προστασία AVG"
 lblGraphicFrameworkTitle = "Γραφικό Περιβάλλον"
+lblAbout = "Σχετικά με το avgui"
 
 # Scan Dialog
 dialogScanTitle = "Αναζήτηση Κακόβουλου Λογισμικού"
@@ -153,6 +154,7 @@ avgUpdate = "Ενημέρωση Προγράμματος και Βάσης Ιώ�
 noFilesFoldersSelected = "Δεν έχουν επιλεγεί αρχεία / φάκελοι"
 avgStopped = "TΟ AVG ΣΤΑΜΑΤΗΣΕ ΝΑ ΕΚΤΕΛΕΙΤΑΙ - Η εφαρμογή θα τερματίσει!"
 failedToStartDaemon = "Αποτυχία εκκίνησης daemon παρακολούθησης avg antivirus!"
+
 
 # Status Widget
 programInfo = "Πληροφορίες Προγράμματος"

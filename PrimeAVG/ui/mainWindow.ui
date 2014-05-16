@@ -311,7 +311,7 @@ border-radius: 5px ;
      <string>Σχετικά</string>
     </property>
     <addaction name="action_AVG"/>
-    <addaction name="action"/>
+    <addaction name="action_AVGui"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -324,6 +324,11 @@ border-radius: 5px ;
   <action name="action">
    <property name="text">
     <string>Γραφικό Περιβάλλον</string>
+   </property>
+  </action>
+  <action name="action_AVGui">
+   <property name="text">
+    <string>Γραφική Διεπαφή AVGui</string>
    </property>
   </action>
  </widget>

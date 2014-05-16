@@ -8,6 +8,7 @@ btnExitTitle = "Quit"
 lblAboutTitle = "About AVGui"
 lblAvgProtectionTitle = "AVG Protection"
 lblGraphicFrameworkTitle = "Graphical Framework"
+lblAbout = "About"
 
 #Scan Progress
 dialogScanProgressTitle = "Malware Scan"

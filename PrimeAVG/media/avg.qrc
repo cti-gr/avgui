@@ -18,5 +18,8 @@
 	 <file>attention.png</file>
 	 <file>flagGreece.png</file>
 	 <file>flagUK.png</file>
+	 <file>espa_logo.png</file>
+	 <file>cti_logo_en.png</file>
+	 <file>cti_logo_gr.png</file>
 </qresource>
 </RCC>

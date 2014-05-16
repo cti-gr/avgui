@@ -1,5 +1,5 @@
-/PrimeAVG/src/__pycache__/
-/PrimeAVG/media/__pycache__/
+/PrimeAVG/src/__pycache__/*
+/PrimeAVG/media/__pycache__/*
 .project
 .pydevproject
 /debpack/*
