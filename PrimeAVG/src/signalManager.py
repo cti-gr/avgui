@@ -68,8 +68,12 @@ class manager(QObject):
 		scanPath = None
 		homeDir = expanduser("~")
 	
-	def printSth(self):
-		print("test")
+	def displayAVGinfo(self):
+		self._theMainWindow.theavgavInfo.show()
+
+	def displayAVGuiinfo(self):
+		self._theMainWindow.theavguiInfo	.show()
+
 				
 	def setupConnections(self, theMainWindow):
 		# Main Window
@@ -79,7 +83,8 @@ class manager(QObject):
 		self._theMainWindow.sigMainSent.connect(self.handleMainWindowEmits)
 		self._theMainWindow.btnStatus.clicked.connect(self.showStatus)
 		self._theMainWindow.comLangsel.currentIndexChanged.connect(self.setLanguage)
-		self._theMainWindow.action_AVG.triggered.connect(self.printSth)
+		self._theMainWindow.action_AVG.triggered.connect(self.displayAVGinfo)
+		self._theMainWindow.action_AVGui.triggered.connect(self.displayAVGuiinfo)
 		
 		# Scan Dialog
 		self._theMainWindow.theScan.btnSelectF.clicked.connect(self.selectWhatToScan)

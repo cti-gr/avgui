@@ -111,6 +111,14 @@ btnSubmitProblemSubmissionTitle = "Submit"
 btnCancelProblemSubmissionTitle = "Cancel"
 lblProbDescTitle = "Problem Description"
 
+# AVgui Info
+mainLabel = "AVGui has been designed and developed by the Computer Technology Institute and Press - DIOPHANTUS for the purposes of the project 'Integrated Services to reinforce Digital Trust of the NSRF 2007-2013 Programme '"
+licenceLabel = "This program is made available under the licence GPL3 - (C) CTI DIOPHANTUS"
+
+# AVG AV info
+lbl1 = "ΑVG Free for Linux and the AVG logo are products of AVG Technologies"
+lbl2 = "All rights reserved"
+
 # Informative / Warning / Error Messages
 mustSudo = "You must enter your user password to perform the specific action"
 unableToCheckDirRights = "Unable to check access rights for specific directory!"

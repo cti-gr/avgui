@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI, showScanResultsUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI, showScanResultsUI, avgavInfoUI, avguiInfoUI
 
 import utilities
 import os
@@ -6,6 +6,19 @@ from PySide import QtGui, QtCore
 from datetime import date
 from configparser import SafeConfigParser
 import conf.language.lang as langmodule
+
+
+class avguiInfo(QtGui.QDialog, avguiInfoUI.Ui_Dialog):
+	def __init__(self, parent=None):
+		super(avguiInfo, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
+
+class avgavInfo(QtGui.QDialog, avgavInfoUI.Ui_Dialog):
+	def __init__(self, parent=None):
+		super(avgavInfo, self).__init__(parent)
+		self.setupUi(self)
+		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
 class updateSettings(QtGui.QDialog, updateSettingsUI.Ui_dialogUpdateSettings):
 
@@ -216,19 +229,23 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		self.setupUi(self)
 		
 		# Opening Configuration File
+		self.theUpdate = updateDialog(self)
+		self.theScan = scanDialog(self)
+		self.theCurrentStatus = currentStatus(self)
+		self.theHistory = historyDialog(self)
+		self.theavguiInfo = avguiInfo(self)
+		self.theavgavInfo = avgavInfo(self)
 		self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
 		self.configparser = SafeConfigParser()
 		self.configparser.read(self.confileName)
 		lang = self.configparser.get('Language', 'lang')
 		if lang == "EL":
 			self.comLangsel.setCurrentIndex(0)
+			self.theavguiInfo.lblCTI.setPixmap(QtGui.QPixmap(":/cti_logo_gr.png"))
 		elif lang == "EN":
 			self.comLangsel.setCurrentIndex(1)
-		self.theUpdate = updateDialog(self)
-		self.theScan = scanDialog(self)
-		#self.theProblemSubmission = problemsubmissionDialog(self)
-		self.theCurrentStatus = currentStatus(self)
-		self.theHistory = historyDialog(self)
+			self.theavguiInfo.lblCTI.setPixmap(QtGui.QPixmap(":/cti_logo_en.png"))
+		
 		#self.theScanProgress = scanProgress()
 		
 		self.connect(self.btnExitMain, QtCore.SIGNAL("clicked()"), self.close)

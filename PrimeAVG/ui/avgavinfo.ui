@@ -6,19 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>225</height>
+    <width>528</width>
+    <height>216</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QLabel" name="label">
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <widget class="QLabel" name="lblAVGinfo1">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>0</y>
-     <width>381</width>
+     <width>501</width>
      <height>51</height>
     </rect>
    </property>
@@ -35,10 +38,10 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="lblAVGlogo">
    <property name="geometry">
     <rect>
-     <x>100</x>
+     <x>150</x>
      <y>90</y>
      <width>211</width>
      <height>81</height>
@@ -54,11 +57,11 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>180</y>
+     <x>210</x>
+     <y>170</y>
      <width>111</width>
      <height>31</height>
     </rect>
@@ -73,10 +76,10 @@
     <string>OK</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="lblAVGinfo2">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>70</x>
      <y>40</y>
      <width>381</width>
      <height>51</height>

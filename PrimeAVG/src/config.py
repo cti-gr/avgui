@@ -23,6 +23,7 @@ global avg_version
 global debug
 
 
+
 def init_config(debugMode=False):
 	global daemonMonitor
 	global avgmonitor
@@ -38,6 +39,7 @@ def init_config(debugMode=False):
 	global avgui_version
 	global avg_version
 	global debug
+
 	
 	debug = debugMode
 	avg_version = subprocess.check_output(["dpkg", "-s", "avg2013flx"]).split()[21].decode("utf")

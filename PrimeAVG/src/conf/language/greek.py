@@ -8,7 +8,7 @@ btnExitTitle = "Έξοδος"
 lblAboutTitle = "Σχετικά με το Πρόγραμμα"
 lblAvgProtectionTitle = "Προστασία AVG"
 lblGraphicFrameworkTitle = "Γραφικό Περιβάλλον"
-lblAbout = "Σχετικά με το avgui"
+lblAbout = "Σχετικά με την Εφαρμογή"
 
 # Scan Dialog
 dialogScanTitle = "Αναζήτηση Κακόβουλου Λογισμικού"
@@ -110,6 +110,14 @@ lblAvguiTitle = "Έκδοση AVGui"
 btnSubmitProblemSubmissionTitle = "Υποβολή"
 btnCancelProblemSubmissionTitle = "Ακύρωση"
 lblProbDescTitle = "Περιγραφή Προβλήματος"
+
+# AVgui Info
+mainLabel = "To AVGui αναπτύχθηκε από το Ινστιτούτο Τεχνολογίας Υπολογιστών και Εκδόσεων ΔΙΟΦΑΝΤΟΣ στα πλαίσια του έργου 'Ολοκληρωμένες Υπηρεσίες Ενίσχυσης Ψηφιακής Εμπιστοσύνης' του Επιχειρισιακού Προγράμματος Ψηφιακή Σύγκλιση"
+licenceLabel = "To AVGui διατίθεται με άδεια GPLv3 - (C) ΙΤΥΕ ΔΙΟΦΑΝΤΟΣ"
+
+# AVG AV info
+lbl1 = "Tο AVG Free for Linux και τα σχετικά λογότυπα είναι προϊόντα της AVG Technologies"
+lbl2 = "Με επιφύλαξη κάθε νόμιμου δικαιώματος"
 
 # Informative / Warning / Error Messages
 mustSudo = "H εκτέλεση της συγκεκριμένης ενέργειας απαιτεί την εισαγωγή κωδικού χρήστη (password)"

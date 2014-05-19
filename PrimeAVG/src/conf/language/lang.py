@@ -3,6 +3,7 @@
 from configparser import SafeConfigParser
 import os
 import subprocess
+import config
 
 # Main Window
 global mainWindowTitle
@@ -117,6 +118,14 @@ global lblAvguiTitle
 global btnSubmitProblemSubmissionTitle
 global btnCancelProblemSubmissionTitle
 global lblProbDescTitle
+
+# AVgui Info
+global mainLabel
+global licenceLabel
+
+# AVG AV info
+global lbl1
+global lbl2
 
 # Informative / Warning / Error Messages
 global mustSudo
@@ -307,6 +316,14 @@ def setuplang():
 	global btnSubmitProblemSubmissionTitle
 	global btnCancelProblemSubmissionTitle
 	global lblProbDescTitle
+
+	# AVgui Info
+	global mainLabel
+	global licenceLabel
+
+	# AVG AV info
+	global lbl1
+	global lbl2
 	
 	# Informative / Warning / Error Messages
 	global mustSudo
@@ -520,6 +537,14 @@ def setuplang():
 	btnSubmitProblemSubmissionTitle = langpack.btnSubmitProblemSubmissionTitle
 	btnCancelProblemSubmissionTitle = langpack.btnCancelProblemSubmissionTitle
 	lblProbDescTitle = langpack.lblProbDescTitle
+
+	# AVgui Info
+	mainLabel = langpack.mainLabel
+	licenceLabel = langpack.licenceLabel
+
+	# AVG AV info
+	lbl1 = langpack.lbl1
+	lbl2 = langpack.lbl2
 	
 	# Informative / Warning / Error Messages
 	mustSudo = langpack.mustSudo
