@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'scanResults.ui'
 #
-# Created: Tue Jan 21 12:14:58 2014
+# Created: Mon May 19 19:17:30 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,6 +15,8 @@ class Ui_dialogScanResults(object):
         dialogScanResults.setObjectName("dialogScanResults")
         dialogScanResults.setWindowModality(QtCore.Qt.ApplicationModal)
         dialogScanResults.resize(952, 517)
+        dialogScanResults.setMinimumSize(QtCore.QSize(952, 517))
+        dialogScanResults.setMaximumSize(QtCore.QSize(952, 517))
         self.btnExtractTxt = QtGui.QPushButton(dialogScanResults)
         self.btnExtractTxt.setGeometry(QtCore.QRect(330, 390, 311, 51))
         font = QtGui.QFont()

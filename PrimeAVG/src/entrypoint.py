@@ -41,11 +41,12 @@ if __name__=="__main__":
 	if len(sys.argv) > 2:
 		print("Too many arguments - Exiting")
 		sys.exit(1)
-	elif sys.argv[1] != "--debug":
-		print("Unknown argument - Exiting")
-		sys.exit(1)
-	elif sys.argv[1] == "--debug":
-		config.init_config(True)
+	elif len(sys.argv) == 2:
+		if sys.argv[1] != "--debug":
+			print("Unknown argument - Exiting")
+			sys.exit(1)
+		else:
+			config.init_config(True)
 	else:
 		config.init_config()
 	

@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>837</width>
-    <height>538</height>
+    <width>855</width>
+    <height>553</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>855</width>
+    <height>553</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>855</width>
+    <height>553</height>
+   </size>
   </property>
   <property name="font">
    <font>
@@ -353,10 +365,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <zorder>gridLayoutWidget</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>btnExit</zorder>
-  <zorder>label_12</zorder>
  </widget>
  <resources>
   <include location="../media/avg.qrc"/>

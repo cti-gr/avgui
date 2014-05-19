@@ -1,4 +1,4 @@
-import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, problemSubmissionUI, updateSettingsUI, registrationUI, currentStatusUI, showScanResultsUI, avgavInfoUI, avguiInfoUI
+import mainWindowUI, updateDialogUI, scanDialogUI, historyDialogUI, scanSelectUI, scanSettingsUI, scanProgressUI, scanResultsUI, dbupdateResultsUI, checkPanelUI, countDownUI, updateProgressUI, updateSettingsUI, currentStatusUI, showScanResultsUI, avgavInfoUI, avguiInfoUI
 
 import utilities
 import os
@@ -53,11 +53,13 @@ class checkPanel(QtGui.QDialog, checkPanelUI.Ui_formCheck):
 		self.setupUi(self)
 		self.connect(self.btnExit, QtCore.SIGNAL("clicked()"), self.close)
 
+'''
 class registrationDialog(QtGui.QDialog, registrationUI.Ui_dialogRegistration):
 	def __init__(self, parent=None):
 		super(registrationDialog, self).__init__(parent)
 		self.setupUi(self)
 		self.connect(self.btnCancel, QtCore.SIGNAL("clicked()"), self.close)
+'''
 
 class countDown(QtGui.QDialog, countDownUI.Ui_formCountDown):
 	

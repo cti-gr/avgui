@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'avgavinfo.ui'
 #
-# Created: Mon May 19 14:40:19 2014
+# Created: Mon May 19 19:29:59 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -14,6 +14,8 @@ class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(528, 216)
+        Dialog.setMinimumSize(QtCore.QSize(528, 216))
+        Dialog.setMaximumSize(QtCore.QSize(528, 216))
         Dialog.setModal(True)
         self.lblAVGinfo1 = QtGui.QLabel(Dialog)
         self.lblAVGinfo1.setGeometry(QtCore.QRect(10, 0, 501, 51))

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'updateSettings.ui'
 #
-# Created: Tue Jan 21 12:14:59 2014
+# Created: Mon May 19 19:20:15 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,8 +15,8 @@ class Ui_dialogUpdateSettings(object):
         dialogUpdateSettings.setObjectName("dialogUpdateSettings")
         dialogUpdateSettings.setWindowModality(QtCore.Qt.WindowModal)
         dialogUpdateSettings.resize(623, 772)
-        dialogUpdateSettings.setMinimumSize(QtCore.QSize(623, 660))
-        dialogUpdateSettings.setMaximumSize(QtCore.QSize(623, 900))
+        dialogUpdateSettings.setMinimumSize(QtCore.QSize(623, 772))
+        dialogUpdateSettings.setMaximumSize(QtCore.QSize(623, 772))
         self.layoutWidget = QtGui.QWidget(dialogUpdateSettings)
         self.layoutWidget.setGeometry(QtCore.QRect(70, 40, 491, 161))
         self.layoutWidget.setObjectName("layoutWidget")

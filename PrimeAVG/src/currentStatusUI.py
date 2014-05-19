@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'currentStatus.ui'
 #
-# Created: Wed Apr  9 15:58:50 2014
+# Created: Mon May 19 19:27:40 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,7 +13,9 @@ import conf.language.lang as langmodule
 class Ui_statusDialog(object):
     def setupUi(self, statusDialog):
         statusDialog.setObjectName("statusDialog")
-        statusDialog.resize(837, 538)
+        statusDialog.resize(855, 553)
+        statusDialog.setMinimumSize(QtCore.QSize(855, 553))
+        statusDialog.setMaximumSize(QtCore.QSize(855, 553))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
