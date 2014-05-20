@@ -42,6 +42,8 @@ The AVGui does NOT support the On Access Scan functionality, at least for the
 time being.
 
 The AVGui has been designed and developed by Computer Technology Institute & 
-Press DIOPHANTUS - www.cti.gr 
-This program is made available under the GPL3 licence
+Press DIOPHANTUS - www.cti.gr.
+
+This program is made available under the GPL3 licence.
+
 The AVG Logo and the AVG Free Edition for Linux are products of AVG Technologies
