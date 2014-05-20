@@ -1,7 +1,7 @@
-This program (AVGui) is a GUI for AVG Free Edition for Linux
-The program requires Python3.4, pyside1.2.1, sqlite3
-and of course the AVG Free Edition for Linux (afl) which can be downloaded from 
-the following link: http://free.avg.com/us-en/download.prd-alf
+This program (AVGui) is a GUI for AVG Free Edition for Linux. 
+The program requires Python3.4, pyside1.2.1, sqlite3 and of course the AVG Free 
+Edition for Linux (afl) which can be downloaded from the following link: 
+http://free.avg.com/us-en/download.prd-alf
 
 The AVGui has been tested only on Ubuntu 14.04.
 May also work on previous releases but the above packages are required.
