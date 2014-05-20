@@ -5,7 +5,6 @@
 /debpack/*
 /PrimeAVG/.metadata/
 /PrimeAVG/log/*
-*.deb
 *.tar.gz
 /avgui-*
 *.changes
