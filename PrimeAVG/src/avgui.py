@@ -26,10 +26,11 @@ class theApplication(object):
 
 	def __init__(self):
 		self.theWindow = setupGui.mainWindow()
-		self.theInitializer =  signalManager.manager(self.theWindow)       
+		self.theInitializer =  signalManager.manager(self.theWindow)   
+		    
 
 if __name__=="__main__":
-	langmodule.setuplang()
+	
 	if not utilities.isAVGDRunning():
 		#QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
 		#		QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
@@ -49,7 +50,8 @@ if __name__=="__main__":
 			config.init_config(True)
 	else:
 		config.init_config()
-	
+
+	langmodule.setuplang()
 
 	signal.signal(signal.SIGALRM, avgstopped_handler)
 	mainpid = os.getpid()
@@ -59,10 +61,7 @@ if __name__=="__main__":
 	gc.enable()
 	
 	try:
-		if config.debug:
-			subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
-		else:
-			subprocess.call(["/usr/share/avgui/src/avgmonitor.py", "--start", str(mainpid)])
+		subprocess.call([config.daemonMonitor, "--start", str(mainpid)])
 	except Exception as exc:
 		QMessageBox.critical(None, langmodule.attention, langmodule.failedToStartDaemon, 
 				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)

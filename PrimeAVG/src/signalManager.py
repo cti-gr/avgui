@@ -53,7 +53,11 @@ class manager(QObject):
 		super(manager, self).__init__(parent)
 		
 		# Opening Configuration File
-		self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
+		if config.debug:
+			self.confileName = os.getcwd() + "/conf/config.ini"
+		else:		
+			self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
+		#self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
 		self.configparser = SafeConfigParser()
 		self.configparser.read(self.confileName)
 		self.mutexPrint = QMutex()

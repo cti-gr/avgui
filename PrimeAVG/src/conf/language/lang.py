@@ -1,4 +1,4 @@
-#!/usr/bin/python3.3
+#!/usr/bin/python3.4
 
 from configparser import SafeConfigParser
 import os
@@ -410,16 +410,15 @@ def setuplang():
 	# Real Time Messages
 	global translationDict
 
-
-	#print(subprocess.check_output(["ls"]))
-	confile = os.path.expanduser("~") + "/.avgui/config.ini"
+	if config.debug:
+		confile = os.getcwd() + "/conf/config.ini"
+	else:		
+		confile = os.path.expanduser("~") + "/.avgui/config.ini"
 	configparser = SafeConfigParser()
 	f = open(confile, 'r')
 	configparser.read(confile)
-	#print("Length is: " + str(len(configparser.sections())))
 	lang = configparser.get("Language", 'lang')
-	#print(str(lang))
-	
+		
 	if lang == "EL":
 		import conf.language.greek as langpack
 	elif lang == "EN":

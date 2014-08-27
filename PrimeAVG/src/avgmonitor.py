@@ -7,10 +7,20 @@ import subprocess
 import sys
 import os
 import signal
+import config
+
 
 class AVGMonitor(simpledaemon.Daemon):
-	default_conf = os.path.expanduser("~") + '/.avgui/log/hellodaemon.conf'
+	
+	if "/usr/share" in os.getcwd():
+		default_conf = os.path.expanduser("~") + '/.avgui/log/hellodaemon.conf'
+	else:
+		default_conf = os.path.abspath(os.path.join(os.getcwd(), os.pardir)) + '/log/hellodaemon.conf'
+	
 	section = 'hello'
+
+	print(default_conf)	
+
 
 	def run(self):
 		print(sys.argv[1:])

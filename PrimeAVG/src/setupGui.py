@@ -6,6 +6,7 @@ from PySide import QtGui, QtCore
 from datetime import date
 from configparser import SafeConfigParser
 import conf.language.lang as langmodule
+import config
 
 
 class avguiInfo(QtGui.QDialog, avguiInfoUI.Ui_Dialog):
@@ -237,7 +238,11 @@ class mainWindow(QtGui.QMainWindow, mainWindowUI.Ui_MainWindow):
 		self.theHistory = historyDialog(self)
 		self.theavguiInfo = avguiInfo(self)
 		self.theavgavInfo = avgavInfo(self)
-		self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
+		if config.debug:
+			self.confileName = os.getcwd() + "/conf/config.ini"
+		else:		
+			self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
+		#self.confileName = os.path.expanduser("~") + "/.avgui/config.ini"
 		self.configparser = SafeConfigParser()
 		self.configparser.read(self.confileName)
 		lang = self.configparser.get('Language', 'lang')
