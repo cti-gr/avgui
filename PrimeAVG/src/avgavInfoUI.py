@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'avgavinfo.ui'
 #
-# Created: Mon May 19 19:29:59 2014
+# Created: Thu Aug 28 08:09:36 2014
 #      by: pyside-uic 0.2.15 running on PySide 1.2.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -13,12 +13,12 @@ import conf.language.lang as langmodule
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
-        Dialog.resize(528, 216)
-        Dialog.setMinimumSize(QtCore.QSize(528, 216))
-        Dialog.setMaximumSize(QtCore.QSize(528, 216))
+        Dialog.resize(650, 216)
+        Dialog.setMinimumSize(QtCore.QSize(650, 216))
+        Dialog.setMaximumSize(QtCore.QSize(650, 216))
         Dialog.setModal(True)
         self.lblAVGinfo1 = QtGui.QLabel(Dialog)
-        self.lblAVGinfo1.setGeometry(QtCore.QRect(10, 0, 501, 51))
+        self.lblAVGinfo1.setGeometry(QtCore.QRect(0, 0, 661, 51))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
@@ -26,20 +26,20 @@ class Ui_Dialog(object):
         self.lblAVGinfo1.setAlignment(QtCore.Qt.AlignCenter)
         self.lblAVGinfo1.setObjectName("lblAVGinfo1")
         self.lblAVGlogo = QtGui.QLabel(Dialog)
-        self.lblAVGlogo.setGeometry(QtCore.QRect(150, 90, 211, 81))
+        self.lblAVGlogo.setGeometry(QtCore.QRect(220, 80, 211, 81))
         self.lblAVGlogo.setText("")
         self.lblAVGlogo.setPixmap(QtGui.QPixmap(":/avg_logo.png"))
         self.lblAVGlogo.setScaledContents(True)
         self.lblAVGlogo.setObjectName("lblAVGlogo")
         self.btnExit = QtGui.QPushButton(Dialog)
-        self.btnExit.setGeometry(QtCore.QRect(210, 170, 111, 31))
+        self.btnExit.setGeometry(QtCore.QRect(270, 170, 111, 31))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)
         self.btnExit.setFont(font)
         self.btnExit.setObjectName("btnExit")
         self.lblAVGinfo2 = QtGui.QLabel(Dialog)
-        self.lblAVGinfo2.setGeometry(QtCore.QRect(70, 40, 381, 51))
+        self.lblAVGinfo2.setGeometry(QtCore.QRect(140, 40, 381, 51))
         font = QtGui.QFont()
         font.setWeight(75)
         font.setBold(True)

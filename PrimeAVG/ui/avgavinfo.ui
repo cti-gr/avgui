@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>528</width>
+    <width>650</width>
     <height>216</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>528</width>
+    <width>650</width>
     <height>216</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>528</width>
+    <width>650</width>
     <height>216</height>
    </size>
   </property>
@@ -31,9 +31,9 @@
   <widget class="QLabel" name="lblAVGinfo1">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>0</y>
-     <width>501</width>
+     <width>661</width>
      <height>51</height>
     </rect>
    </property>
@@ -53,8 +53,8 @@
   <widget class="QLabel" name="lblAVGlogo">
    <property name="geometry">
     <rect>
-     <x>150</x>
-     <y>90</y>
+     <x>220</x>
+     <y>80</y>
      <width>211</width>
      <height>81</height>
     </rect>
@@ -72,7 +72,7 @@
   <widget class="QPushButton" name="btnExit">
    <property name="geometry">
     <rect>
-     <x>210</x>
+     <x>270</x>
      <y>170</y>
      <width>111</width>
      <height>31</height>
@@ -91,7 +91,7 @@
   <widget class="QLabel" name="lblAVGinfo2">
    <property name="geometry">
     <rect>
-     <x>70</x>
+     <x>140</x>
      <y>40</y>
      <width>381</width>
      <height>51</height>
