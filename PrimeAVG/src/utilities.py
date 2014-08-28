@@ -156,7 +156,7 @@ class chkUpdateWorker(QtCore.QThread):
 		#abnormalTermination = True
 		if hasattr(self, 'avgchkupProc'):
 			if (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgchkupProc.state() == QtCore.QProcess.ProcessState.Starting):
-				print("now killing")
+				#print("now killing")
 				self.avgchkupProc.terminate()
 				#self.avgchkupProc.close()
 			abnormalCheckUpdatesTermination = True
@@ -298,16 +298,16 @@ class updateWorker(QtCore.QThread):
 	def onAVGProcFinish(self):
 		print(" - | - | - Update Process Terminated - | - | - ")
 		if hasattr(self, 'avgUpdateProc'):
-			print("exit code is: " + str(self.avgUpdateProc.exitCode()))
+			#print("exit code is: " + str(self.avgUpdateProc.exitCode()))
 			#if self.avgUpdateProc.receivers(SIGNAL('readyRead()')) > 0:
 			self.avgUpdateProc.readyRead.disconnect()
-			print("status is: " + str(self.avgUpdateProc.state()))
+			#print("status is: " + str(self.avgUpdateProc.state()))
 			#if (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Running) | (self.avgUpdateProc.state() == QtCore.QProcess.ProcessState.Starting):
 				# trying to kill
 			#	self.avgUpdateProc.kill()
 			# trying to close
 			#self.avgUpdateProc.close()
-			print("trying to delete avgUpdateProc")
+			#print("trying to delete avgUpdateProc")
 			del self.avgUpdateProc
 				#while self.isRunning():
 		#	self.exit()
@@ -436,7 +436,7 @@ class scanWorker(QtCore.QThread):
 		self.avgscanProc.finished.connect(self.onAVGProcessFinish)
 		if (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Running) & (self.avgscanProc.state() != QtCore.QProcess.ProcessState.Starting) :
 			
-			print("---- STARTING AVG SCAN ----")
+			#print("---- STARTING AVG SCAN ----")
 			if self.scanParams:
 				try:
 					print("Within try1 " + str(self.scanParams))
@@ -457,7 +457,8 @@ class scanWorker(QtCore.QThread):
 					print("Σφάλμα κατά την εκκίνηση της σάρωσης: " + str(errinit2))
 
 	def procDestroyed(self):
-		print("!!!!!! PROCESS DESTROYED !!!!!!") 
+		pass
+		#print("!!!!!! PROCESS DESTROYED !!!!!!") 
 	
 	@QtCore.Slot()	  
 	def printOut(self):
@@ -596,7 +597,6 @@ class sqliteWorker(QtCore.QThread):
 		try:
 			#print("Opening connection")	  
 			# open db connection and create cursor
-			# to replace the path in the connect statement
 			conn = sqlite3.connect(config.dbfilepath)
 			#print("Creating Cursor")	 
 			cur = conn.cursor()
@@ -836,8 +836,10 @@ class malwareModel(QtCore.QAbstractListModel):
 	def rowCount(self, parent):
 		
 		return len(self.__availableMalware)
-		
-# --- Models and Data needed to support the Table View of Scan Results --- #
+
+################################################################################		
+######## Models & Data needed to support the Table View of Scan Results ########
+################################################################################		
 
 def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =''):
 	
@@ -851,7 +853,7 @@ def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =
 		if malwareFound != '':
 			querySelect = querySelect + ', tblMalware.Name '
 			queryFrom = queryFrom + ',tblMalware, tblInfections '
-			queryWhere = 'tblScanEvent.ID = tblInfections.ScanEventID AND tblMalware.Name =' + "'" + malwareFound + "' "
+			queryWhere = 'tblScanEvent.ID = tblInfections.ScanEventID AND tblInfections.MalwareID = tblMalware.ID AND tblMalware.Name =' + "'" + malwareFound + "' "
 			whereCondition = True
 		if databaseUsed != '':
 			querySelect = querySelect + ', tblVirusDBs.DBVersion '
@@ -876,7 +878,7 @@ def scanSearchQuery(startDate ='', endDate ='', malwareFound ='', databaseUsed =
 		else:
 			queryString = querySelect + queryFrom
 		queryString = queryString + 'ORDER BY tblScanEvent.DateTime'
-		#print(queryString)
+		print(queryString)
 		results = cur.execute(queryString)
 		resultsList = results.fetchall()
 		#print("resultsList: " + str(resultsList))
@@ -935,7 +937,9 @@ class scanResultsTableModel(QtCore.QAbstractTableModel):
 		if role == QtCore.Qt.TextAlignmentRole:
 			return QtCore.Qt.AlignCenter
 
-##################################### RETRIEVE CORE AND VIRUS DB UPDATES HISTORY ################################	
+################################################################################		
+################ RETRIEVE CORE AND VIRUS DB UPDATES HISTORY ####################
+################################################################################		
 
 class dbHistoryTableModel(QtCore.QAbstractTableModel):
 	
@@ -1004,7 +1008,8 @@ class dbHistoryWorker(QtCore.QThread):
 		tmpList = []
 		for line in self.dbupdhist.splitlines():
 			if ("Loaded core/iavi version:" in line):
-				print(line)
+				pass				
+				#print(line)
 			if ("Update: Started scheduled update with priority 2." in line):
 				#print("in first if")
 				flagParse = True
