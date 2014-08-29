@@ -224,7 +224,9 @@ class chkUpdateWorker(QtCore.QThread):
 		gc.collect()
 		#self.exit()
 
-################################################# Update Process ####################################################
+################################################################################
+############################ Update Process ####################################
+################################################################################
 
 class updateWorker(QtCore.QThread):
 	global abnormalUpdateTermination 
@@ -953,7 +955,10 @@ class dbHistoryTableModel(QtCore.QAbstractTableModel):
 		return len(self.__results)
 	
 	def columnCount(self, parent):
-		return len(self.__results[0])
+		if self.__results:
+			return len(self.__results[0])
+		else:
+			return 0
 	
 	def flags(self, index):
 		return QtCore.Qt.ItemIsEnabled | QtCore.Qt.ItemIsSelectable
@@ -1042,13 +1047,12 @@ class dbHistoryWorker(QtCore.QThread):
 		#self.exec_()
 
 	def ondbHistoryProcessFinish(self):
-		#print("Results")
-		#print(len(self.__results))
 		self.sigHistoryRetrieved.emit(self.__results)
-		#self.dbHistoryProc.terminate()
 		self.exit()
 
-############# Program Finalization ######################################
+################################################################################
+###################### Program Finalization ####################################
+################################################################################
 
 # Stop avgmonitor daemon
 def finalizeApp():

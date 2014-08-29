@@ -312,9 +312,6 @@ class manager(QObject):
 			print("here...")
 			QMessageBox.information(None, langmodule.attention, langmodule.noFileNameProvided, 
 								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.disconnect()
-			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.setChecked(False)
-			#self._theMainWindow.theScan.theScanSettings.chkbFileStore.stateChanged.connect(self.enableStorage)
 			storagePathOK = False
 		elif (self._theMainWindow.theScan.theScanSettings.textStoreFile.toPlainText() != "") & (self.scanReportStorageEnabled == 1):
 			print("scanReportFolder is: " + str(scanReportFolder))
@@ -345,9 +342,9 @@ class manager(QObject):
 			#print("sender: " + str(self.sender().objectName()))
 			self.scanReportStorageEnabled = 0
 
-##################################################################################################
-		
-################################### DB Updates History ##########################################  
+################################################################################
+############################### DB Updates History #############################
+################################################################################
 
 	def retrieveDBHistory(self):
 		self.thedbHistoryWorker = utilities.dbHistoryWorker()
@@ -356,16 +353,21 @@ class manager(QObject):
 		self.thedbHistoryWorker.start()
 		
 	def showdbHistoryResults(self, theResults):
-		print("theResults = " + str(theResults))
-		modelHisDBRes = utilities.dbHistoryTableModel(theResults)
-		self._theMainWindow.theHistory.theHistdbResults.tblViewHistoryDB.setModel(modelHisDBRes)
-		self._theMainWindow.theHistory.theHistdbResults.tblViewHistoryDB.resizeColumnsToContents()
-		self._theMainWindow.theHistory.theHistdbResults.show()
-		self.thedbHistoryWorker.exit()
-		
-##################################################################################################
-	
-########################################## SCAN ##################################################
+		if theResults:
+			print("theResults = " + str(theResults))
+			modelHisDBRes = utilities.dbHistoryTableModel(theResults)
+			self._theMainWindow.theHistory.theHistdbResults.tblViewHistoryDB.setModel(modelHisDBRes)
+			self._theMainWindow.theHistory.theHistdbResults.tblViewHistoryDB.resizeColumnsToContents()
+			self._theMainWindow.theHistory.theHistdbResults.show()
+			self.thedbHistoryWorker.exit()
+		else:
+			QMessageBox.information(None, langmodule.noResults, langmodule.noUpdatesYes, 
+								 QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+
+################################################################################
+################################### SCAN #######################################
+################################################################################
+
 	def beginScan(self):
 		global infectionsList
 		global infectedFiles

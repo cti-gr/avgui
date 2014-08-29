@@ -162,6 +162,7 @@ avgUpdate = "Ενημέρωση Προγράμματος και Βάσης Ιώ�
 noFilesFoldersSelected = "Δεν έχουν επιλεγεί αρχεία / φάκελοι"
 avgStopped = "TΟ AVG ΣΤΑΜΑΤΗΣΕ ΝΑ ΕΚΤΕΛΕΙΤΑΙ - Η εφαρμογή θα τερματίσει!"
 failedToStartDaemon = "Αποτυχία εκκίνησης daemon παρακολούθησης avg antivirus!"
+noUpdatesYes = "Δεν έχουν λάβει χώρα ακόμα ενημερώσεις της βάσης ιών"
 
 
 # Status Widget

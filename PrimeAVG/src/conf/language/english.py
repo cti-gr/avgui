@@ -162,6 +162,7 @@ avgUpdate = "Performing Update"
 noFilesFoldersSelected = "No Files / Folders Selected"
 avgStopped = "AVG Antivirus has stopped - AVGui will now exit!" 
 failedToStartDaemon = "Failed to start avg monitor daemon!"
+noUpdatesYes = "No Virus DB update has taken place yet"
 
 
 # Status Widget

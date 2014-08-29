@@ -171,7 +171,7 @@ global avgUpdate
 global noFilesFoldersSelected
 global avgStopped
 global failedToStartDaemon
-
+global noUpdatesYes
 
 # Status Widget
 global programInfo
@@ -369,6 +369,7 @@ def setuplang():
 	global noFilesFoldersSelected
 	global avgStopped
 	global failedToStartDaemon
+	global noUpdatesYes
 	
 
 	
@@ -588,6 +589,7 @@ def setuplang():
 	noFilesFoldersSelected = langpack.noFilesFoldersSelected
 	avgStopped = langpack.avgStopped
 	failedToStartDaemon = langpack.failedToStartDaemon
+	noUpdatesYes = langpack.noUpdatesYes
 	
 
 
