@@ -31,12 +31,6 @@ class theApplication(object):
 
 if __name__=="__main__":
 	
-	if not utilities.isAVGDRunning():
-		#QMessageBox.critical(None, "Προσοχή", "To AVG δεν εκτελείται - Η εφαρμογή θα τερματίσει", 
-		#		QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
-		print(langmodule.avgnotrunning)
-		exit(1)
-	
 	app = QApplication(sys.argv)
 
 	if len(sys.argv) > 2:
@@ -52,6 +46,12 @@ if __name__=="__main__":
 		config.init_config()
 
 	langmodule.setuplang()
+
+	if not utilities.isAVGDRunning():
+		QMessageBox.critical(None, langmodule.attention, langmodule.avgnotrunning, 
+				QMessageBox.Ok | QMessageBox.Default, QMessageBox.NoButton)
+		#print(langmodule.avgnotrunning)
+		exit(1)
 
 	signal.signal(signal.SIGALRM, avgstopped_handler)
 	mainpid = os.getpid()
