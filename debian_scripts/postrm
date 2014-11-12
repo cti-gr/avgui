@@ -1,0 +1,22 @@
+#!/bin/bash
+
+USER_HOME=$(eval echo ~${SUDO_USER})
+
+set -e
+ 
+case "$1" in
+   remove)
+      echo "Checking if personal hidden directory exists"
+          if [ -d ${USER_HOME}/.avgui ]; then
+              echo "It exists, will now remove .avgui directory"
+              rm -r ${USER_HOME}/.avgui
+          fi
+   ;;
+   purge|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+      echo $1
+    ;;
+   *)
+      echo "postinst called with unknown argument \`\$1'" >&2
+      exit 0
+   ;;
+esac

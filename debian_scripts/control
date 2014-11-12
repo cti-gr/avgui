@@ -1,0 +1,14 @@
+Source: avgui
+Section: Miscellaneous
+Priority: extra
+Maintainer: Pantelis Karamolegkos <pkaramol@cti.gr>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: http://secure-distro.cti.gr
+#Vcs-Git: git://git.debian.org/collab-maint/avgui.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/avgui.git;a=summary
+
+Package: avgui
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}, python3.4, sqlite3, gksu, python3-pip, python3-pyside
+Description: User Interface for performing some elementary actions with AVG Free for Linux

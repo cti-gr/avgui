@@ -1,0 +1,5 @@
+avgui (0.93-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Pantelis <pkaramol@cti.gr>  Wed, 12 Nov 2014 04:00:21 -0800
