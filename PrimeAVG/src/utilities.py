@@ -656,9 +656,11 @@ class sqliteWorker(QtCore.QThread):
 					for mal in malwareFound:
 							t = (mal,)
 							if t in getMalware:
-								pass
+								print(t , " found in malware table, not inserting")								
+								#pass
 							else:
 								#print("Malware insertion v2") 
+								print(t , " is like that...inserting anyway...")
 								cur.execute('insert into tblMalware (Name) values (?)', t)	
 								#conn.commit()
 						   
@@ -761,7 +763,7 @@ class sqliteWorker(QtCore.QThread):
 		except Exception as err:
 			 print("Σφάλμα κατά την εισαγωγή στοιχείων στη βάση: "	 + str(err))
 			 conn.close()
-			 raise Exception(str(err))
+			 #raise Exception(str(err))
 
 # --- Models and Data needed to populate Combo Boxes of search dialog --- #
 
